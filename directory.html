@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  (function() {
+    const sessionKey = localStorage.getItem('nexus_session_token');
+    // If they don't have an active login session, boot them back to the index page immediately
+    if (!sessionKey) {
+      window.location.replace("index.html?error=auth_required");
+    }
+  })();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Matrix Architecture - Enterprise Core v5.0</title>
