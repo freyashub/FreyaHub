@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freya's Nexus Hub</title>
     <style>
-        /* Base Setup & Deep Blue Variables */
+        /* Base Reset & Core Fluid Variables */
         * {
             margin: 0;
             padding: 0;
@@ -33,7 +33,7 @@
             position: relative;
         }
 
-        /* Ambient Blue Background Orbs */
+        /* Ambient Fluid Glow Background Layers */
         .ambient-orb {
             position: fixed;
             border-radius: 50%;
@@ -45,7 +45,7 @@
         .orb-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--blue-neon); }
         .orb-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: var(--blue-deep); }
 
-        /* Capsule Top Navigation Bar */
+        /* Premium Capsule Top Navigation Bar */
         .top-navbar {
             position: fixed;
             top: 24px;
@@ -104,7 +104,7 @@
             transition: var(--transition-fluid);
         }
 
-        /* Layout Sections */
+        /* Layout Structural Grid Segments */
         section {
             min-height: 100vh;
             width: 100%;
@@ -112,14 +112,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 120px 2rem 60px 2rem;
+            padding: 140px 2rem 60px 2rem;
             position: relative;
             z-index: 1;
         }
 
         .content-container {
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
         }
 
@@ -127,7 +127,7 @@
             font-size: 4rem;
             font-weight: 900;
             letter-spacing: -2px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             line-height: 1.1;
         }
 
@@ -139,9 +139,9 @@
 
         p {
             color: var(--text-dim);
-            font-size: 1.15rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
         }
 
         .launcher-btn {
@@ -149,29 +149,60 @@
             align-items: center;
             gap: 12px;
             background: var(--glass-panel);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            padding: 16px 32px;
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            padding: 18px 36px;
             border-radius: 100px;
             color: var(--text-pure);
             text-decoration: none;
             font-weight: 600;
+            font-size: 1.05rem;
             transition: var(--transition-fluid);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
         }
 
         .launcher-btn:hover {
             transform: translateY(-3px);
             border-color: var(--blue-neon);
-            box-shadow: 0 10px 25px rgba(0, 240, 255, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 240, 255, 0.2);
         }
 
-        /* --- APPLICATIONS SPACE --- */
+        /* --- DETAILED DESCRIPTION TEXT SECTION --- */
+        .info-block {
+            text-align: left;
+            background: var(--glass-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 4rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .info-block h2 {
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .info-block p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- CONSOLIDATED APPLICATIONS GRID --- */
+        .apps-title {
+            margin-top: 5rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 2rem;
+        }
+
         .apps-container {
             width: 100%;
-            max-width: 1000px;
-            margin-top: 3rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1.5rem;
+            text-align: left;
         }
 
         .app-card {
@@ -179,16 +210,20 @@
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 2rem 1.5rem;
-            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             transition: var(--transition-fluid);
         }
 
         .app-card:hover {
-            border-color: rgba(0, 240, 255, 0.15);
+            border-color: rgba(0, 240, 255, 0.2);
             background: rgba(255,255,255,0.04);
+            transform: translateY(-5px);
         }
 
-        .app-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .app-card h3 { font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .app-card p { font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-dim); line-height: 1.5; }
         
         .badge-upcoming {
             display: inline-block;
@@ -196,13 +231,13 @@
             color: #f3b043;
             font-size: 0.75rem;
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 50px;
             text-transform: uppercase;
-            margin-top: 1rem;
+            width: max-content;
         }
 
-        /* --- WHO IS FREYA SECTION UI --- */
+        /* --- WHO IS FREYA BIOGRAPHY PANEL --- */
         #about {
             background: rgba(1, 3, 10, 0.7);
             border-top: 1px solid var(--glass-border);
@@ -218,19 +253,28 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
 
-        .about-card-layout h2 { font-size: 2.5rem; margin-bottom: 1.5rem; }
+        .about-card-layout h2 { font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: -1px; }
+        .about-card-layout h3 { margin-bottom: 1rem; font-size: 1.4rem; font-weight: 700; }
 
-        /* ==========================================
-           ⚡ DISPLAY RESPONSIVE ENGINE BREAKPOINTS 
-           ========================================== */
-        @media (min-width: 1400px) { h1 { font-size: 5rem; } }
-        @media (max-width: 1200px) and (min-width: 769px) { h1 { font-size: 3.5rem; } }
+        /* ==========================================================================
+           ⚡ DISPLAY RESPONSIVE BREAKPOINT CONTROLLERS (Mobile, Desktop, Larger)
+           ========================================================================== */
+        @media (min-width: 1400px) {
+            .content-container { max-width: 1100px; }
+            h1 { font-size: 5rem; }
+        }
+
+        @media (max-width: 1200px) and (min-width: 769px) {
+            h1 { font-size: 3.5rem; }
+        }
+
         @media (max-width: 768px) {
             .top-navbar { width: 92%; justify-content: space-between; padding: 6px 12px; }
             .nav-tab { padding: 8px 14px; font-size: 0.85rem; }
             h1 { font-size: 2.6rem; }
-            section { padding: 100px 1rem 40px 1rem; }
-            .about-card-layout { padding: 2rem; }
+            section { padding: 120px 1rem 40px 1rem; }
+            .info-block, .about-card-layout { padding: 2rem; }
+            .apps-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -239,51 +283,23 @@
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
+    <!-- Circle Nav Header Capsule -->
     <nav class="top-navbar">
         <a href="#home" class="nav-tab active">Home</a>
         <a href="directory.html" class="nav-tab">Directory</a>
         <a href="#about" class="nav-tab">About</a>
         <div class="audio-widget">
-            <button class="audio-btn" id="musicToggle">▶</button>
+            <button class="audio-btn" id="musicToggle" title="Toggle Background Music">▶</button>
         </div>
     </nav>
 
-    <!-- MAIN HERO HOME VIEW -->
+    <!-- SECTION 1: HOMEPAGE PLATFORM INTRO -->
     <section id="home">
         <div class="content-container">
             <h1>Welcome to <span class="gradient-blue">Freya's</span> Nexus</h1>
             <p>A personal front-end development web space designed to store upcoming automation engines, custom development tool scripts, and isolated information databases.</p>
             
-            <!-- Real Page Redirect Link -->
-            <a href="directory.html" class="launcher-btn">Explore Directory Base ➔</a>
+            <a href="directory.html" class="launcher-btn">Enter Main Subject Directory ➔</a>
 
-            <div class="apps-container">
-                <div class="app-card">
-                    <h3>Freya Auto Clicker</h3>
-                    <p style="font-size:0.85rem; margin-bottom:0;">Automated macro-loop engine.</p>
-                    <div class="badge-upcoming">Upcoming</div>
-                </div>
-                <div class="app-card">
-                    <h3>Freya External</h3>
-                    <p style="font-size:0.85rem; margin-bottom:0;">Isolated execution script controller.</p>
-                    <div class="badge-upcoming">Upcoming</div>
-                </div>
-                <div class="app-card">
-                    <h3>Freya Executor</h3>
-                    <p style="font-size:0.85rem; margin-bottom:0;">Native browser script integration compiler.</p>
-                    <div class="badge-upcoming">Upcoming</div>
-                </div>
-                <div class="app-card">
-                    <h3>Freya's Scripts</h3>
-                    <p style="font-size:0.85rem; margin-bottom:0;">Custom modular code structures.</p>
-                    <div class="badge-upcoming">Upcoming</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PERSONAL BIO VIEW -->
-    <section id="about">
-        <div class="content-container" style="max-width: 900px;">
-            <div class="about-card-layout">
-                <h2>Who is <span class="gradient-blue">Freya</span>?</h2>
+            <!-- Comprehensive System Overview Block -->
+            <div class="info-block">
