@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Hub Directory</title>
+    <style>
+        /* Base Setup & Fluid Layout Mechanics */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --bg-base: #020617;
+            --blue-neon: #00f0ff;
+            --blue-deep: #1d4ed8;
+            --text-pure: #ffffff;
+            --text-dim: #64748b;
+            --glass-panel: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --transition-fluid: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-pure);
+            padding: 140px 2rem 60px 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Bar Capsule Shape Styling */
+        .top-navbar {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 8px 12px;
+            border-radius: 100px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .nav-tab {
+            color: var(--text-pure);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 10px 24px;
+            border-radius: 100px;
+            transition: var(--transition-fluid);
+        }
+
+        .nav-tab:hover { 
+            background: rgba(255, 255, 255, 0.06); 
+            color: var(--blue-neon); 
+        }
+        
+        .nav-tab.active { 
+            background: linear-gradient(135deg, var(--blue-neon), var(--blue-deep)); 
+            color: #fff; 
+        }
+
+        .directory-wrapper {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header-block {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .header-block h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .gradient-blue {
+            background: linear-gradient(135deg, var(--blue-neon) 0%, var(--blue-deep) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Pure Scrollable Subject Layout Space Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .subject-card {
+            background: var(--glass-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition-fluid);
+        }
+
+        .subject-card:hover {
+            border-color: rgba(0, 240, 255, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateY(-6px);
+        }
+
+        .card-meta {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--blue-neon);
+            width: max-content;
+            margin-bottom: 1.25rem;
+        }
+
+        .subject-card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .subject-card p { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 2rem; }
+
+        /* Dedicated Custom Isolated Community Chat System per Card */
+        .dedicated-chat {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-top: auto;
+        }
+
+        .chat-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--blue-neon);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .chat-history {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 110px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
+
+        .chat-row { color: #cbd5e1; line-height: 1.4; }
+        .chat-row span { color: var(--blue-neon); font-weight: 600; }
+
+        /* Dynamic Status Engine for Software Builds */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-top: 1.5rem;
+        }
+        
+        .pulse-node {
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite alternate;
+        }
+        
+        @keyframes pulse { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Capsule Navigation Header -->
+    <nav class="top-navbar">
+        <a href="index.html" class="nav-tab">Home</a>
+        <a href="directory.html" class="nav-tab active">Directory</a>
+    </nav>
+
+    <div class="directory-wrapper">
+        <div class="header-block">
+            <h1>Nexus Central <span class="gradient-blue">Directory</span></h1>
+            <p style="color: #64748b; font-size: 1.1rem;">Scroll through current active data subjects, application frameworks, and channel modules.</p>
+        </div>
+
+        <main class="subject-grid">
+            
+            <!-- Subject 1: Dedicated Script Dev Chat -->
+            <div class="subject-card">
+                <div>
+                    <div class="card-meta">App Integration</div>
+                    <h3>Autoclicker Utilities</h3>
+                    <p>Engine space for variable interval click scripts, memory macros, and custom sequence automation pipelines.</p>
+                </div>
+                
+                <div class="status-badge" style="margin-bottom: 1.5rem;">
+                    <div class="pulse-node"></div>
+                    <span>Autoclicker Engine [Upcoming Launch]</span>
+                </div>
+
+                <div class="dedicated-chat">
+                    <div class="chat-title">#autoclicker-stream</div>
+                    <div class="chat-history">
+                        <div class="chat-row"><span>System_Bot:</span> Core modules assigned to branch.</div>
+                        <div class="chat-row"><span>Freya:</span> Polishing click loop delay values next.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject 2: Dedicated General System Chat -->
+            <div class="subject-card">
+                <div>
+                    <div class="card-meta">Network Core</div>
+                    <h3>Main Lobby</h3>
+                    <p>General discussion node covering platform mechanics, layout revisions, and server architecture deployment logs.</p>
+                </div>
+
+                <div class="dedicated-chat" style="margin-top: 2rem;">
+                    <div class="chat-title">#general-lobby</div>
+                    <div class="chat-history">
+                        <div class="chat-row"><span>Alpha_User:</span> This layout feels incredibly responsive.</div>
+                        <div class="chat-row"><span>Freya:</span> Welcome to the system core!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject 3: Dedicated Asset Resource Chat -->
+            <div class="subject-card">
+                <div>
+                    <div class="card-meta">Asset Vault</div>
+                    <h3>Resource Sequences</h3>
+                    <p>A library compiling functional styles, media asset codes, dynamic script patterns, and configuration templates.</p>
+                </div>
+
+                <div class="dedicated-chat" style="margin-top: 2rem;">
+                    <div class="chat-title">#resource-vault</div>
+                    <div class="chat-history">
+                        <div class="chat-row"><span>System_Bot:</span> Fluid blue gradient rules indexed.</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
