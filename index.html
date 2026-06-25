@@ -1062,62 +1062,104 @@
   </script>
 </body>
 </html>
-// Function to generate a simulated unique Hardware ID based on browser traits
-function generateBrowserHWID() {
-  const traits = [
-    navigator.userAgent,
-    navigator.language,
-    screen.colorDepth,
-    screen.width + 'x' + screen.height,
-    new Date().getTimezoneOffset()
-  ].join('||');
-  
-  // Quick string-to-hash function to create a clean alphanumeric hardware token
-  let hash = 0;
-  for (let i = 0; i < traits.length; i++) {
-    const char = traits.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash |= 0; 
+<script>
+  // 1. Generates a unique browser HWID fingerprint
+  function generateBrowserHWID() {
+    const traits = [
+      navigator.userAgent,
+      navigator.language,
+      screen.colorDepth,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset()
+    ].join('||');
+    
+    let hash = 0;
+    for (let i = 0; i < traits.length; i++) {
+      const char = traits.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0; 
+    }
+    return "NX-HWID-" + Math.abs(hash).toString(16).toUpperCase();
   }
-  return "NX-HWID-" + Math.abs(hash).toString(16).toUpperCase();
-}
 
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
-  const statusBox = document.getElementById('authStatus');
-  
-  statusBox.style.display = "block";
-  statusBox.style.background = "rgba(0, 240, 255, 0.05)";
-  statusBox.style.color = "var(--cyan)";
-  statusBox.innerHTML = "Fetching device telemetry and verifying credentials...";
-
-  try {
-    // 1. Fetch user's public IP address safely
-    const ipResponse = await fetch('https://api.ipify.org?format=json');
-    const ipData = await ipResponse.json();
-    const userIP = ipData.ip;
-
-    // 2. Compute the device fingerprint
-    const userHWID = generateBrowserHWID();
-
-    // 3. Package the payload to send to your backend coordinator
-    const payload = {
-      email: emailInput,
-      ip: userIP,
-      hwid: userHWID,
-      timestamp: new Date().toISOString()
-    };
-
-    console.log("Telemetry Payload Compiled:", payload);
-
-    // TODO: Forward this payload to your centralized key verification system
-    // verifyLicensePayload(payload);
-
-  } catch (error) {
-    statusBox.style.background = "rgba(239, 68, 68, 0.15)";
-    statusBox.style.color = "#f87171";
-    statusBox.innerHTML = "Telemetry connection failed. Check your network configuration.";
+  // 2. Generates a random secure license key
+  function generateLicenseKey() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let segments = [];
+    for (let i = 0; i < 3; i++) {
+      let segment = '';
+      for (let j = 0; j < 4; j++) {
+        segment += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      segments.push(segment);
+    }
+    return "NEXUS-" + segments.join('-'); // Returns format: NEXUS-XXXX-XXXX-XXXX
   }
-});
+
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
+    const statusBox = document.getElementById('authStatus');
+    
+    statusBox.style.display = "block";
+    statusBox.style.background = "rgba(0, 240, 255, 0.05)";
+    statusBox.style.border = "1px solid var(--cyan)";
+    statusBox.style.color = "var(--cyan)";
+    statusBox.innerHTML = "Processing telemetry & compiling security keys...";
+
+    try {
+      // Fetch public IP address
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const userIP = ipData.ip;
+
+      // Compile HWID and uniquely generated Key
+      const userHWID = generateBrowserHWID();
+      const generatedKey = generateLicenseKey();
+
+      // PASTE YOUR WEB3FORMS ACCESS TOKEN INSIDE THE QUOTES BELOW
+      const web3FormsToken = "YOUR_WEB3FORMS_ACCESS_TOKEN_HERE";
+
+      // Package everything into a payload to dispatch via email
+      const formData = new FormData();
+      formData.append("access_key", web3FormsToken);
+      formData.append("subject", `New Terminal Access Key Issued for ${emailInput}`);
+      formData.append("Target User Email", emailInput);
+      formData.append("Assigned License Key", generatedKey);
+      formData.append("Device IP Address", userIP);
+      formData.append("Device HWID Fingerprint", userHWID);
+
+      // Send the data to the email server API
+      const emailResponse = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const emailResult = await emailResponse.json();
+
+      if (emailResult.success) {
+        // Log the local session token so directory.html lets them pass through
+        localStorage.setItem('nexus_session_token', generatedKey);
+
+        statusBox.style.background = "rgba(16, 185, 129, 0.15)";
+        statusBox.style.border = "1px solid #10b981";
+        statusBox.style.color = "#34d399";
+        statusBox.innerHTML = `✔ Key Generated! Check your email inbox. Redirecting terminal...`;
+
+        // Automatically send them to the directory page after 2.5 seconds
+        setTimeout(() => {
+          window.location.href = "directory.html";
+        }, 2500);
+      } else {
+        throw new Error("API rejection");
+      }
+
+    } catch (error) {
+      statusBox.style.background = "rgba(239, 68, 68, 0.15)";
+      statusBox.style.border = "1px solid #ef4444";
+      statusBox.style.color = "#f87171";
+      statusBox.innerHTML = "Dispatch failed. Serverless communication terminal link offline.";
+    }
+  });
+</script>
