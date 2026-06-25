@@ -858,7 +858,7 @@
             </button>
           </form>
 
-          <div id="authStatus" style="margin-top: 20px; font-size: 13.5px; font-weight: 600; display: none; padding: 12px; border-radius: var(--radius-sm);"></div>
+          <div id="authStatus" style="margin-top: 20px; font-size: 13.5px; font-weight: 600; display: none; padding: 12px; border-radius: var(--radius-sm); border: 1px solid transparent; word-break: break-word;"></div>
         </div>
       </section>
 
@@ -870,7 +870,6 @@
         </div>
 
         <div class="tools-grid">
-
           <div class="tool-card reveal">
             <div class="upcoming-badge">Upcoming</div>
             <div class="tool-icon tool-icon-ac">⚡</div>
@@ -918,7 +917,6 @@
               <span class="tool-tag">Plug & Deploy</span>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -952,175 +950,210 @@
           </div>
         </div>
       </section>
-
-      <section class="about-section reveal" id="about">
-        <div class="section-header">
-          <div class="section-eyebrow">// Platform Architecture</div>
-          <h2 class="section-title">Built With <span>Precision</span></h2>
-        </div>
-        <div class="about-grid">
-          <div class="about-card">
-            <div class="about-card-icon">🔬</div>
-            <div class="about-card-title">Zero Dependencies</div>
-            <p class="about-card-desc">Pure HTML, CSS, and Vanilla JavaScript — no frameworks, no bloat, no build step. Every pixel and interaction is hand-engineered from scratch.</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">📐</div>
-            <div class="about-card-title">Three-Tier Responsive</div>
-            <p class="about-card-desc">Mobile, standard desktop, and ultra-wide monitor breakpoints. Every layout adapts flawlessly across all viewport widths without compromise.</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">🌊</div>
-            <div class="about-card-title">True Glassmorphism</div>
-            <p class="about-card-desc">Backdrop blur, translucent hairline borders, ambient glow drops, and cubic-bezier fluid transitions — the real thing, not the template version.</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon">⚡</div>
-            <div class="about-card-title">Modular File Architecture</div>
-            <p class="about-card-desc">Each tool and major content section lives in its own dedicated file, keeping load times fast, code maintainable, and the platform infinitely scalable.</p>
-          </div>
-        </div>
-      </section>
-
     </div>
   </main>
 
   <footer>
     <div class="footer-logo">Freya's <span>Nexus</span></div>
-    <div class="footer-sub">All Systems Operational</div>
-    <ul class="footer-links">
-      <li><a href="#tools">Tools</a></li>
-      <li><a href="directory.html">Directory</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
-    <div class="footer-copy">&copy; 2026 Freya's Nexus Hub. Engineered Core Portfolio.</div>
+    <div class="footer-sub">All Systems Nominal</div>
+    <div class="footer-copy">&copy; 2026 Freya's Nexus. Designed for Precision.</div>
   </footer>
 
   <script>
-    // 1. Generates a unique browser HWID fingerprint
-    function generateBrowserHWID() {
-      const traits = [
+    // 1. MOBILE MENU TOGGLE
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if(hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+    }
+
+    // 2. SCROLL REVEAL LOGIC
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+      revealElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    // 3. HWID GENERATION ENGINE (Fingerprint via browser properties)
+    function generateHWID() {
+      const navigatorData = [
         navigator.userAgent,
         navigator.language,
         screen.colorDepth,
         screen.width + 'x' + screen.height,
-        new Date().getTimezoneOffset()
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency || 4
       ].join('||');
       
+      // Basic client hash algorithm
       let hash = 0;
-      for (let i = 0; i < traits.length; i++) {
-        const char = traits.charCodeAt(i);
+      for (let i = 0; i < navigatorData.length; i++) {
+        const char = navigatorData.charCodeAt(i);
         hash = ((hash << 5) - hash) + char;
-        hash |= 0; 
+        hash |= 0;
       }
-      return "NX-HWID-" + Math.abs(hash).toString(16).toUpperCase();
+      return 'NX-' + Math.abs(hash).toString(16).toUpperCase();
     }
 
-    // 2. Generates a random secure license key
+    // 4. LICENSE KEY GENERATOR
     function generateLicenseKey() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let segments = [];
+      const blocks = [];
       for (let i = 0; i < 3; i++) {
-        let segment = '';
-        for (let j = 0; j < 4; j++) {
-          segment += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        segments.push(segment);
+        blocks.push(Math.random().toString(36).substring(2, 6).toUpperCase());
       }
-      return "NEXUS-" + segments.join('-');
+      return `NEXUS-${blocks.join('-')}`;
     }
 
-    // 3. Form Submission Handler wired directly to Web3Forms
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
-      const statusBox = document.getElementById('authStatus');
-      
-      statusBox.style.display = "block";
-      statusBox.style.background = "rgba(0, 240, 255, 0.05)";
-      statusBox.style.border = "1px solid var(--cyan)";
-      statusBox.style.color = "var(--cyan)";
-      statusBox.innerHTML = "Processing telemetry & compiling security keys...";
+    // 5. IDENTITY DISPATCHER & LOCK MANAGER
+    const loginForm = document.getElementById('loginForm');
+    const authStatus = document.getElementById('authStatus');
 
-      try {
-        // Fetch user public IP address
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        const userIP = ipData.ip;
+    if(loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('userEmail').value.trim().toLowerCase();
+        
+        // Show initializing status
+        authStatus.style.display = 'block';
+        authStatus.style.background = 'rgba(0, 240, 255, 0.05)';
+        authStatus.style.borderColor = 'rgba(0, 240, 255, 0.2)';
+        authStatus.style.color = 'var(--cyan)';
+        authStatus.textContent = 'Fetching hardware telemetry and IP address...';
 
-        // Compile custom telemetry keys
-        const userHWID = generateBrowserHWID();
-        const generatedKey = generateLicenseKey();
+        try {
+          // Fetch current public IP profile
+          const ipResponse = await fetch('https://api.ipify.org?format=json');
+          const ipData = await ipResponse.json();
+          const currentIP = ipData.ip;
+          const currentHWID = generateHWID();
 
-        // Linked directly to your customized Web3Forms endpoint
-        const web3FormsToken = "e9b6e48e-f079-45c9-8fac-92d6b478200d";
+          // Pull Master Account Register from Global LocalStorage
+          let accountsRegistry = JSON.parse(localStorage.getItem('nexus_accounts_registry')) || {};
 
-        // Append custom layout keys to mail template
-        const formData = new FormData();
-        formData.append("access_key", web3FormsToken);
-        formData.append("subject", `New Terminal Access Key Issued for ${emailInput}`);
-        formData.append("Target User Email", emailInput);
-        formData.append("Assigned License Key", generatedKey);
-        formData.append("Device IP Address", userIP);
-        formData.append("Device HWID Fingerprint", userHWID);
+          // Check if user has an account profile initialized
+          if (accountsRegistry[email]) {
+            const existingAccount = accountsRegistry[email];
 
-        // Deliver payload via fetch request
-        const emailResponse = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          body: formData
-        });
+            // SECURITY MATCH CHECK: Validate hardware signatures & IP links
+            if (existingAccount.hwid === currentHWID && existingAccount.ip === currentIP) {
+              // Target match: Device and network are authentic
+              authStatus.style.background = 'rgba(34, 197, 94, 0.1)';
+              authStatus.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+              authStatus.style.color = '#4ade80';
+              authStatus.textContent = 'Telemetry verified. Activating session matrix...';
+              
+              // Set tracking object for active local visitor
+              localStorage.setItem('nexus_current_active_session', JSON.stringify(existingAccount));
+              
+              setTimeout(() => {
+                window.location.href = 'directory.html';
+              }, 2000);
+            } else {
+              // THREAT TRIGGER: Hardware mismatch or Network alteration detected
+              authStatus.style.background = 'rgba(239, 68, 68, 0.1)';
+              authStatus.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+              authStatus.style.color = '#f87171';
+              
+              // Create dynamic client lock object
+              const verificationToken = 'VFY-' + Math.floor(100000 + Math.random() * 900000);
+              const lockDetails = {
+                email: email,
+                intendedHWID: currentHWID,
+                intendedIP: currentIP,
+                token: verificationToken,
+                masterKey: existingAccount.licenseKey
+              };
+              
+              // Push the lock snapshot to localStorage so the verification pathway can look it up
+              localStorage.setItem('nexus_pending_lock_state', JSON.stringify(lockDetails));
 
-        const emailResult = await emailResponse.json();
+              // Simulate sending link containing tokens inside terminal prompt interface
+              authStatus.innerHTML = `<strong>SECURITY LOCKOUT:</strong> Device/IP mismatch detected.<br><br>A validation protocol link was dispatched to <strong>${email}</strong>.<br><br><span style="font-size:11px; color:#aaa; display:block; margin-top:8px; border:1px dashed rgba(255,255,255,0.15); padding:6px; background:#000;">[DEV TRACE LOG]: Check console for link parameters or check the validation link format.</span>`;
+              
+              // Generate explicit confirmation trace parameters for testing development pipeline
+              const simulatedVerificationLink = `${window.location.origin}${window.location.pathname.replace('index.html', '')}index.html?verifyToken=${verificationToken}&targetEmail=${encodeURIComponent(email)}`;
+              console.log('====== SECURITY ROUTING MAIL BluePrint ======');
+              console.log('To:', email);
+              console.log('Subject: Security Authorization Link Required');
+              console.log('Link:', simulatedVerificationLink);
+              console.log('============================================');
+            }
+          } else {
+            // PROFILE CREATION: First-time deployment on current platform parameters
+            const newKey = generateLicenseKey();
+            const accountProfile = {
+              email: email,
+              hwid: currentHWID,
+              ip: currentIP,
+              licenseKey: newKey,
+              dateRegistered: new Date().toLocaleDateString()
+            };
 
-        if (emailResult.success) {
-          // Grant passing permission inside window storage
-          localStorage.setItem('nexus_session_token', generatedKey);
+            // Store inside shared index lookup matrix
+            accountsRegistry[email] = accountProfile;
+            localStorage.setItem('nexus_accounts_registry', JSON.stringify(accountsRegistry));
+            
+            // Set active local user object status
+            localStorage.setItem('nexus_current_active_session', JSON.stringify(accountProfile));
 
-          statusBox.style.background = "rgba(16, 185, 129, 0.15)";
-          statusBox.style.border = "1px solid #10b981";
-          statusBox.style.color = "#34d399";
-          statusBox.innerHTML = `✔ Key Generated! Check your email inbox. Redirecting terminal...`;
+            authStatus.style.background = 'rgba(34, 197, 94, 0.1)';
+            authStatus.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+            authStatus.style.color = '#4ade80';
+            authStatus.textContent = `New terminal signature indexed! Assigned Key: ${newKey}. Entering mainframe...`;
 
-          // Automatic safe dashboard forward
+            setTimeout(() => {
+              window.location.href = 'directory.html';
+            }, 2500);
+          }
+        } catch (error) {
+          authStatus.style.background = 'rgba(239, 68, 68, 0.1)';
+          authStatus.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+          authStatus.style.color = '#f87171';
+          authStatus.textContent = 'Error compiling telemetric data network interface: ' + error.message;
+        }
+      });
+    }
+
+    // 6. INCOMING HOOK: CHECK FOR LINK INJECTIONS
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tokenInLink = urlParams.get('verifyToken');
+      const emailInLink = urlParams.get('targetEmail');
+
+      if (tokenInLink && emailInLink) {
+        // Display validation overlay container inside the form field area
+        authStatus.style.display = 'block';
+        authStatus.style.background = 'rgba(168, 85, 247, 0.1)';
+        authStatus.style.borderColor = 'rgba(168, 85, 247, 0.3)';
+        authStatus.style.color = '#c084fc';
+        authStatus.textContent = `Incoming token routing processing... Hooked profile targeting: ${emailInLink}`;
+
+        // Retrieve lock data block state
+        const lockState = JSON.parse(localStorage.getItem('nexus_pending_lock_state'));
+
+        if (lockState && lockState.token === tokenInLink && lockState.email === emailInLink) {
           setTimeout(() => {
-            window.location.href = "directory.html";
-          }, 2500);
-        } else {
-          throw new Error("API rejection");
-        }
+            // Update global record register to allow access validation patterns
+            let accountsRegistry = JSON.parse(localStorage.getItem('nexus_accounts_registry')) || {};
+            
+            if (accountsRegistry[emailInLink]) {
+              // Re-bind network device context profiles
+              accountsRegistry[emailInLink].hwid = lockState.intendedHWID;
+              accountsRegistry[emailInLink].ip = lockState.intendedIP;
+              
+              localStorage.setItem('nexus_accounts_registry', JSON.stringify(accountsRegistry));
+              localStorage.setItem('nexus_current_active_session', JSON.stringify(accountsRegistry[emailInLink]));
+              
+              // Purge temporary lockout object states
+              localStorage.removeItem('nexus_pending_lock_state');
 
-      } catch (error) {
-        statusBox.style.background = "rgba(239, 68, 68, 0.15)";
-        statusBox.style.border = "1px solid #ef4444";
-        statusBox.style.color = "#f87171";
-        statusBox.innerHTML = "Dispatch failed. Serverless communication terminal link offline.";
-      }
-    });
-
-    /* ── USER INTERACTION & LAYOUT RESPONSES ────────────────────── */
-    // Hamburger Mobile Menu Logic
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    hamburger.addEventListener('click', () => {
-      mobileMenu.classList.toggle('open');
-      hamburger.classList.toggle('active');
-    });
-
-    // Clean Scroll Reveal Engine
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealOnScroll = () => {
-      for (let i = 0; i < revealElements.length; i++) {
-        const windowHeight = window.innerHeight;
-        const elementTop = revealElements[i].getBoundingClientRect().top;
-        const revealPoint = 50;
-        if (elementTop < windowHeight - revealPoint) {
-          revealElements[i].classList.add('visible');
-        }
-      }
-    };
-    window.addEventListener('scroll', revealOnScroll);
-    window.addEventListener('load', revealOnScroll); // Fire instantly on boot
-  </script>
-</body>
-</html>
+              authStatus.style.background = 'rgba(34, 197, 94, 0.1)';
+              authStatus.style.borderColor = 'rgba(34, 197, 94,
