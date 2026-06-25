@@ -1062,3 +1062,62 @@
   </script>
 </body>
 </html>
+// Function to generate a simulated unique Hardware ID based on browser traits
+function generateBrowserHWID() {
+  const traits = [
+    navigator.userAgent,
+    navigator.language,
+    screen.colorDepth,
+    screen.width + 'x' + screen.height,
+    new Date().getTimezoneOffset()
+  ].join('||');
+  
+  // Quick string-to-hash function to create a clean alphanumeric hardware token
+  let hash = 0;
+  for (let i = 0; i < traits.length; i++) {
+    const char = traits.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0; 
+  }
+  return "NX-HWID-" + Math.abs(hash).toString(16).toUpperCase();
+}
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
+  const statusBox = document.getElementById('authStatus');
+  
+  statusBox.style.display = "block";
+  statusBox.style.background = "rgba(0, 240, 255, 0.05)";
+  statusBox.style.color = "var(--cyan)";
+  statusBox.innerHTML = "Fetching device telemetry and verifying credentials...";
+
+  try {
+    // 1. Fetch user's public IP address safely
+    const ipResponse = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipResponse.json();
+    const userIP = ipData.ip;
+
+    // 2. Compute the device fingerprint
+    const userHWID = generateBrowserHWID();
+
+    // 3. Package the payload to send to your backend coordinator
+    const payload = {
+      email: emailInput,
+      ip: userIP,
+      hwid: userHWID,
+      timestamp: new Date().toISOString()
+    };
+
+    console.log("Telemetry Payload Compiled:", payload);
+
+    // TODO: Forward this payload to your centralized key verification system
+    // verifyLicensePayload(payload);
+
+  } catch (error) {
+    statusBox.style.background = "rgba(239, 68, 68, 0.15)";
+    statusBox.style.color = "#f87171";
+    statusBox.innerHTML = "Telemetry connection failed. Check your network configuration.";
+  }
+});
