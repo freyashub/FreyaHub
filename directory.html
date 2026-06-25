@@ -1,1540 +1,1375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Directory — Freya's Nexus Hub</title>
-  <style>
-    /* ── RESET & BASE ──────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freya's Nexus — Directory Engine</title>
+    <style>
+        /* ==========================================================================
+           1. CORE CORE BRANDING, LUMINANCE & DESIGN VARIABLE ENGINE
+           ========================================================================== */
+        :root {
+            --bg-base: #020617;
+            --bg-surface-glass: rgba(15, 23, 42, 0.45);
+            --bg-surface-glass-hover: rgba(30, 41, 59, 0.65);
+            --bg-surface-active: rgba(30, 41, 59, 0.85);
+            
+            --border-hairline: rgba(255, 255, 255, 0.06);
+            --border-hairline-glow: rgba(0, 240, 255, 0.25);
+            
+            --color-text-primary: #f8fafc;
+            --color-text-muted: #94a3b8;
+            --color-text-dark: #64748b;
+            
+            --glow-cyan: #00f0ff;
+            --glow-blue: #3b82f6;
+            --glow-sapphire: #1d4ed8;
+            
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --transition-fluid: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --glass-blur: blur(20px);
+        }
 
-    :root {
-      --bg-deep:        #020617;
-      --bg-mid:         #050d20;
-      --bg-panel:       #040b1a;
-      --glass-bg:       rgba(6, 18, 44, 0.60);
-      --glass-bg-light: rgba(8, 22, 54, 0.45);
-      --glass-border:   rgba(0, 240, 255, 0.10);
-      --glass-border-h: rgba(0, 240, 255, 0.28);
-      --glass-shine:    rgba(0, 240, 255, 0.05);
-      --cyan:           #00f0ff;
-      --cyan-dim:       rgba(0, 240, 255, 0.12);
-      --cyan-glow:      rgba(0, 240, 255, 0.30);
-      --sapphire:       #1d4ed8;
-      --sapphire-mid:   #2563eb;
-      --text-primary:   #e8f4ff;
-      --text-secondary: #7ea8c9;
-      --text-dim:       #3a5a78;
-      --radius-lg:      16px;
-      --radius-md:      10px;
-      --radius-sm:      7px;
-      --blur-glass:     blur(20px);
-      --nav-h:          64px;
-      --sidebar-w:      270px;
-      --transition:     cubic-bezier(0.22, 0.61, 0.36, 1);
+        /* Reset & Base System Configuration */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-      /* Department accent colors */
-      --math-color:     #00f0ff;
-      --phys-color:     #60a5fa;
-      --neuro-color:    #a78bfa;
-      --phil-color:     #34d399;
-      --cs-color:       #fb923c;
-    }
+        body {
+            background-color: var(--bg-base);
+            color: var(--color-text-primary);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
 
-    html, body { height: 100%; overflow: hidden; }
+        /* Ambient Fluid Light Fields */
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(140px);
+            opacity: 0.15;
+            mix-blend-mode: screen;
+        }
 
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg-deep);
-      color: var(--text-primary);
-    }
+        body::before {
+            top: -10%;
+            left: -10%;
+            background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
+        }
 
-    /* ── AMBIENT ORBS ──────────────────────────────────────────── */
-    .bg-orbs {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 0; overflow: hidden;
-    }
-    .orb {
-      position: absolute; border-radius: 50%;
-      filter: blur(90px); opacity: 0.18;
-      animation: drift 20s ease-in-out infinite alternate;
-    }
-    .orb-1 { width:500px;height:500px; background:radial-gradient(circle,#00f0ff,transparent 70%); top:-150px;left:-120px; animation-duration:24s; }
-    .orb-2 { width:400px;height:400px; background:radial-gradient(circle,#1d4ed8,transparent 70%); top:40%;right:-100px; animation-duration:19s;animation-delay:-8s; }
-    .orb-3 { width:350px;height:350px; background:radial-gradient(circle,#7c3aed,transparent 70%); bottom:-80px;left:35%; animation-duration:28s;animation-delay:-14s; }
-    @keyframes drift {
-      0%  { transform:translate(0,0) scale(1); }
-      50% { transform:translate(30px,25px) scale(1.05); }
-      100%{ transform:translate(-15px,40px) scale(0.97); }
-    }
+        body::after {
+            bottom: -10%;
+            right: -10%;
+            background: radial-gradient(circle, var(--glow-sapphire) 0%, transparent 70%);
+        }
 
-    /* Scanlines */
-    body::after {
-      content:''; position:fixed; inset:0; pointer-events:none; z-index:1;
-      background-image: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,240,255,0.01) 2px,rgba(0,240,255,0.01) 4px);
-    }
+        /* Master Framework Layout Container */
+        .nexus-app-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+        }
 
-    /* ── NAV ───────────────────────────────────────────────────── */
-    .nav {
-      position: fixed; top:0; left:0; right:0;
-      height: var(--nav-h);
-      z-index: 200;
-      display: flex; align-items: center;
-      background: rgba(2,6,23,0.80);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
-      padding: 0 24px;
-      gap: 16px;
-    }
-    .nav-logo {
-      display: flex; align-items: center; gap: 9px;
-      text-decoration: none; flex-shrink: 0;
-    }
-    .logo-mark {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: linear-gradient(135deg, var(--cyan), var(--sapphire));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: #fff;
-      box-shadow: 0 0 14px var(--cyan-glow);
-    }
-    .logo-text { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-    .logo-text span { color: var(--cyan); }
+        /* ==========================================================================
+           2. HEADER COMPONENT (GLASSMORPHIC CAPSULE)
+           ========================================================================== */
+        .nexus-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.5);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-hairline);
+            height: 72px;
+            flex-shrink: 0;
+        }
 
-    .nav-divider {
-      width: 1px; height: 22px;
-      background: var(--glass-border);
-      flex-shrink: 0;
-    }
-    .nav-breadcrumb {
-      font-size: 13px; color: var(--text-dim); font-weight: 500;
-    }
-    .nav-breadcrumb span { color: var(--text-secondary); }
+        .header-left-cluster {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-    .nav-spacer { flex: 1; }
+        .menu-trigger-btn {
+            background: var(--bg-surface-glass);
+            border: 1px solid var(--border-hairline);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fluid);
+        }
 
-    .nav-dept-indicator {
-      display: flex; align-items: center; gap: 8px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--glass-border);
-      background: var(--glass-shine);
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text-dim);
-      transition: all 0.3s var(--transition);
-    }
-    .nav-dept-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--text-dim);
-      transition: all 0.3s;
-    }
-    .nav-home {
-      display: flex; align-items: center; gap: 6px;
-      padding: 7px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--glass-border);
-      background: var(--glass-bg);
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 12px; font-weight: 600;
-      transition: all 0.2s;
-    }
-    .nav-home:hover { color: var(--cyan); border-color: var(--glass-border-h); }
+        .menu-trigger-btn:hover {
+            background: var(--bg-surface-glass-hover);
+            border-color: rgba(0, 240, 255, 0.3);
+        }
 
-    /* mobile sidebar toggle */
-    .nav-sidebar-toggle {
-      display: none;
-      background: none; border: 1px solid var(--glass-border);
-      color: var(--text-secondary);
-      border-radius: var(--radius-sm);
-      padding: 7px 10px; cursor: pointer; font-size: 16px;
-      transition: all 0.2s;
-    }
-    .nav-sidebar-toggle:hover { color: var(--cyan); border-color: var(--glass-border-h); }
+        .menu-trigger-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--color-text-primary);
+            stroke-width: 2;
+        }
 
-    /* ── LAYOUT SHELL ──────────────────────────────────────────── */
-    .layout {
-      position: fixed;
-      top: var(--nav-h); left: 0; right: 0; bottom: 0;
-      display: flex;
-      z-index: 2;
-    }
+        .brand-monogram-box {
+            background: linear-gradient(135deg, #1e40af, #00f0ff);
+            color: var(--color-text-primary);
+            font-weight: 800;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
 
-    /* ── SIDEBAR ───────────────────────────────────────────────── */
-    .sidebar {
-  width: var(--sidebar-w);
-  flex-shrink: 0;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: rgba(3, 9, 22, 0.95); /* increased opacity */
-  border-right: 1px solid var(--glass-border);
-  transition: transform 0.35s var(--transition);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: transform;
-}
+        .brand-title-string {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
 
+        .brand-title-string span {
+            color: var(--glow-cyan);
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
 
-    .sidebar-search {
-      padding: 14px 14px 10px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .search-input-wrap {
-      position: relative;
-      display: flex; align-items: center;
-    }
-    .search-icon {
-      position: absolute; left: 11px;
-      color: var(--text-dim); font-size: 13px; pointer-events: none;
-    }
-    .sidebar-search input {
-      width: 100%;
-      padding: 9px 12px 9px 32px;
-      background: rgba(0,240,255,0.04);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      color: var(--text-primary);
-      font-size: 12.5px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .sidebar-search input::placeholder { color: var(--text-dim); }
-    .sidebar-search input:focus {
-      border-color: var(--glass-border-h);
-      background: rgba(0,240,255,0.07);
-    }
+        .current-path-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            border-left: 1px solid var(--border-hairline);
+            padding-left: 1rem;
+            height: 24px;
+        }
 
-    .sidebar-dept-tabs {
-      display: flex;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--glass-border);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .sidebar-dept-tabs::-webkit-scrollbar { display: none; }
-    .dept-tab {
-      flex: 1;
-      min-width: 0;
-      padding: 9px 4px 8px;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      text-align: center;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      border-right: 1px solid var(--glass-border);
-      background: none; border-top: none; border-left: none;
-      transition: color 0.2s, border-color 0.2s;
-      line-height: 1.3;
-    }
-    .dept-tab:last-child { border-right: none; }
-    .dept-tab[data-dept="math"].active    { color: var(--math-color);  border-bottom-color: var(--math-color); }
-    .dept-tab[data-dept="phys"].active    { color: var(--phys-color);  border-bottom-color: var(--phys-color); }
-    .dept-tab[data-dept="neuro"].active   { color: var(--neuro-color); border-bottom-color: var(--neuro-color); }
-    .dept-tab[data-dept="phil"].active    { color: var(--phil-color);  border-bottom-color: var(--phil-color); }
-    .dept-tab[data-dept="cs"].active      { color: var(--cs-color);    border-bottom-color: var(--cs-color); }
-    .dept-tab:hover:not(.active) { color: var(--text-secondary); }
+        .path-caret {
+            color: var(--color-text-dark);
+        }
 
-    .sidebar-subject-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 0;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,240,255,0.15) transparent;
-    }
-    .sidebar-subject-list::-webkit-scrollbar { width: 3px; }
-    .sidebar-subject-list::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.15); border-radius: 3px; }
+        .home-navigation-anchor {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-surface-glass);
+            border: 1px solid var(--border-hairline);
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            color: var(--color-text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition-fluid);
+        }
 
-    .subject-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 14px;
-      cursor: pointer;
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      border-left: 2px solid transparent;
-      transition: all 0.18s var(--transition);
-      user-select: none;
-    }
-    .subject-item:hover {
-      color: var(--text-primary);
-      background: rgba(0,240,255,0.04);
-    }
-    .subject-item.active {
-      color: var(--text-primary);
-      background: rgba(0,240,255,0.07);
-      font-weight: 600;
-    }
-    .subject-item[data-dept="math"].active    { border-left-color: var(--math-color); }
-    .subject-item[data-dept="phys"].active    { border-left-color: var(--phys-color); }
-    .subject-item[data-dept="neuro"].active   { border-left-color: var(--neuro-color); }
-    .subject-item[data-dept="phil"].active    { border-left-color: var(--phil-color); }
-    .subject-item[data-dept="cs"].active      { border-left-color: var(--cs-color); }
+        .home-navigation-anchor:hover {
+            background: var(--bg-surface-glass-hover);
+            border-color: var(--glow-blue);
+            transform: translateY(-1px);
+        }
 
-    .subject-num {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--text-dim);
-      width: 20px; flex-shrink: 0; text-align: right;
-    }
-    .subject-item.active .subject-num { color: inherit; opacity: 0.6; }
-    .subject-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--text-dim);
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
-    .subject-item[data-dept="math"].active  .subject-dot { background: var(--math-color);  box-shadow: 0 0 6px var(--math-color); }
-    .subject-item[data-dept="phys"].active  .subject-dot { background: var(--phys-color);  box-shadow: 0 0 6px var(--phys-color); }
-    .subject-item[data-dept="neuro"].active .subject-dot { background: var(--neuro-color); box-shadow: 0 0 6px var(--neuro-color); }
-    .subject-item[data-dept="phil"].active  .subject-dot { background: var(--phil-color);  box-shadow: 0 0 6px var(--phil-color); }
-    .subject-item[data-dept="cs"].active    .subject-dot { background: var(--cs-color);    box-shadow: 0 0 6px var(--cs-color); }
+        /* ==========================================================================
+           3. MASTER SPLIT-SCREEN WORKSPACE SYSTEM
+           ========================================================================== */
+        .nexus-workspace-grid {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            width: 100vw;
+            position: relative;
+        }
 
-    .no-results {
-      padding: 24px 14px;
-      font-size: 12px;
-      color: var(--text-dim);
-      text-align: center;
-    }
+        /* LEFT SIDEBAR NAVIGATION MATRIX */
+        .workspace-sidebar {
+            width: 380px;
+            background: rgba(4, 9, 33, 0.4);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--border-hairline);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: var(--transition-fluid);
+            flex-shrink: 0;
+            z-index: 10;
+        }
 
-    /* ── MAIN PANEL ────────────────────────────────────────────── */
-    .main-panel {
-      flex: 1;
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+        .sidebar-search-container {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-hairline);
+        }
 
-    /* ── INFO DISPLAY ──────────────────────────────────────────── */
-    .info-panel {
-      flex: 0 0 auto;
-      padding: 28px 32px 22px;
-      border-bottom: 1px solid var(--glass-border);
-      background: linear-gradient(180deg, rgba(4,11,26,0.9) 0%, transparent 100%);
-      display: flex;
-      gap: 28px;
-      align-items: flex-start;
-    }
-    .info-left { flex: 1; min-width: 0; }
-    .info-dept-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--glass-border);
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-      transition: all 0.3s;
-    }
-    .info-dept-badge-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: currentColor;
-      transition: all 0.3s;
-    }
-    .info-subject-title {
-      font-size: clamp(20px, 2.5vw, 28px);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-      transition: color 0.3s;
-    }
-    .info-subject-desc {
-      font-size: 13.5px;
-      line-height: 1.68;
-      color: var(--text-secondary);
-      max-width: 600px;
-    }
-    .info-right {
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-width: 140px;
-    }
-    .info-meta-row {
-      display: flex; align-items: center;
-      gap: 8px;
-      font-size: 11.5px;
-      color: var(--text-dim);
-    }
-    .info-meta-label { font-weight: 600; letter-spacing: 0.04em; }
-    .info-meta-val {
-      font-size: 11px; font-weight: 700;
-      padding: 3px 9px; border-radius: 999px;
-      border: 1px solid var(--glass-border);
-      background: var(--glass-shine);
-      color: var(--text-secondary);
-    }
-    .info-key-concepts {
-      margin-top: 12px;
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-    .concept-chip {
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 11px; font-weight: 600;
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.03);
-      color: var(--text-dim);
-      transition: all 0.2s;
-    }
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
 
-    /* ── CHAT AREA ─────────────────────────────────────────────── */
-    .chat-area {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,240,255,0.12) transparent;
-    }
-    .chat-messages::-webkit-scrollbar { width: 3px; }
-    .chat-messages::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.12); border-radius: 3px; }
+        .search-input-field {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-hairline);
+            border-radius: 8px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            color: var(--color-text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition-fluid);
+        }
 
-    /* Welcome message */
-    .chat-welcome {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      text-align: center;
-      padding: 40px 20px;
-      gap: 12px;
-    }
-    .chat-welcome-icon {
-      font-size: 40px;
-      margin-bottom: 4px;
-      filter: drop-shadow(0 0 18px var(--cyan-glow));
-    }
-    .chat-welcome-title {
-      font-size: 18px; font-weight: 700;
-      color: var(--text-primary);
-      letter-spacing: -0.01em;
-    }
-    .chat-welcome-sub {
-      font-size: 13px; color: var(--text-dim); line-height: 1.6; max-width: 380px;
-    }
-    .chat-welcome-prompts {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      justify-content: center;
-      margin-top: 8px;
-    }
-    .prompt-chip {
-      padding: 7px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--glass-border);
-      background: var(--glass-bg);
-      font-size: 12px; font-weight: 500;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .prompt-chip:hover {
-      border-color: var(--glass-border-h);
-      color: var(--text-primary);
-      background: rgba(0,240,255,0.06);
-    }
+        .search-input-field:focus {
+            border-color: var(--glow-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+        }
 
-    /* Messages */
-    .msg {
-      display: flex;
-      gap: 12px;
-      animation: msgIn 0.3s var(--transition) both;
-    }
-    @keyframes msgIn {
-      from { opacity:0; transform:translateY(10px); }
-      to   { opacity:1; transform:translateY(0); }
-    .sidebar {
-  position: fixed;
-  top: var(--nav-h); left: 0;
-  height: calc(100vh - var(--nav-h));
-  transform: translateX(-100%);
-  z-index: 160;
-  box-shadow: 8px 0 40px rgba(0,0,0,0.5);
-  background: var(--bg-panel); /* solid background instead of translucent */
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
+        .search-icon-svg {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: var(--color-text-dark);
+            stroke-width: 2;
+            pointer-events: none;
+        }
 
-    .msg.user { flex-direction: row-reverse; }
-    .msg-avatar {
-      width: 30px; height: 30px; border-radius: 8px;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700;
-    }
-    .msg-avatar.ai-avatar {
-      background: linear-gradient(135deg, var(--cyan), var(--sapphire));
-      color: #fff;
-      box-shadow: 0 0 10px var(--cyan-dim);
-    }
-    .msg-avatar.user-avatar {
-      background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(139,92,246,0.3));
-      border: 1px solid rgba(139,92,246,0.35);
-      color: #c4b5fd;
-    }
-    .msg-bubble {
-      max-width: 72%;
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      font-size: 13.5px;
-      line-height: 1.68;
-    }
-    .msg.ai .msg-bubble {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-primary);
-      backdrop-filter: var(--blur-glass);
-    }
-    .msg.user .msg-bubble {
-      background: linear-gradient(135deg, rgba(29,78,216,0.25), rgba(99,102,241,0.18));
-      border: 1px solid rgba(99,102,241,0.28);
-      color: var(--text-primary);
-    }
-    .msg-time {
-      font-size: 10px; color: var(--text-dim);
-      margin-top: 5px; letter-spacing: 0.04em;
-    }
-    .msg.user .msg-time { text-align: right; }
+        /* Scrollable Repository Department Track */
+        .sidebar-scrollable-track {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-hairline) transparent;
+        }
 
-    /* Typing indicator */
-    .typing-indicator {
-      display: none;
-      align-items: center;
-      gap: 12px;
-    }
-    .typing-indicator.show { display: flex; }
-    .typing-dots {
-      display: flex; gap: 4px; padding: 12px 16px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
-    }
-    .typing-dots span {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--text-dim);
-      animation: typingBounce 1.2s ease-in-out infinite;
-    }
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingBounce {
-      0%,60%,100% { transform: translateY(0); opacity:0.4; }
-      30%          { transform: translateY(-6px); opacity:1; }
-    }
+        .sidebar-scrollable-track::-webkit-scrollbar {
+            width: 4px;
+        }
 
-    /* ── CHAT INPUT ────────────────────────────────────────────── */
-    .chat-input-area {
-      flex-shrink: 0;
-      padding: 14px 32px 18px;
-      border-top: 1px solid var(--glass-border);
-      background: rgba(2,6,23,0.7);
-      backdrop-filter: blur(12px);
-    }
-    .chat-context-bar {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 10px;
-      font-size: 11px; color: var(--text-dim);
-    }
-    .ctx-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--cyan); box-shadow: 0 0 5px var(--cyan);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100%{ opacity:1; transform:scale(1); }
-      50%    { opacity:0.4; transform:scale(0.7); }
-    }
-    .ctx-subject { font-weight: 700; color: var(--text-secondary); }
+        .sidebar-scrollable-track::-webkit-scrollbar-thumb {
+            background: var(--border-hairline);
+            border-radius: 2px;
+        }
 
-    .chat-input-row {
-      display: flex; gap: 10px; align-items: flex-end;
-    }
-    .chat-input {
-      flex: 1;
-      resize: none;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
-      color: var(--text-primary);
-      font-family: inherit;
-      font-size: 13.5px;
-      line-height: 1.55;
-      padding: 11px 16px;
-      outline: none;
-      min-height: 44px;
-      max-height: 120px;
-      transition: border-color 0.2s, background 0.2s;
-      scrollbar-width: thin;
-    }
-    .chat-input::placeholder { color: var(--text-dim); }
-    .chat-input:focus {
-      border-color: var(--glass-border-h);
-      background: rgba(0,240,255,0.05);
-    }
-    .chat-send-btn {
-      width: 44px; height: 44px; flex-shrink: 0;
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, var(--cyan), #38bdf8);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--bg-deep);
-      font-size: 16px;
-      box-shadow: 0 0 16px rgba(0,240,255,0.3);
-      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-    }
-    .chat-send-btn:hover { transform: scale(1.06); box-shadow: 0 0 24px rgba(0,240,255,0.45); }
-    .chat-send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .department-wrapper-block {
+            margin-bottom: 2rem;
+        }
 
-    /* ── MOBILE OVERLAY ────────────────────────────────────────── */
-    .sidebar-overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 150;
-      background: rgba(2,6,23,0.7);
-      backdrop-filter: blur(4px);
-    }
-    .sidebar-overlay.show { display: block; }
+        .department-header-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding: 0 0.25rem;
+        }
 
-    /* ── RESPONSIVE: DESKTOP 769–1399px ─────────────────────────── */
-    @media (max-width: 1399px) {
-      :root { --sidebar-w: 248px; }
-      .info-panel { padding: 22px 24px 18px; }
-      .chat-messages { padding: 18px 24px; }
-      .chat-input-area { padding: 12px 24px 16px; }
-    }
+        .department-title-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--color-text-dark);
+        }
 
-    /* ── RESPONSIVE: ULTRA-WIDE >=1400px ──────────────────────── */
-    @media (min-width: 1400px) {
-      :root { --sidebar-w: 300px; }
-      .info-panel { padding: 34px 44px 26px; }
-      .chat-messages { padding: 24px 44px; }
-      .chat-input-area { padding: 16px 44px 22px; }
-      .msg-bubble { font-size: 14px; }
-    }
+        .department-count-badge {
+            font-size: 0.7rem;
+            background: var(--bg-surface-glass);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-hairline);
+            color: var(--color-text-muted);
+        }
 
-    /* ── RESPONSIVE: MOBILE <=768px ─────────────────────────────── */
-    @media (max-width: 768px) {
-      :root { --sidebar-w: 80vw; }
-      html, body { overflow: auto; }
-      .nav { padding: 0 16px; gap: 10px; }
-      .nav-dept-indicator { display: none; }
-      .nav-sidebar-toggle { display: flex; align-items: center; justify-content: center; }
-      .layout { position: fixed; }
+        .department-subject-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
 
-      .sidebar {
-        position: fixed;
-        top: var(--nav-h); left: 0;
-        height: calc(100vh - var(--nav-h));
-        transform: translateX(-100%);
-        z-index: 160;
-        box-shadow: 8px 0 40px rgba(0,0,0,0.5);
-      }
-      .sidebar.mobile-open { transform: translateX(0); }
-      .sidebar-overlay { display: none; }
-      .sidebar-overlay.show { display: block; }
+        /* Subject Tab Micro-Engine */
+        .subject-tab-element {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 0.65rem 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: var(--transition-fluid);
+            position: relative;
+            overflow: hidden;
+        }
 
-      .info-panel {
-        flex-direction: column;
-        gap: 14px;
-        padding: 18px 16px 14px;
-      }
-      .info-right { min-width: 0; flex-direction: row; flex-wrap: wrap; }
-      .chat-messages { padding: 14px 16px; }
-      .chat-input-area { padding: 10px 16px 14px; }
-      .info-key-concepts { margin-top: 8px; }
-    }
-  </style>
+        .subject-tab-element:hover {
+            background: var(--bg-surface-glass-hover);
+            border-color: var(--border-hairline);
+        }
+
+        .subject-tab-element.is-active {
+            background: var(--bg-surface-active);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: inset 0 0 12px rgba(0, 240, 255, 0.05);
+        }
+
+        .subject-tab-index {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--glow-cyan);
+            margin-right: 0.75rem;
+            opacity: 0.7;
+            width: 20px;
+        }
+
+        .subject-tab-name {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            transition: var(--transition-fluid);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .subject-tab-element.is-active .subject-tab-name {
+            color: var(--color-text-primary);
+        }
+
+        .subject-tab-indicator-node {
+            width: 4px;
+            height: 4px;
+            background: var(--glow-cyan);
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition-fluid);
+            box-shadow: 0 0 8px var(--glow-cyan);
+        }
+
+        .subject-tab-element.is-active .subject-tab-indicator-node {
+            opacity: 1;
+        }
+
+        /* RIGHT CONTEXTUAL DISPLAY DISPLAY PANEL */
+        .workspace-display-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 0%, rgba(15, 23, 42, 0.3) 0%, transparent 70%);
+            position: relative;
+        }
+
+        /* Non-Selected Empty State Module */
+        .panel-empty-state-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            z-index: 5;
+            transition: var(--transition-fluid);
+            background: var(--bg-base);
+        }
+
+        .panel-empty-state-container.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.98);
+        }
+
+        .directory-badge-capsule {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            color: var(--glow-cyan);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+
+        .directory-badge-capsule::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--glow-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--glow-cyan);
+        }
+
+        .empty-state-headline {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-paragraph {
+            max-width: 520px;
+            color: var(--color-text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+        }
+
+        .central-geometric-node {
+            width: 64px;
+            height: 64px;
+            position: relative;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .geometric-hexagon {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--border-hairline);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: geoRotate 12s linear infinite;
+        }
+
+        .geometric-hexagon.inner {
+            width: 60%;
+            height: 60%;
+            border-color: var(--glow-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            animation: geoRotateInner 8s linear infinite;
+        }
+
+        @keyframes geoRotate {
+            0% { transform: rotate(0deg); border-color: var(--border-hairline); }
+            50% { border-color: var(--glow-blue); }
+            100% { transform: rotate(360deg); border-color: var(--border-hairline); }
+        }
+        @keyframes geoRotateInner {
+            0% { transform: rotate(360deg); opacity: 0.6; }
+            50% { opacity: 1; transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); opacity: 0.6; }
+        }
+
+        .engine-title-string {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .engine-subtitle-string {
+            font-size: 0.95rem;
+            color: var(--color-text-dark);
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        /* Active Workspace Dashboard Layout */
+        .panel-active-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            transform: scale(1.02);
+            transition: var(--transition-fluid);
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+        }
+
+        .panel-active-workspace.is-visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+            position: relative;
+        }
+
+        /* Knowledge System Manifest Header Block */
+        .workspace-knowledge-card {
+            padding: 1.75rem 2.5rem;
+            background: rgba(15, 23, 42, 0.25);
+            border-bottom: 1px solid var(--border-hairline);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            flex-shrink: 0;
+        }
+
+        .knowledge-department-route {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--glow-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .knowledge-subject-headline {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .knowledge-subject-summary {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            max-width: 800px;
+        }
+
+        /* Sandbox Simulation Execution Chat Frame */
+        .simulation-engine-terminal {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(2, 6, 23, 0.4);
+        }
+
+        .terminal-output-stream {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-hairline) transparent;
+        }
+
+        .terminal-output-stream::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .terminal-output-stream::-webkit-scrollbar-thumb {
+            background: var(--border-hairline);
+        }
+
+        /* Message Structure Blueprints */
+        .sim-message-packet {
+            display: flex;
+            gap: 1rem;
+            max-width: 85%;
+            animation: messageRender 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes messageRender {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sim-message-packet.system-variant {
+            align-self: flex-start;
+        }
+
+        .sim-message-packet.user-variant {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar-node {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            border: 1px solid var(--border-hairline);
+        }
+
+        .sim-message-packet.system-variant .message-avatar-node {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--glow-cyan);
+            border-color: rgba(0, 240, 255, 0.2);
+        }
+
+        .sim-message-packet.user-variant .message-avatar-node {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--glow-blue);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .message-content-balloon {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-hairline);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .sim-message-packet.system-variant .message-content-balloon {
+            border-top-left-radius: 0;
+        }
+
+        .sim-message-packet.user-variant .message-content-balloon {
+            border-top-right-radius: 0;
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        /* Console Stream Code Highlights */
+        .code-syntax-block {
+            margin-top: 0.75rem;
+            background: #010409;
+            border: 1px solid var(--border-hairline);
+            border-radius: 6px;
+            padding: 0.85rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #e6edf3;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* ==========================================================================
+           4. PERSISTENT CONSOLE FOOTER SYSTEM
+           ========================================================================== */
+        .terminal-input-dock {
+            padding: 1.5rem 2.5rem;
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--border-hairline);
+            flex-shrink: 0;
+        }
+
+        .system-status-registry-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--glow-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--glow-cyan);
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .status-state-string {
+            color: var(--color-text-dark);
+        }
+
+        .status-state-string span {
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        .input-form-control-node {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .input-text-stream-area {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-hairline);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            color: var(--color-text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition-fluid);
+            resize: none;
+            height: 52px;
+            font-family: var(--font-family);
+            line-height: 1.2;
+        }
+
+        .input-text-stream-area:focus {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.08);
+        }
+
+        .input-text-stream-area:disabled {
+            background: rgba(15, 23, 42, 0.2);
+            cursor: not-allowed;
+            color: var(--color-text-dark);
+        }
+
+        .transmission-dispatch-btn {
+            background: var(--bg-surface-glass);
+            border: 1px solid var(--border-hairline);
+            color: var(--glow-cyan);
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fluid);
+            flex-shrink: 0;
+        }
+
+        .transmission-dispatch-btn:hover:not(:disabled) {
+            background: var(--glow-cyan);
+            color: var(--bg-base);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .transmission-dispatch-btn:disabled {
+            color: var(--color-text-dark);
+            cursor: not-allowed;
+            background: rgba(15, 23, 42, 0.1);
+        }
+
+        .transmission-dispatch-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* ==========================================================================
+           5. THREE-TIER RESPONSIVE SCALING ENGINE
+           ========================================================================== */
+        
+        /* Desktop Default Monitors Monitor Rule System (769px to 1399px) */
+        @media (max-width: 1399px) {
+            .workspace-sidebar {
+                width: 320px;
+            }
+            .empty-state-headline {
+                font-size: 2rem;
+            }
+            .terminal-output-stream {
+                padding: 1.75rem;
+            }
+        }
+
+        /* Mobile Breakpoints Interface Overhaul Structure (<=768px) */
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
+            .nexus-app-container {
+                height: auto;
+                min-height: 100vh;
+                overflow: visible;
+            }
+            .nexus-workspace-grid {
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+            }
+            .workspace-sidebar {
+                width: 100vw;
+                height: auto;
+                max-height: 400px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-hairline);
+            }
+            .sidebar-scrollable-track {
+                display: flex;
+                gap: 1.5rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 1rem;
+            }
+            .department-wrapper-block {
+                margin-bottom: 0;
+                flex-shrink: 0;
+                width: 280px;
+            }
+            .department-subject-list {
+                max-height: 220px;
+                overflow-y: auto;
+                padding-right: 0.25rem;
+            }
+            .workspace-display-panel {
+                width: 100vw;
+                height: calc(100vh - 472px);
+                min-height: 500px;
+                position: relative;
+            }
+            .panel-empty-state-container, .panel-active-workspace {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+            .terminal-input-dock {
+                padding: 1rem;
+            }
+            .workspace-knowledge-card {
+                padding: 1rem 1.5rem;
+            }
+            .terminal-output-stream {
+                padding: 1.25rem;
+            }
+        }
+
+        /* Larger Displays Framework Scale Expansion (>=1400px) */
+        @media (min-width: 1400px) {
+            .workspace-sidebar {
+                width: 420px;
+            }
+            .empty-state-headline {
+                font-size: 2.75rem;
+            }
+            .workspace-knowledge-card {
+                padding: 2.25rem 3.5rem;
+            }
+            .terminal-output-stream {
+                padding: 3.5rem;
+            }
+            .message-content-balloon {
+                font-size: 1.05rem;
+                padding: 1.25rem 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- AMBIENT ORBS -->
-  <div class="bg-orbs" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
-
-  <!-- NAV -->
-  <nav class="nav">
-    <button class="nav-sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
-    <a href="index.html" class="nav-logo">
-      <div class="logo-mark">F</div>
-      <span class="logo-text">Freya's <span>Nexus</span></span>
-    </a>
-    <div class="nav-divider"></div>
-    <div class="nav-breadcrumb">Directory <span>/ <span id="navSubject">—</span></span></div>
-    <div class="nav-spacer"></div>
-    <div class="nav-dept-indicator" id="navDeptBadge">
-      <div class="nav-dept-dot" id="navDeptDot"></div>
-      <span id="navDeptLabel">Select a Subject</span>
-    </div>
-    <a href="index.html" class="nav-home">← Home</a>
-  </nav>
-
-  <!-- SIDEBAR OVERLAY (mobile) -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-  <!-- LAYOUT -->
-  <div class="layout">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-search">
-        <div class="search-input-wrap">
-          <span class="search-icon">⌕</span>
-          <input type="text" id="searchInput" placeholder="Search 100 subjects…" autocomplete="off" />
-        </div>
-      </div>
-
-      <div class="sidebar-dept-tabs" id="deptTabs">
-        <button class="dept-tab active" data-dept="math">Math</button>
-        <button class="dept-tab" data-dept="phys">Science</button>
-        <button class="dept-tab" data-dept="neuro">Life</button>
-        <button class="dept-tab" data-dept="phil">Phil</button>
-        <button class="dept-tab" data-dept="cs">CS</button>
-      </div>
-
-      <div class="sidebar-subject-list" id="subjectList">
-        <!-- Populated by JS -->
-      </div>
-    </aside>
-
-    <!-- MAIN PANEL -->
-    <main class="main-panel">
-
-      <!-- INFO DISPLAY PANEL -->
-      <div class="info-panel" id="infoPanel">
-        <div class="info-left">
-          <div class="info-dept-badge" id="infoDeptBadge">
-            <div class="info-dept-badge-dot"></div>
-            <span id="infoDeptName">Directory</span>
-          </div>
-          <div class="info-subject-title" id="infoTitle">Select a Subject</div>
-          <div class="info-subject-desc" id="infoDesc">
-            Choose any of the 100 subjects from the sidebar to load its knowledge panel and begin a focused simulation conversation.
-          </div>
-          <div class="info-key-concepts" id="infoChips">
-            <!-- concept chips rendered by JS -->
-          </div>
-        </div>
-        <div class="info-right" id="infoMeta">
-          <!-- meta rows rendered by JS -->
-        </div>
-      </div>
-
-      <!-- CHAT AREA -->
-      <div class="chat-area">
-        <div class="chat-messages" id="chatMessages">
-          <div class="chat-welcome" id="chatWelcome">
-            <div class="chat-welcome-icon">⬡</div>
-            <div class="chat-welcome-title">Knowledge Simulation Engine</div>
-            <div class="chat-welcome-sub">Each subject opens an isolated chat tuned to that discipline. Select a topic from the sidebar to begin.</div>
-            <div class="chat-welcome-prompts" id="welcomePrompts">
-              <!-- filled by JS after selection -->
+    <div class="nexus-app-container">
+        
+        <header class="nexus-header">
+            <div class="header-left-cluster">
+                <button class="menu-trigger-btn" aria-label="Toggle Navigation Module">
+                    <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <div class="brand-monogram-box">F</div>
+                <h1 class="brand-title-string">Freya's <span>Nexus</span></h1>
+                <div class="current-path-indicator">
+                    <span>Directory</span>
+                    <span class="path-caret">/</span>
+                    <span id="path-sub-node">—</span>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="typing-indicator" id="typingIndicator">
-          <div class="msg-avatar ai-avatar">N</div>
-          <div class="typing-dots">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-      </div>
+            <a href="index.html" class="home-navigation-anchor">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Home</span>
+            </a>
+        </header>
 
-      <!-- CHAT INPUT -->
-      <div class="chat-input-area">
-        <div class="chat-context-bar">
-          <div class="ctx-dot"></div>
-          <span>Topic-Isolated Mode —</span>
-          <span class="ctx-subject" id="ctxSubjectLabel">No subject selected</span>
-        </div>
-        <div class="chat-input-row">
-          <textarea
-            class="chat-input"
-            id="chatInput"
-            rows="1"
-            placeholder="Select a subject to start asking…"
-            disabled
-          ></textarea>
-          <button class="chat-send-btn" id="sendBtn" disabled>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-          </button>
-        </div>
-      </div>
+        <main class="nexus-workspace-grid">
+            
+            <aside class="workspace-sidebar">
+                <div class="sidebar-search-container">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="subject-search-core" class="search-input-field" placeholder="Search 100 specialized disciplines...">
+                    </div>
+                </div>
 
-    </main>
-  </div><!-- /layout -->
+                <div class="sidebar-scrollable-track" id="master-sidebar-track">
+                    </div>
+            </aside>
 
-  <script>
-  // ═══════════════════════════════════════════════════════════════
-  // DATA: 100 SUBJECTS
-  // ═══════════════════════════════════════════════════════════════
-  const SUBJECTS = [
-    // MATHEMATICS (1–20)
-    { id:1,  dept:'math', name:'Linear Algebra',
-      desc:'The study of vector spaces, linear mappings, matrices, and systems of linear equations. Foundational to virtually every branch of modern mathematics, physics, and machine learning.',
-      concepts:['Eigenvalues','Matrix Decomposition','Vector Spaces','Linear Transformations','Determinants'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:2,  dept:'math', name:'Calculus AB',
-      desc:'Differential and integral calculus of single-variable functions. Covers limits, derivatives, definite integrals, and the fundamental theorem connecting them.',
-      concepts:['Limits','Derivatives','Integrals','Chain Rule','Riemann Sums'],
-      level:'High School / Intro', field:'Mathematics' },
-    { id:3,  dept:'math', name:'Calculus BC',
-      desc:'An extension of Calculus AB into parametric equations, polar coordinates, infinite series, and advanced integration techniques.',
-      concepts:['Taylor Series','Parametric Curves','Polar Coordinates','Convergence Tests','Integration By Parts'],
-      level:'Advanced Intro', field:'Mathematics' },
-    { id:4,  dept:'math', name:'Differential Equations',
-      desc:'The study of equations relating a function to its derivatives. Models everything from population growth and heat transfer to quantum wavefunctions and circuit behavior.',
-      concepts:['ODEs','PDEs','Laplace Transforms','Phase Portraits','Boundary Value Problems'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:5,  dept:'math', name:'Discrete Mathematics',
-      desc:'Mathematics of discrete structures: logic, proofs, sets, graph theory, combinatorics, and algorithms. The backbone of computer science theory.',
-      concepts:['Proof Techniques','Boolean Logic','Graphs','Recursion','Counting Principles'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:6,  dept:'math', name:'Number Theory',
-      desc:'The study of integers and their properties — primes, divisibility, congruences, and the deep structures that underlie modern cryptography.',
-      concepts:['Prime Numbers','Modular Arithmetic','Fermat\'s Theorem','Euler\'s Totient','Diophantine Equations'],
-      level:'Undergraduate–Graduate', field:'Mathematics' },
-    { id:7,  dept:'math', name:'Topology',
-      desc:'The study of properties preserved under continuous deformation. Explores continuity, compactness, connectedness, and spaces far beyond classical geometry.',
-      concepts:['Homeomorphisms','Manifolds','Open Sets','Homotopy','Compactness'],
-      level:'Graduate', field:'Mathematics' },
-    { id:8,  dept:'math', name:'Complex Analysis',
-      desc:'Calculus extended to complex numbers. Analytic functions, contour integration, and residue theory reveal extraordinary connections across mathematics and physics.',
-      concepts:['Cauchy\'s Theorem','Residues','Conformal Maps','Analytic Functions','Laurent Series'],
-      level:'Graduate', field:'Mathematics' },
-    { id:9,  dept:'math', name:'Abstract Algebra',
-      desc:'The study of algebraic structures — groups, rings, fields, and modules — focusing on the common patterns that unite diverse mathematical systems.',
-      concepts:['Groups','Rings','Fields','Homomorphisms','Galois Theory'],
-      level:'Undergraduate–Graduate', field:'Mathematics' },
-    { id:10, dept:'math', name:'Probability Theory',
-      desc:'The rigorous mathematical study of randomness and uncertainty. Measure-theoretic probability, random variables, convergence theorems, and stochastic processes.',
-      concepts:['Measure Theory','Random Variables','Central Limit Theorem','Markov Chains','Expectation'],
-      level:'Undergraduate–Graduate', field:'Mathematics' },
-    { id:11, dept:'math', name:'Mathematical Statistics',
-      desc:'Formal statistical inference grounded in probability. Parameter estimation, hypothesis testing, Bayesian methods, and regression theory.',
-      concepts:['MLE','Confidence Intervals','Hypothesis Testing','Bayes\' Theorem','Regression'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:12, dept:'math', name:'Geometry & Trigonometry',
-      desc:'Classical Euclidean geometry, coordinate geometry, and the study of angle relationships in triangles. Connects visual intuition to algebraic reasoning.',
-      concepts:['Euclidean Proofs','Sine/Cosine','Unit Circle','Analytic Geometry','Congruence'],
-      level:'High School', field:'Mathematics' },
-    { id:13, dept:'math', name:'Numerical Analysis',
-      desc:'The design and analysis of algorithms for computing mathematical solutions numerically. Addresses approximation, error propagation, and computational stability.',
-      concepts:['Root Finding','Interpolation','Numerical Integration','Error Analysis','Iterative Methods'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:14, dept:'math', name:'Graph Theory',
-      desc:'The study of networks of vertices and edges. Models social networks, circuits, routing problems, and underpins algorithms across computer science.',
-      concepts:['Trees','Paths','Euler/Hamilton Circuits','Coloring','Network Flow'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:15, dept:'math', name:'Set Theory',
-      desc:'The foundational language of mathematics. Explores collections, cardinality, ordinals, the axiom of choice, and the Cantorian infinite.',
-      concepts:['Cardinality','ZFC Axioms','Ordinals','Cantor\'s Theorem','Well-Ordering'],
-      level:'Undergraduate–Graduate', field:'Mathematics' },
-    { id:16, dept:'math', name:'Logic & Foundations',
-      desc:'Formal systems for mathematical truth. Propositional and predicate logic, Gödel\'s incompleteness theorems, and the limits of formal provability.',
-      concepts:['Propositional Logic','First-Order Logic','Gödel\'s Theorems','Proof Systems','Decidability'],
-      level:'Graduate', field:'Mathematics' },
-    { id:17, dept:'math', name:'Cryptography Math',
-      desc:'The mathematical foundations behind secure communication: number theory, elliptic curves, lattice problems, and the hardness assumptions that protect modern data.',
-      concepts:['RSA','Elliptic Curves','Diffie-Hellman','Hash Functions','Zero-Knowledge Proofs'],
-      level:'Graduate', field:'Mathematics' },
-    { id:18, dept:'math', name:'Combinatorics',
-      desc:'The art of counting, arranging, and selecting. From basic permutations to Ramsey theory and generating functions, combinatorics touches every area of mathematics.',
-      concepts:['Permutations','Generating Functions','Ramsey Theory','Inclusion-Exclusion','Pigeonhole'],
-      level:'Undergraduate', field:'Mathematics' },
-    { id:19, dept:'math', name:'Chaos Theory',
-      desc:'The study of deterministic systems exhibiting sensitive dependence on initial conditions. Fractals, strange attractors, and the geometry of unpredictability.',
-      concepts:['Sensitive Dependence','Strange Attractors','Fractals','Lyapunov Exponents','Bifurcations'],
-      level:'Graduate', field:'Mathematics' },
-    { id:20, dept:'math', name:'Game Theory',
-      desc:'Mathematical models of strategic interaction. Nash equilibria, zero-sum games, mechanism design, and the logic of rational agents in conflict and cooperation.',
-      concepts:['Nash Equilibrium','Zero-Sum Games','Prisoner\'s Dilemma','Mechanism Design','Cooperative Games'],
-      level:'Undergraduate–Graduate', field:'Mathematics' },
+            <section class="workspace-display-panel">
+                
+                <div class="panel-empty-state-container" id="engine-empty-state">
+                    <div class="directory-badge-capsule">Directory</div>
+                    <h2 class="empty-state-headline">Select a Subject</h2>
+                    <p class="empty-state-paragraph">
+                        Choose any of the 100 subjects from the sidebar to load its knowledge panel and begin a focused simulation conversation.
+                    </p>
+                    <div class="central-geometric-node">
+                        <div class="geometric-hexagon out"></div>
+                        <div class="geometric-hexagon inner"></div>
+                    </div>
+                    <h3 class="engine-title-string">Knowledge Simulation Engine</h3>
+                    <p class="engine-subtitle-string">Each subject opens an isolated chat tuned to that discipline. Select a topic from the sidebar to begin.</p>
+                </div>
 
-    // PHYSICAL SCIENCES (21–40)
-    { id:21, dept:'phys', name:'Quantum Mechanics',
-      desc:'The theory governing matter and energy at atomic and subatomic scales. Wave functions, superposition, measurement, and the deeply non-classical logic of the quantum world.',
-      concepts:['Schrödinger Equation','Wave Functions','Superposition','Entanglement','Uncertainty Principle'],
-      level:'Graduate', field:'Physics' },
-    { id:22, dept:'phys', name:'Astrophysics',
-      desc:'The application of physics to stars, galaxies, black holes, and the cosmos. Stellar evolution, gravitational physics, and the large-scale structure of the universe.',
-      concepts:['Stellar Evolution','Black Holes','Dark Matter','Cosmic Microwave Background','Neutron Stars'],
-      level:'Graduate', field:'Physics' },
-    { id:23, dept:'phys', name:'Theoretical Physics',
-      desc:'The mathematical framework underlying all physical law. From classical mechanics to string theory — where mathematics and physical reality converge at the deepest level.',
-      concepts:['Lagrangian Mechanics','Field Theory','String Theory','Symmetry Groups','Path Integrals'],
-      level:'Graduate', field:'Physics' },
-    { id:24, dept:'phys', name:'Thermodynamics',
-      desc:'The science of heat, work, and energy transformation. The four laws governing macroscopic systems, entropy, and the arrow of time.',
-      concepts:['Entropy','Laws of Thermodynamics','Heat Engines','Free Energy','Statistical Mechanics'],
-      level:'Undergraduate', field:'Physics' },
-    { id:25, dept:'phys', name:'Particle Physics',
-      desc:'The study of the fundamental constituents of matter and their interactions. The Standard Model, quarks, leptons, bosons, and the search for physics beyond the known.',
-      concepts:['Standard Model','Quarks','Leptons','Higgs Boson','Gauge Symmetry'],
-      level:'Graduate', field:'Physics' },
-    { id:26, dept:'phys', name:'Relativity Theory',
-      desc:'Einstein\'s special and general relativity. Time dilation, length contraction, the curvature of spacetime, and gravity as geometry.',
-      concepts:['Spacetime','Lorentz Transformations','Einstein Field Equations','Geodesics','Gravitational Waves'],
-      level:'Graduate', field:'Physics' },
-    { id:27, dept:'phys', name:'Electromagnetism',
-      desc:'The unified theory of electric and magnetic fields. Maxwell\'s equations, electromagnetic waves, and the force that governs most everyday phenomena.',
-      concepts:['Maxwell\'s Equations','Faraday\'s Law','Gauss\'s Law','EM Waves','Poynting Vector'],
-      level:'Undergraduate', field:'Physics' },
-    { id:28, dept:'phys', name:'Optics & Photonics',
-      desc:'The science of light — its propagation, interaction with matter, and manipulation. From geometric optics to lasers, fiber optics, and quantum light.',
-      concepts:['Diffraction','Interference','Lasers','Fiber Optics','Quantum Optics'],
-      level:'Undergraduate–Graduate', field:'Physics' },
-    { id:29, dept:'phys', name:'Nuclear Physics',
-      desc:'The structure, behavior, and reactions of atomic nuclei. Radioactivity, fission, fusion, and the forces that bind nucleons together.',
-      concepts:['Nuclear Fission','Fusion','Radioactive Decay','Nuclear Forces','Binding Energy'],
-      level:'Graduate', field:'Physics' },
-    { id:30, dept:'phys', name:'Organic Chemistry',
-      desc:'The chemistry of carbon compounds. Structure, reactivity, synthesis, and mechanisms — the molecular foundation of biology, medicine, and materials.',
-      concepts:['Functional Groups','Reaction Mechanisms','Stereochemistry','Synthesis','Aromaticity'],
-      level:'Undergraduate', field:'Chemistry' },
-    { id:31, dept:'phys', name:'Inorganic Chemistry',
-      desc:'The chemistry of non-carbon-centered compounds. Coordination chemistry, transition metals, crystal structures, and the full breadth of the periodic table.',
-      concepts:['Coordination Complexes','Crystal Field Theory','Periodic Trends','Ligands','Redox Chemistry'],
-      level:'Undergraduate', field:'Chemistry' },
-    { id:32, dept:'phys', name:'Physical Chemistry',
-      desc:'The intersection of physics and chemistry — thermodynamics of reactions, quantum chemistry, spectroscopy, and kinetics.',
-      concepts:['Gibbs Free Energy','Spectroscopy','Reaction Kinetics','Statistical Thermodynamics','Molecular Orbitals'],
-      level:'Undergraduate–Graduate', field:'Chemistry' },
-    { id:33, dept:'phys', name:'Biochemistry',
-      desc:'The chemistry of living systems. Proteins, nucleic acids, enzymes, metabolic pathways, and the molecular mechanisms that sustain life.',
-      concepts:['Enzyme Kinetics','Metabolism','DNA Replication','Protein Folding','Signal Transduction'],
-      level:'Undergraduate', field:'Chemistry' },
-    { id:34, dept:'phys', name:'Analytical Chemistry',
-      desc:'The science of measuring chemical composition. Instrumental methods, spectroscopy, chromatography, and the quantitative analysis of matter.',
-      concepts:['Chromatography','Mass Spectrometry','NMR','Titration','Electrochemistry'],
-      level:'Undergraduate', field:'Chemistry' },
-    { id:35, dept:'phys', name:'Quantum Chemistry',
-      desc:'Quantum mechanics applied to molecular systems. Electronic structure, the Schrödinger equation for molecules, and computational approaches to chemical bonding.',
-      concepts:['Molecular Orbitals','DFT','Hartree-Fock','Born-Oppenheimer','Electron Correlation'],
-      level:'Graduate', field:'Chemistry' },
-    { id:36, dept:'phys', name:'Geology & Tectonics',
-      desc:'The study of Earth\'s solid structure, rock cycles, and the dynamic motion of tectonic plates. Mountain building, earthquakes, and deep time.',
-      concepts:['Plate Tectonics','Rock Cycle','Seismology','Stratigraphy','Mantle Convection'],
-      level:'Undergraduate', field:'Earth Science' },
-    { id:37, dept:'phys', name:'Meteorology',
-      desc:'The science of the atmosphere and weather systems. Pressure dynamics, fronts, convection, and the physics underlying climate and forecast models.',
-      concepts:['Atmospheric Dynamics','Fronts','Coriolis Effect','Convection','Climate Models'],
-      level:'Undergraduate', field:'Earth Science' },
-    { id:38, dept:'phys', name:'Oceanography',
-      desc:'The study of Earth\'s oceans — currents, chemistry, biology, and the ocean\'s role in regulating global climate and supporting life.',
-      concepts:['Ocean Currents','Thermohaline Circulation','Marine Chemistry','Wave Dynamics','Deep Sea'],
-      level:'Undergraduate', field:'Earth Science' },
-    { id:39, dept:'phys', name:'Planetary Science',
-      desc:'The formation, evolution, and properties of planets, moons, asteroids, and planetary systems — within our solar system and beyond.',
-      concepts:['Planet Formation','Exoplanets','Orbital Mechanics','Astrogeology','Atmospheres'],
-      level:'Graduate', field:'Earth Science' },
-    { id:40, dept:'phys', name:'Volcanology',
-      desc:'The study of volcanoes, magma systems, and volcanic phenomena. Eruption mechanics, lava chemistry, and the role of volcanism in shaping Earth\'s surface.',
-      concepts:['Magma Chambers','Eruption Styles','Pyroclastic Flow','Lava Composition','Volcanic Hazards'],
-      level:'Undergraduate', field:'Earth Science' },
+                <div class="panel-active-workspace" id="engine-active-workspace">
+                    
+                    <div class="workspace-knowledge-card">
+                        <div class="knowledge-department-route" id="display-meta-dept">DEPARTMENT</div>
+                        <h2 class="knowledge-subject-headline" id="display-meta-title">Subject Title String</h2>
+                        <p class="knowledge-subject-summary" id="display-meta-desc">Analytical conceptual framework profile documentation index detailing algorithmic models and simulation criteria.</p>
+                    </div>
 
-    // LIFE & NEUROSCIENCE (41–60)
-    { id:41, dept:'neuro', name:'Cellular Neuroscience',
-      desc:'The biology of individual neurons — their structure, ion channels, action potential generation, and how single cells compute and communicate.',
-      concepts:['Action Potentials','Ion Channels','Membrane Potential','Axon Myelination','Dendritic Integration'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:42, dept:'neuro', name:'Cognitive Neuroscience',
-      desc:'The neural basis of cognition. How attention, memory, language, decision-making, and consciousness arise from patterns of brain activity.',
-      concepts:['Working Memory','Attention Networks','Language Areas','Decision Making','Neural Correlates'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:43, dept:'neuro', name:'Behavioral Neuroscience',
-      desc:'The relationship between brain function and behavior. Learning, motivation, reward circuitry, emotion, and how neural systems drive action.',
-      concepts:['Reward Circuits','Conditioning','Dopamine','Limbic System','Fear Response'],
-      level:'Undergraduate–Graduate', field:'Neuroscience' },
-    { id:44, dept:'neuro', name:'Neuroanatomy',
-      desc:'The structural organization of the nervous system. Brain regions, white matter tracts, cranial nerves, and the macro-to-micro architecture of neural tissue.',
-      concepts:['Cortical Lobes','Basal Ganglia','Cerebellum','White Matter Tracts','Brainstem'],
-      level:'Undergraduate', field:'Neuroscience' },
-    { id:45, dept:'neuro', name:'Neuropharmacology',
-      desc:'How drugs and endogenous chemicals alter nervous system function. Receptor pharmacology, neurotransmitter systems, and the pharmacological basis of neurological and psychiatric drugs.',
-      concepts:['Receptor Agonism','Neurotransmitters','Blood-Brain Barrier','Psychopharmacology','Drug Tolerance'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:46, dept:'neuro', name:'Computational Neuroscience',
-      desc:'Mathematical and computational models of neural function. From integrate-and-fire neurons to large-scale network simulations and information-theoretic approaches.',
-      concepts:['Integrate-and-Fire','Neural Coding','Hebbian Learning','Attractor Networks','Spiking Networks'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:47, dept:'neuro', name:'Molecular Biology',
-      desc:'The mechanisms of gene expression, DNA replication, transcription, translation, and the molecular machines that drive cellular life.',
-      concepts:['DNA Replication','Transcription','Translation','CRISPR','Gene Regulation'],
-      level:'Undergraduate', field:'Biology' },
-    { id:48, dept:'neuro', name:'Genetics & Genomics',
-      desc:'The study of heredity, genetic variation, genome structure, and the relationship between genotype and phenotype from Mendelian principles to whole-genome sequencing.',
-      concepts:['Mendelian Genetics','Genome Sequencing','SNPs','Epigenetics','GWAS'],
-      level:'Undergraduate–Graduate', field:'Biology' },
-    { id:49, dept:'neuro', name:'Evolutionary Biology',
-      desc:'The mechanisms and history of biological evolution. Natural selection, genetic drift, speciation, phylogenetics, and the common ancestry of all life.',
-      concepts:['Natural Selection','Genetic Drift','Speciation','Phylogenetics','Adaptation'],
-      level:'Undergraduate', field:'Biology' },
-    { id:50, dept:'neuro', name:'Microbiology',
-      desc:'The study of microorganisms — bacteria, archaea, fungi, and viruses. Metabolism, pathogenicity, ecology, and applications in medicine and biotechnology.',
-      concepts:['Bacterial Genetics','Pathogenicity','Microbiome','Biofilms','Antimicrobial Resistance'],
-      level:'Undergraduate', field:'Biology' },
-    { id:51, dept:'neuro', name:'Immunology',
-      desc:'The biology of the immune system. Innate and adaptive immunity, antigen recognition, T and B cells, vaccines, and immune dysfunction in disease.',
-      concepts:['Innate Immunity','Adaptive Immunity','T Cells','B Cells','Immunological Memory'],
-      level:'Undergraduate–Graduate', field:'Biology' },
-    { id:52, dept:'neuro', name:'Virology',
-      desc:'The study of viruses — their structure, replication strategies, evolution, and the mechanisms by which they cause disease and evade immunity.',
-      concepts:['Viral Replication','Capsid Structure','Host Tropism','Viral Evolution','Antiviral Mechanisms'],
-      level:'Graduate', field:'Biology' },
-    { id:53, dept:'neuro', name:'Marine Biology',
-      desc:'Life in the ocean — from microscopic plankton to whale ecology, coral reef systems, deep-sea biology, and the impact of human activity on marine ecosystems.',
-      concepts:['Coral Reefs','Plankton Dynamics','Deep-Sea Ecology','Marine Mammals','Ocean Food Webs'],
-      level:'Undergraduate', field:'Biology' },
-    { id:54, dept:'neuro', name:'Ecology',
-      desc:'The relationships between organisms and their environments. Populations, communities, ecosystems, energy flow, nutrient cycling, and biodiversity.',
-      concepts:['Food Webs','Population Dynamics','Nutrient Cycling','Biodiversity','Ecosystem Services'],
-      level:'Undergraduate', field:'Biology' },
-    { id:55, dept:'neuro', name:'Biophysics',
-      desc:'Physics applied to biological systems. Membrane mechanics, molecular motors, protein dynamics, and the thermodynamics of living matter.',
-      concepts:['Membrane Mechanics','Molecular Motors','Single-Molecule Techniques','Protein Folding','Diffusion'],
-      level:'Graduate', field:'Biology' },
-    { id:56, dept:'neuro', name:'Astrobiology',
-      desc:'The study of life in the cosmos — its origins, distribution, and future. Extremophiles, habitable zones, planetary biosignatures, and the search for extraterrestrial life.',
-      concepts:['Extremophiles','Habitable Zones','Biosignatures','Origin of Life','Planetary Habitability'],
-      level:'Graduate', field:'Biology' },
-    { id:57, dept:'neuro', name:'Neuroplasticity',
-      desc:'The brain\'s capacity to reorganize itself in response to experience, injury, or learning. Synaptic plasticity, critical periods, and therapeutic implications.',
-      concepts:['Long-Term Potentiation','Critical Periods','Synaptic Pruning','Cortical Remapping','BDNF'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:58, dept:'neuro', name:'Synaptic Transmission',
-      desc:'The molecular mechanisms of communication between neurons. Vesicle release, neurotransmitter diffusion, receptor activation, and short-term synaptic dynamics.',
-      concepts:['Vesicle Fusion','SNARE Proteins','Postsynaptic Potentials','Neurotransmitter Clearance','Quantal Release'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:59, dept:'neuro', name:'Brain-Computer Interfaces',
-      desc:'Technologies that create direct communication pathways between neural tissue and external devices. Signal acquisition, decoding algorithms, and clinical applications.',
-      concepts:['Neural Decoding','EEG','Spike Sorting','Closed-Loop Systems','Neuroprosthetics'],
-      level:'Graduate', field:'Neuroscience' },
-    { id:60, dept:'neuro', name:'Neuroendocrinology',
-      desc:'The interactions between the nervous system and the endocrine system. Hormones, the hypothalamic-pituitary axis, and how chemical signals regulate brain and body.',
-      concepts:['Hypothalamus','Pituitary Gland','Cortisol','Hormone Feedback Loops','Stress Axis'],
-      level:'Graduate', field:'Neuroscience' },
+                    <div class="simulation-engine-terminal">
+                        <div class="terminal-output-stream" id="chat-output-stream-container">
+                            </div>
 
-    // PHILOSOPHY (61–80)
-    { id:61, dept:'phil', name:'Epistemology',
-      desc:'The theory of knowledge. What can we know? How do we know it? Justification, truth, belief, skepticism, and the structure of rational inquiry.',
-      concepts:['Justified True Belief','Gettier Problem','Foundationalism','Reliabilism','Skepticism'],
-      level:'Undergraduate–Graduate', field:'Philosophy' },
-    { id:62, dept:'phil', name:'Metaphysics',
-      desc:'The study of what fundamentally exists and its nature. Substance, causation, time, modality, personal identity, and the basic categories of being.',
-      concepts:['Substance','Causation','Possible Worlds','Personal Identity','Ontology'],
-      level:'Undergraduate–Graduate', field:'Philosophy' },
-    { id:63, dept:'phil', name:'Nihilism & Existentialism',
-      desc:'The confrontation with meaninglessness and the challenge of authentic existence. Nietzsche, Sartre, Camus, and the philosophical responses to a world without inherent purpose.',
-      concepts:['Absurdity','Authenticity','Bad Faith','Will to Power','Radical Freedom'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:64, dept:'phil', name:'Stoicism',
-      desc:'An ancient Greek and Roman philosophy of rational self-mastery and virtue. The dichotomy of control, equanimity, and living in accordance with nature and reason.',
-      concepts:['Virtue Ethics','Dichotomy of Control','Logos','Negative Visualization','Cosmopolitanism'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:65, dept:'phil', name:'Formal Logic',
-      desc:'Rigorous systems for valid inference. Propositional logic, predicate logic, modal logic, and the formal analysis of argument structure and validity.',
-      concepts:['Truth Tables','Quantifiers','Modal Logic','Natural Deduction','Soundness & Completeness'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:66, dept:'phil', name:'Ethics & Morality',
-      desc:'Normative theories of right action and good character. Consequentialism, deontology, virtue ethics, and contemporary debates in applied and meta-ethics.',
-      concepts:['Consequentialism','Kantian Deontology','Virtue Ethics','Moral Realism','Applied Ethics'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:67, dept:'phil', name:'Aesthetics',
-      desc:'The philosophy of beauty, art, and aesthetic experience. What makes something beautiful or sublime? The nature of art, taste, and the aesthetics of everyday life.',
-      concepts:['Beauty','Sublime','Aesthetic Judgment','Art Ontology','Representation'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:68, dept:'phil', name:'Philosophy of Mind',
-      desc:'The nature of mental states, consciousness, and the mind-body relationship. Qualia, intentionality, functionalism, and the hard problem of consciousness.',
-      concepts:['Hard Problem','Qualia','Functionalism','Intentionality','Physicalism'],
-      level:'Undergraduate–Graduate', field:'Philosophy' },
-    { id:69, dept:'phil', name:'Philosophy of Science',
-      desc:'The foundations, methods, and implications of scientific knowledge. Falsifiability, scientific revolutions, realism vs. anti-realism, and the demarcation problem.',
-      concepts:['Falsifiability','Paradigm Shifts','Scientific Realism','Underdetermination','Reduction'],
-      level:'Undergraduate–Graduate', field:'Philosophy' },
-    { id:70, dept:'phil', name:'Political Philosophy',
-      desc:'The philosophical foundations of political authority, justice, rights, and the ideal organization of society. Liberalism, republicanism, communitarianism, and beyond.',
-      concepts:['Social Contract','Justice','Rights','Liberty','Legitimacy'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:71, dept:'phil', name:'Phenomenology',
-      desc:'The philosophy of first-person conscious experience. Husserl\'s intentionality, Heidegger\'s being-in-the-world, Merleau-Ponty on embodiment and perception.',
-      concepts:['Intentionality','Dasein','Embodiment','Intersubjectivity','Life-World'],
-      level:'Graduate', field:'Philosophy' },
-    { id:72, dept:'phil', name:'Eastern Philosophy',
-      desc:'Philosophical traditions from South, East, and Southeast Asia. Buddhism, Taoism, Confucianism, Advaita Vedanta, and the diverse non-Western frameworks for understanding reality.',
-      concepts:['Dharma','Tao','Non-Self','Karma','Zen'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:73, dept:'phil', name:'Rationalism',
-      desc:'The view that reason is the primary source of knowledge. Descartes, Leibniz, and Spinoza on innate ideas, a priori knowledge, and the rational structure of reality.',
-      concepts:['A Priori Knowledge','Innate Ideas','Cogito','Substance','Monadology'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:74, dept:'phil', name:'Empiricism',
-      desc:'The view that all knowledge derives from sensory experience. Locke, Berkeley, Hume, and the limits of what experience can justify.',
-      concepts:['Tabula Rasa','Impressions','Hume\'s Fork','Primary/Secondary Qualities','Induction Problem'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:75, dept:'phil', name:'Pragmatism',
-      desc:'The American philosophical tradition grounding truth and meaning in practical consequences. Peirce, James, Dewey, and Rorty on knowledge as a tool for navigating reality.',
-      concepts:['Truth as Utility','Inquiry','Instrumentalism','Anti-Foundationalism','Fallibilism'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:76, dept:'phil', name:'Hermeneutics',
-      desc:'The theory and methodology of interpretation. Schleiermacher, Dilthey, Gadamer, and Ricoeur on how we understand texts, symbols, and human action.',
-      concepts:['Hermeneutic Circle','Fusion of Horizons','Textual Interpretation','Pre-Understanding','Narrative'],
-      level:'Graduate', field:'Philosophy' },
-    { id:77, dept:'phil', name:'Philosophy of Language',
-      desc:'The nature and use of language. Reference, meaning, speech acts, truth-conditional semantics, and the relationship between language and thought.',
-      concepts:['Reference','Sense & Reference','Speech Acts','Truth Conditions','Linguistic Relativity'],
-      level:'Undergraduate–Graduate', field:'Philosophy' },
-    { id:78, dept:'phil', name:'Absurdism',
-      desc:'Camus\'s philosophy confronting the conflict between the human need for meaning and the universe\'s silence. The myth of Sisyphus and the ethics of revolt.',
-      concepts:['The Absurd','Revolt','Camus','Myth of Sisyphus','Leap of Faith'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:79, dept:'phil', name:'Determinism vs Free Will',
-      desc:'The ancient debate over whether human choices are free or causally determined. Compatibilism, hard determinism, libertarianism, and the moral stakes of each view.',
-      concepts:['Compatibilism','Hard Determinism','Libertarianism','Moral Responsibility','Causal Closure'],
-      level:'Undergraduate', field:'Philosophy' },
-    { id:80, dept:'phil', name:'Analytical Philosophy',
-      desc:'The dominant 20th-century philosophical tradition emphasizing clarity, argument, and engagement with logic and science. Russell, Frege, Wittgenstein, and the analytic method.',
-      concepts:['Logical Analysis','Language Games','Vienna Circle','Ordinary Language','Verification'],
-      level:'Undergraduate–Graduate', field:'Philosophy' },
+                        <div class="terminal-input-dock">
+                            <div class="system-status-registry-bar">
+                                <div class="status-pulse-dot" id="console-pulse-indicator"></div>
+                                <div class="status-state-string" id="console-status-text">Topic-Isolated Mode — <span>No subject selected</span></div>
+                            </div>
+                            <form class="input-form-control-node" id="console-transmission-form" onsubmit="executeMessageTransaction(event)">
+                                <input type="text" id="console-input-buffer" class="input-text-stream-area" placeholder="Select a subject to start asking..." disabled>
+                                <button type="submit" id="console-dispatch-btn" class="transmission-dispatch-btn" aria-label="Transmit Console Packet Data" disabled>
+                                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
 
-    // COMPUTER SCIENCE & ADVANCED TECH (81–100)
-    { id:81,  dept:'cs', name:'Artificial Intelligence',
-      desc:'The design of systems that exhibit intelligent behavior. Search, planning, knowledge representation, reasoning under uncertainty, and the history of AI research.',
-      concepts:['Search Algorithms','Knowledge Representation','Planning','Uncertainty','Agent Design'],
-      level:'Undergraduate–Graduate', field:'Computer Science' },
-    { id:82,  dept:'cs', name:'Machine Learning',
-      desc:'Algorithms that learn patterns from data. Supervised, unsupervised, and reinforcement learning — from linear models to ensemble methods and deep networks.',
-      concepts:['Gradient Descent','Overfitting','Feature Engineering','SVMs','Decision Trees'],
-      level:'Undergraduate–Graduate', field:'Computer Science' },
-    { id:83,  dept:'cs', name:'Neural Networks',
-      desc:'Biologically inspired computational architectures. Backpropagation, convolutional and recurrent architectures, attention mechanisms, and large-scale deep learning.',
-      concepts:['Backpropagation','CNNs','RNNs','Transformers','Attention Mechanisms'],
-      level:'Graduate', field:'Computer Science' },
-    { id:84,  dept:'cs', name:'Data Structures',
-      desc:'Organized schemes for storing and accessing data efficiently. Arrays, trees, graphs, heaps, hash tables, and the trade-offs between them.',
-      concepts:['Trees','Hash Tables','Graphs','Heaps','Linked Lists'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:85,  dept:'cs', name:'Algorithms',
-      desc:'The design and analysis of step-by-step computational procedures. Sorting, searching, dynamic programming, greedy strategies, and complexity analysis.',
-      concepts:['Sorting','Dynamic Programming','Graph Algorithms','Divide & Conquer','Complexity Classes'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:86,  dept:'cs', name:'Cyber Security',
-      desc:'Protecting systems, networks, and data from adversarial attack. Threat modeling, cryptographic protocols, penetration testing, and secure system design.',
-      concepts:['Threat Modeling','Cryptographic Protocols','Pen Testing','Zero-Day Exploits','Defense-in-Depth'],
-      level:'Undergraduate–Graduate', field:'Computer Science' },
-    { id:87,  dept:'cs', name:'Blockchain Dev',
-      desc:'Distributed ledger architecture, consensus mechanisms, smart contracts, and decentralized application development on public and private blockchain networks.',
-      concepts:['Consensus Mechanisms','Smart Contracts','Merkle Trees','DeFi','Zero-Knowledge Proofs'],
-      level:'Undergraduate–Graduate', field:'Computer Science' },
-    { id:88,  dept:'cs', name:'Quantum Computing',
-      desc:'Computation exploiting quantum mechanical phenomena. Qubits, superposition, quantum gates, entanglement-based algorithms, and current hardware realities.',
-      concepts:['Qubits','Quantum Gates','Shor\'s Algorithm','Grover\'s Algorithm','Quantum Error Correction'],
-      level:'Graduate', field:'Computer Science' },
-    { id:89,  dept:'cs', name:'Operating Systems',
-      desc:'The software layer managing hardware resources. Process scheduling, memory management, file systems, inter-process communication, and kernel architecture.',
-      concepts:['Process Scheduling','Virtual Memory','File Systems','System Calls','Concurrency'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:90,  dept:'cs', name:'Database Architecture',
-      desc:'The design and implementation of systems for persistent data storage. Relational models, query optimization, transaction management, ACID properties, and NoSQL paradigms.',
-      concepts:['Relational Model','SQL','Indexing','Transactions','ACID Properties'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:91,  dept:'cs', name:'Compiler Design',
-      desc:'The construction of programs that translate source code into executable form. Lexing, parsing, semantic analysis, optimization, and code generation.',
-      concepts:['Lexical Analysis','Parsing','AST','Type Checking','Code Generation'],
-      level:'Graduate', field:'Computer Science' },
-    { id:92,  dept:'cs', name:'Computer Networks',
-      desc:'The architecture and protocols enabling networked communication. TCP/IP, routing, switching, congestion control, and the layered model of the internet.',
-      concepts:['TCP/IP','Routing Protocols','DNS','HTTP','Congestion Control'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:93,  dept:'cs', name:'Frontend Systems',
-      desc:'The architecture of user-facing web systems. Browser rendering pipelines, the DOM, JavaScript runtimes, performance optimization, and component-based design.',
-      concepts:['Browser Rendering','DOM','JavaScript Engine','Web APIs','Performance Optimization'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:94,  dept:'cs', name:'Game Engine Architecture',
-      desc:'The design of real-time interactive systems. Rendering pipelines, physics simulation, entity-component systems, audio, and the engineering patterns of game engines.',
-      concepts:['Render Pipeline','Physics Engine','Entity-Component','Spatial Partitioning','Game Loop'],
-      level:'Graduate', field:'Computer Science' },
-    { id:95,  dept:'cs', name:'Cloud Computing',
-      desc:'Distributed computing delivered as a service. Virtualization, containerization, distributed storage, serverless architectures, and the economics of cloud infrastructure.',
-      concepts:['Virtualization','Containers','Serverless','Load Balancing','Distributed Storage'],
-      level:'Undergraduate–Graduate', field:'Computer Science' },
-    { id:96,  dept:'cs', name:'Parallel Processing',
-      desc:'Computation across multiple simultaneous processors. Shared-memory and distributed architectures, thread synchronization, GPU computing, and parallel algorithm design.',
-      concepts:['Threads','Synchronization','GPU Architecture','MPI','Amdahl\'s Law'],
-      level:'Graduate', field:'Computer Science' },
-    { id:97,  dept:'cs', name:'Software Engineering',
-      desc:'The disciplined application of engineering principles to software development. Requirements, design patterns, testing, version control, agile methods, and system architecture.',
-      concepts:['Design Patterns','Agile','Testing','Version Control','System Architecture'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:98,  dept:'cs', name:'Human-Computer Interaction',
-      desc:'The design and evaluation of interactive systems for human use. Usability, user research, affordances, cognitive models, and accessibility.',
-      concepts:['Usability','User Research','Affordances','Mental Models','Accessibility'],
-      level:'Undergraduate', field:'Computer Science' },
-    { id:99,  dept:'cs', name:'Reverse Engineering',
-      desc:'The process of analyzing compiled code, binary formats, and hardware systems to understand their function without access to source. Static and dynamic analysis techniques.',
-      concepts:['Disassembly','Static Analysis','Dynamic Analysis','Decompilation','Binary Formats'],
-      level:'Graduate', field:'Computer Science' },
-    { id:100, dept:'cs', name:'Automation Systems',
-      desc:'The design of systems that execute processes without human intervention. Control theory, scripting architectures, workflow orchestration, and robotic process automation.',
-      concepts:['Control Theory','Workflow Orchestration','PID Controllers','RPA','Feedback Loops'],
-      level:'Undergraduate', field:'Computer Science' },
-  ];
+                </div>
 
-  const DEPT_META = {
-    math:  { label:'Mathematics',       color:'var(--math-color)',  emoji:'∑' },
-    phys:  { label:'Physical Sciences', color:'var(--phys-color)',  emoji:'⚛' },
-    neuro: { label:'Life & Neuroscience',color:'var(--neuro-color)',emoji:'🧠' },
-    phil:  { label:'Philosophy',        color:'var(--phil-color)',  emoji:'◈' },
-    cs:    { label:'CS & Advanced Tech',color:'var(--cs-color)',    emoji:'⌘' },
-  };
+            </section>
 
-  // ═══════════════════════════════════════════════════════════════
-  // STATE
-  // ═══════════════════════════════════════════════════════════════
-  let activeDept = 'math';
-  let activeSubjectId = null;
-  let chatHistory = {}; // keyed by subject id
-  let isLoading = false;
+        </main>
+    </div>
 
-  // ═══════════════════════════════════════════════════════════════
-  // DOM REFS
-  // ═══════════════════════════════════════════════════════════════
-  const subjectList      = document.getElementById('subjectList');
-  const searchInput      = document.getElementById('searchInput');
-  const deptTabsEl       = document.getElementById('deptTabs');
-  const chatMessages     = document.getElementById('chatMessages');
-  const chatWelcome      = document.getElementById('chatWelcome');
-  const chatInput        = document.getElementById('chatInput');
-  const sendBtn          = document.getElementById('sendBtn');
-  const typingIndicator  = document.getElementById('typingIndicator');
-  const infoTitle        = document.getElementById('infoTitle');
-  const infoDesc         = document.getElementById('infoDesc');
-  const infoChips        = document.getElementById('infoChips');
-  const infoMeta         = document.getElementById('infoMeta');
-  const infoDeptName     = document.getElementById('infoDeptName');
-  const infoDeptBadge    = document.getElementById('infoDeptBadge');
-  const navSubject       = document.getElementById('navSubject');
-  const navDeptLabel     = document.getElementById('navDeptLabel');
-  const navDeptDot       = document.getElementById('navDeptDot');
-  const ctxSubjectLabel  = document.getElementById('ctxSubjectLabel');
-  const sidebar          = document.getElementById('sidebar');
-  const sidebarToggle    = document.getElementById('sidebarToggle');
-  const sidebarOverlay   = document.getElementById('sidebarOverlay');
-  const welcomePrompts   = document.getElementById('welcomePrompts');
+    <script>
+        const NEXUS_DIRECTORY_MANIFEST = [
+            {
+                departmentName: "Mathematics Department",
+                subjects: [
+                    { id: "01", name: "Linear Algebra", desc: "Vector spaces, matrix transformation mechanics, eigenspaces, and canonical decomposition algorithms." },
+                    { id: "02", name: "Calculus AB", desc: "Differential and integral analysis limits, mean value theorems, and baseline rate derivatives." },
+                    { id: "03", name: "Calculus BC", desc: "Advanced vector integration fields, parametric models, polar systems, and infinite series convergences." },
+                    { id: "04", name: "Differential Equations", desc: "First-order matrices, linear systems, Laplace transform structures, and bifurcations." },
+                    { id: "05", name: "Discrete Mathematics", desc: "Combinatorial logic, set topologies, graph properties, recurrence relations, and boolean modules." },
+                    { id: "06", name: "Number Theory", desc: "Modular arithmetic loops, prime distributions, quadratic reciprocity constants, and Diophantine sets." },
+                    { id: "07", name: "Topology", desc: "Metric space metrics, homeomorphisms, compactness layers, and fundamental homotopy groups." },
+                    { id: "08", name: "Complex Analysis", desc: "Holomorphic mappings, Cauchy residue mechanics, contour scaling integrals, and conformal profiles." },
+                    { id: "09", name: "Abstract Algebra", desc: "Group isomorphisms, ring ideals, Galois theory matrices, and fields." },
+                    { id: "10", name: "Probability Theory", desc: "Stochastic probability fields, conditional densities, central limit vectors, and measure constructs." },
+                    { id: "11", name: "Mathematical Statistics", desc: "Parametric estimation criteria, hypothesis risk, Neyman-Pearson frameworks, and Bayesian variance mappings." },
+                    { id: "12", name: "Geometry & Trigonometry", desc: "Non-Euclidean hyperbolic systems, analytical metrics, and trigonometric identities." },
+                    { id: "13", name: "Numerical Analysis", desc: "Error propagation matrices, spline interpolation systems, and Runge-Kutta numerical integration algorithms." },
+                    { id: "14", name: "Graph Theory", desc: "Isomorphisms, Eulerian paths, planar map coloring matrices, and network flow matrices." },
+                    { id: "15", name: "Set Theory", desc: "Zermelo-Fraenkel axioms, transfinite cardinal systems, and ordinal set structures." },
+                    { id: "16", name: "Logic & Foundations", desc: "First-order model theories, Gödel incompleteness profiles, and formal proof validations." },
+                    { id: "17", name: "Cryptography Math", desc: "Discrete logarithmic hashes, elliptic curve vector geometry, and RSA factorization constraints." },
+                    { id: "18", name: "Combinatorics", desc: "Permutations, Generating functions, Ramsey theory bounds, and inclusion-exclusion vectors." },
+                    { id: "19", name: "Chaos Theory", desc: "Attractor system maps, Lyapunov exponents, fractal geometric matrices, and deterministic non-linearity." },
+                    { id: "20", name: "Game Theory", desc: "Nash equilibrium vectors, zero-sum matrix games, and evolutionary strategies." }
+                ]
+            },
+            {
+                departmentName: "Physical Sciences Department",
+                subjects: [
+                    { id: "21", name: "Quantum Mechanics", desc: "Schrödinger wave state equations, Hilbert spaces, operators, and quantum entanglement vectors." },
+                    { id: "22", name: "Astrophysics", desc: "Stellar nucleosynthesis, gravitational collapse mechanics, and orbital thermodynamic metrics." },
+                    { id: "23", name: "Theoretical Physics", desc: "Lagrangian-Hamiltonian mechanics, string string models, and unified quantum field configurations." },
+                    { id: "24", name: "Thermodynamics", desc: "Entropy mechanics, Gibbs free energy thresholds, and statistical mechanics parameters." },
+                    { id: "25", name: "Particle Physics", desc: "Standard Model gauge structures, lepton/quark matrices, and Higgs mechanism couplings." },
+                    { id: "26", name: "Relativity Theory", desc: "Minkowski space metrics, Lorentz transforms, and Einstein field curvature tensors." },
+                    { id: "27", name: "Electromagnetism", desc: "Maxwell equations, electrodynamic gauge fields, and relativistic radiation structures." },
+                    { id: "28", name: "Optics & Photonics", desc: "Wave interference mechanics, laser cavity resonances, and non-linear crystal refraction vectors." },
+                    { id: "29", name: "Nuclear Physics", desc: "Liquid drop structures, shell matrix variations, fission/fusion kinetics, and radioactive isotopes." },
+                    { id: "30", name: "Organic Chemistry", desc: "Stereochemical synthesis arrays, electrophilic mechanism pathways, and nucleophilic reactions." },
+                    { id: "31", name: "Inorganic Chemistry", desc: "Coordination complex fields, crystal field splittings, and organometallic catalytic states." },
+                    { id: "32", name: "Physical Chemistry", desc: "Quantum chemical kinetics, spectroscopic state transitions, and molecular thermodynamic states." },
+                    { id: "33", name: "Biochemistry", desc: "Enzymatic reaction mechanics, metabolic pathways, and nucleic acid polymer arrays." },
+                    { id: "34", name: "Analytical Chemistry", desc: "Chromatographic mass spectrometry models, analytical calibrations, and electrochemical responses." },
+                    { id: "35", name: "Quantum Chemistry", desc: "Hartree-Fock molecular calculations, density functional matrices, and basis sets." },
+                    { id: "36", name: "Geology & Tectonics", desc: "Lithospheric plate deformation vectors, structural stress fields, and seismological models." },
+                    { id: "37", name: "Meteorology", desc: "Baroclinic dynamic fluids, atmospheric convective systems, and air-mass thermodynamic fields." },
+                    { id: "38", name: "Oceanography", desc: "Thermohaline circulation models, geostrophic current vectors, and deep sea thermal systems." },
+                    { id: "39", name: "Planetary Science", desc: "Planetary structural accretions, magnetosphere configurations, and satellite tidal friction forces." },
+                    { id: "40", name: "Volcanology", desc: "Magmatic fluid rheologies, volatile degassing indices, and explosive volcanic dynamics." }
+                ]
+            },
+            {
+                departmentName: "Life & Neuroscience Department",
+                subjects: [
+                    { id: "41", name: "Cellular Neuroscience", desc: "Ion channel kinetics, Hodgkin-Huxley models, and axonal membrane parameters." },
+                    { id: "42", name: "Cognitive Neuroscience", desc: "Neural network maps of memory encoding, visual attention streams, and processing schemas." },
+                    { id: "43", name: "Behavioral Neuroscience", desc: "Limbic reward circuits, neurobiological conditioning drivers, and endocrine behaviors." },
+                    { id: "44", name: "Neuroanatomy", desc: "Cytoarchitectonic cortical maps, ventricular system fluid flows, and deep white matter paths." },
+                    { id: "45", name: "Neuropharmacology", desc: "Ligand-gated receptor dynamics, synaptic drug configurations, and second-messenger cascades." },
+                    { id: "46", name: "Computational Neuroscience", desc: "Spiking network architectures, cable equations, and synaptic plasticity tuning metrics." },
+                    { id: "47", name: "Molecular Biology", desc: "Transcription regulatory complexes, RNA splice variants, and translation ribosomal frameworks." },
+                    { id: "48", name: "Genetics & Genomics", desc: "Epigenetic chromatin profiles, sequence mapping arrays, and polygenic trait metrics." },
+                    { id: "49", name: "Evolutionary Biology", desc: "Population genetic drifts, phylogenetic tree structures, and phenotypic adaptive landscapes." },
+                    { id: "50", name: "Microbiology", desc: "Bacterial cell wall structures, metabolic path vectors, and virulence factors." },
+                    { id: "51", name: "Immunology", desc: "V(D)J genetic recombinations, T-cell receptors, and cytokine pathway cascades." },
+                    { id: "52", name: "Virology", desc: "Viral capsid self-assemblies, replication pathways, and host immune evasion protocols." },
+                    { id: "53", name: "Marine Biology", desc: "Benthic ecology dynamics, marine food webs, and physiological deep sea adaptations." },
+                    { id: "54", name: "Ecology", desc: "Trophic interactions, ecosystem energy budgets, and niche distributions." },
+                    { id: "55", name: "Biophysics", desc: "Protein folding thermodynamics, optical tweezers, and cellular fluid flow models." },
+                    { id: "56", name: "Astrobiology", desc: "Extremophile metabolic frameworks, biosignature metrics, and prebiotic chemical pathways." },
+                    { id: "57", name: "Neuroplasticity", desc: "Long-term potentiation mechanisms, dendritic pruning, and cortical map reorganizations." },
+                    { id: "58", name: "Synaptic Transmission", desc: "SNARE complex vesicle releases, quantal flux indices, and post-synaptic densities." },
+                    { id: "59", name: "Brain-Computer Interfaces", desc: "Electrocorticographic signal arrays, neural decoders, and closed-loop stimulations." },
+                    { id: "60", name: "Neuroendocrinology", desc: "Hypothalamic-pituitary axes, neuropeptide profiles, and behavioral hormone feedbacks." }
+                ]
+            },
+            {
+                departmentName: "Philosophy Department",
+                subjects: [
+                    { id: "61", name: "Epistemology", desc: "Justification parameters, skepticism variants, coherentism, and Gettier problem edge cases." },
+                    { id: "62", name: "Metaphysics", desc: "Ontological categorizations, mereological structures, and modal worlds." },
+                    { id: "63", name: "Nihilism & Existentialism", desc: "Absence of intrinsic values, radical human freedoms, and existential authenticity." },
+                    { id: "64", name: "Stoicism", desc: "Dichotomy of control frameworks, virtue ethics, and emotional regulation logics." },
+                    { id: "65", name: "Formal Logic", desc: "Propositional and predicate calculus syntax, modal proofs, and completeness frameworks." },
+                    { id: "66", name: "Ethics & Morality", desc: "Deontological formulas, utilitarian cost calculations, and virtue frameworks." },
+                    { id: "67", name: "Aesthetics", desc: "Art philosophies, criteria of beauty, and objective taste configurations." },
+                    { id: "68", name: "Philosophy of Mind", desc: "Dualistic mind-body splits, physicalist reductions, and qualia profiles." },
+                    { id: "69", name: "Philosophy of Science", desc: "Demarcation definitions, induction problems, and paradigm shifts." },
+                    { id: "70", name: "Political Philosophy", desc: "Social contract designs, sovereign power distribution metrics, and justice paradigms." },
+                    { id: "71", name: "Phenomenology", desc: "Intentionality frameworks, epoché reduction structures, and life-world experiences." },
+                    { id: "72", name: "Eastern Philosophy", desc: "Non-dual configurations, Vedic structures, Taoist dynamics, and Buddhist emptiness concepts." },
+                    { id: "73", name: "Rationalism", desc: "Innate idea configurations, a priori proofs, and foundational reason systems." },
+                    { id: "74", name: "Empiricism", desc: "Tabula rasa initial states, sensory collections, and verification limits." },
+                    { id: "75", name: "Pragmatism", desc: "Instrumental true values, experimental action outcomes, and verification schemas." },
+                    { id: "76", name: "Hermeneutics", desc: "Interpretation cycles, context loops, and textual horizons." },
+                    { id: "77", name: "Philosophy of Language", desc: "Sense and reference distinctions, speech acts, and semantic truth mappings." },
+                    { id: "78", name: "Absurdism", desc: "The conflict between meaning-seeking minds and the cold, silent universe." },
+                    { id: "79", name: "Determinism vs Free Will", desc: "Causal tracking loops, compatibilist variables, and libertarian choices." },
+                    { id: "80", name: "Analytical Philosophy", desc: "Logical atomism matrices, ordinary language tools, and conceptual analyses." }
+                ]
+            },
+            {
+                departmentName: "Computer Science & Advanced Tech Department",
+                subjects: [
+                    { id: "81", name: "Artificial Intelligence", desc: "Heuristic agent optimization, expert system structures, and search graph solvers." },
+                    { id: "82", name: "Machine Learning", desc: "Gradient descent optimizations, loss configurations, and generalization bounds." },
+                    { id: "83", name: "Neural Networks", desc: "Backpropagation passes, tensor matrix transformations, and weight layers." },
+                    { id: "84", name: "Data Structures", desc: "B-trees, red-black algorithms, hash collisions, and graph representations." },
+                    { id: "85", name: "Algorithms", desc: "Asymptotic complexity metrics, dynamic optimizations, and NP-complete reductions." },
+                    { id: "86", name: "Cyber Security", desc: "Memory overflow exploits, cryptographic handshakes, and privilege escalations." },
+                    { id: "87", name: "Blockchain Dev", desc: "Consensus engines, Merkle tree histories, and smart contract execution sandboxes." },
+                    { id: "88", name: "Quantum Computing", desc: "Qubit quantum operations, Shor/Grover algorithms, and decoherence profiles." },
+                    { id: "89", name: "Operating Systems", desc: "Virtual memory virtualizations, scheduler states, and file handling drivers." },
+                    { id: "90", name: "Database Architecture", desc: "ACID isolation metrics, index engines, and distributed data sharding models." },
+                    { id: "91", name: "Compiler Design", desc: "Lexical tokenizing streams, abstract syntax parsing trees, and LLVM compilation passes." },
+                    { id: "92", name: "Computer Networks", desc: "TCP/IP sliding windows, routing metrics, and framing layer architectures." },
+                    { id: "93", name: "Frontend Systems", desc: "Browser render updates, event loops, and hardware pipeline layouts." },
+                    { id: "94", name: "Game Engine Architecture", desc: "Real-time physics engines, spatial scene partitioning graphs, and rendering pipelines." },
+                    { id: "95", name: "Cloud Computing", desc: "Microservice routing structures, container virtualization, and orchestration systems." },
+                    { id: "96", name: "Parallel Processing", desc: "SIMD vectorization patterns, thread locks, and cache coherency models." },
+                    { id: "97", name: "Software Engineering", desc: "Structural patterns, architectural scalability rules, and testing scopes." },
+                    { id: "98", name: "Human-Computer Interaction", desc: "Fitts's movement models, cognitive load distributions, and interaction loops." },
+                    { id: "99", name: "Reverse Engineering", desc: "x86/ARM disassembly patterns, decompiler mapping outputs, and binary analysis." },
+                    { id: "100", name: "Automation Systems", desc: "Closed-loop feedback matrices, PID controllers, and micro-interaction loops." }
+                ]
+            }
+        ];
 
-  // ═══════════════════════════════════════════════════════════════
-  // RENDER SIDEBAR SUBJECTS
-  // ═══════════════════════════════════════════════════════════════
-  function renderSubjectList(dept, query) {
-    subjectList.innerHTML = '';
-    const filtered = SUBJECTS.filter(s => {
-      const deptMatch = query ? true : s.dept === dept;
-      const queryMatch = query ? s.name.toLowerCase().includes(query.toLowerCase()) : true;
-      return deptMatch && queryMatch;
-    });
+        // Global State Drivers
+        let activeSelectedSubject = null;
+        let runningChatHistories = {}; 
 
-    if (filtered.length === 0) {
-      subjectList.innerHTML = '<div class="no-results">No subjects found.</div>';
-      return;
-    }
+        // Core UI Node Cache References
+        const sidebarScrollTrackNode = document.getElementById('master-sidebar-track');
+        const globalSearchInputField = document.getElementById('subject-search-core');
+        const emptyStateWindowNode = document.getElementById('engine-empty-state');
+        const activeWorkspaceWindowNode = document.getElementById('engine-active-workspace');
+        
+        const textMetaDeptLabel = document.getElementById('display-meta-dept');
+        const textMetaTitleLabel = document.getElementById('display-meta-title');
+        const textMetaDescLabel = document.getElementById('display-meta-desc');
+        const pathSubNodeLabel = document.getElementById('path-sub-node');
+        
+        const chatOutputStreamView = document.getElementById('chat-output-stream-container');
+        const terminalInputTextField = document.getElementById('console-input-buffer');
+        const terminalSubmitActionBtn = document.getElementById('console-dispatch-btn');
+        const consoleStatusTextNode = document.getElementById('console-status-text');
 
-    filtered.forEach(s => {
-      const el = document.createElement('div');
-      el.className = 'subject-item' + (s.id === activeSubjectId ? ' active' : '');
-      el.dataset.id = s.id;
-      el.dataset.dept = s.dept;
-      el.innerHTML = `<span class="subject-num">${String(s.id).padStart(2,'0')}</span><span class="subject-dot"></span>${s.name}`;
-      el.addEventListener('click', () => selectSubject(s.id));
-      subjectList.appendChild(el);
-    });
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // SELECT SUBJECT
-  // ═══════════════════════════════════════════════════════════════
-  function selectSubject(id) {
-    const s = SUBJECTS.find(x => x.id === id);
-    if (!s) return;
-    activeSubjectId = id;
-    activeDept = s.dept;
-
-    // Sync dept tab
-    document.querySelectorAll('.dept-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.dept === s.dept);
-    });
-
-    renderSubjectList(s.dept, searchInput.value);
-
-    // Update info panel
-    const dm = DEPT_META[s.dept];
-    infoTitle.textContent = s.name;
-    infoDesc.textContent  = s.desc;
-    infoDeptName.textContent = dm.label;
-    infoDeptBadge.style.color = dm.color;
-    infoDeptBadge.style.borderColor = dm.color + '44';
-    infoDeptBadge.style.background  = dm.color + '11';
-
-    infoChips.innerHTML = s.concepts.map(c =>
-      `<span class="concept-chip">${c}</span>`
-    ).join('');
-
-    infoMeta.innerHTML = `
-      <div class="info-meta-row"><span class="info-meta-label">Field</span><span class="info-meta-val">${s.field}</span></div>
-      <div class="info-meta-row"><span class="info-meta-label">Level</span><span class="info-meta-val">${s.level}</span></div>
-      <div class="info-meta-row"><span class="info-meta-label">Subject</span><span class="info-meta-val">#${String(s.id).padStart(2,'0')}</span></div>
-    `;
-
-    // Nav update
-    navSubject.textContent = s.name;
-    navDeptLabel.textContent = dm.label;
-    navDeptDot.style.background = dm.color;
-    navDeptDot.style.boxShadow  = `0 0 6px ${dm.color}`;
-    ctxSubjectLabel.textContent = s.name;
-
-    // Chat area
-    enableChat(s);
-
-    // Close mobile sidebar
-    closeMobileSidebar();
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // ENABLE CHAT
-  // ═══════════════════════════════════════════════════════════════
-  function enableChat(subject) {
-    chatInput.disabled = false;
-    chatInput.placeholder = `Ask anything about ${subject.name}…`;
-    sendBtn.disabled = false;
-
-    // Render existing chat history or welcome
-    renderChatArea(subject);
-  }
-
-  function renderChatArea(subject) {
-    // Remove old children except typing indicator
-    while (chatMessages.firstChild) chatMessages.removeChild(chatMessages.firstChild);
-
-    const history = chatHistory[subject.id] || [];
-
-    if (history.length === 0) {
-      // Show welcome with suggested prompts
-      const welcome = document.createElement('div');
-      welcome.className = 'chat-welcome';
-      const dm = DEPT_META[subject.dept];
-      const prompts = getPromptSuggestions(subject);
-      welcome.innerHTML = `
-        <div class="chat-welcome-icon">${dm.emoji}</div>
-        <div class="chat-welcome-title">${subject.name}</div>
-        <div class="chat-welcome-sub">Topic-isolated simulation active. Ask anything about this subject or pick a starting point below.</div>
-        <div class="chat-welcome-prompts">
-          ${prompts.map(p => `<div class="prompt-chip">${p}</div>`).join('')}
-        </div>
-      `;
-      welcome.querySelectorAll('.prompt-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          chatInput.value = chip.textContent;
-          sendMessage();
+        /* Initialize Component View Tree */
+        document.addEventListener("DOMContentLoaded", () => {
+            renderDirectorySidebarElements(NEXUS_DIRECTORY_MANIFEST);
+            setupSearchEngineFilters();
         });
-      });
-      chatMessages.appendChild(welcome);
-    } else {
-      history.forEach(msg => renderMessage(msg.role, msg.content, msg.time, false));
-    }
-  }
 
-  function getPromptSuggestions(s) {
-    const bank = [
-      `What is the core idea behind ${s.name}?`,
-      `Explain the most important concept in ${s.name} simply.`,
-      `What are the biggest open questions in ${s.name}?`,
-      `How does ${s.name} connect to real-world applications?`,
-    ];
-    return bank.slice(0, 4);
-  }
+        /* Structural Template Element Insertion Engine */
+        function renderDirectorySidebarElements(manifestData) {
+            sidebarScrollTrackNode.innerHTML = "";
+            
+            manifestData.forEach(dept => {
+                const deptBlock = document.createElement('div');
+                deptBlock.className = 'department-wrapper-block';
+                
+                const headerStrip = document.createElement('div');
+                headerStrip.className = 'department-header-strip';
+                
+                const titleLabel = document.createElement('h4');
+                titleLabel.className = 'department-title-label';
+                titleLabel.textContent = dept.departmentName;
+                
+                const badgeCount = document.createElement('span');
+                badgeCount.className = 'department-count-badge';
+                badgeCount.textContent = `${dept.subjects.length} Topics`;
+                
+                headerStrip.appendChild(titleLabel);
+                headerStrip.appendChild(badgeCount);
+                deptBlock.appendChild(headerStrip);
+                
+                const subjectListContainer = document.createElement('div');
+                subjectListContainer.className = 'department-subject-list';
+                
+                dept.subjects.forEach(subject => {
+                    const subjectBtn = document.createElement('button');
+                    subjectBtn.className = 'subject-tab-element';
+                    subjectBtn.setAttribute('data-id', subject.id);
+                    subjectBtn.setAttribute('aria-label', `Load matrix channel for ${subject.name}`);
+                    subjectBtn.onclick = () => selectActiveSubjectContext(subject, dept.departmentName);
+                    
+                    const indexText = document.createElement('span');
+                    indexText.className = 'subject-tab-index';
+                    indexText.textContent = subject.id;
+                    
+                    const nameText = document.createElement('span');
+                    nameText.className = 'subject-tab-name';
+                    nameText.textContent = subject.name;
+                    
+                    const activeIndicator = document.createElement('div');
+                    activeIndicator.className = 'subject-tab-indicator-node';
+                    
+                    subjectBtn.appendChild(indexText);
+                    subjectBtn.appendChild(nameText);
+                    subjectBtn.appendChild(activeIndicator);
+                    subjectListContainer.appendChild(subjectBtn);
+                });
+                
+                deptBlock.appendChild(subjectListContainer);
+                sidebarScrollTrackNode.appendChild(deptBlock);
+            });
+        }
 
-  // ═══════════════════════════════════════════════════════════════
-  // RENDER MESSAGE
-  // ═══════════════════════════════════════════════════════════════
-  function renderMessage(role, content, time, scroll = true) {
-    const isUser = role === 'user';
-    const msg = document.createElement('div');
-    msg.className = `msg ${isUser ? 'user' : 'ai'}`;
-    msg.innerHTML = `
-      <div class="msg-avatar ${isUser ? 'user-avatar' : 'ai-avatar'}">${isUser ? 'U' : 'N'}</div>
-      <div>
-        <div class="msg-bubble">${escapeHtml(content)}</div>
-        <div class="msg-time">${time}</div>
-      </div>
-    `;
-    chatMessages.appendChild(msg);
-    if (scroll) chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+        /* Real-Time Matrix Search Engine Filtering System */
+        function setupSearchEngineFilters() {
+            globalSearchInputField.addEventListener('input', (e) => {
+                const searchString = e.target.value.toLowerCase().trim();
+                const subjectItemElements = document.querySelectorAll('.subject-tab-element');
+                const deptBlocks = document.querySelectorAll('.department-wrapper-block');
 
-  function escapeHtml(str) {
-    return str
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/\n/g,'<br>');
-  }
+                deptBlocks.forEach(block => {
+                    let deepMatchCount = 0;
+                    const items = block.querySelectorAll('.subject-tab-element');
+                    
+                    items.forEach(item => {
+                        const subName = item.querySelector('.subject-tab-name').textContent.toLowerCase();
+                        const subId = item.querySelector('.subject-tab-index').textContent.toLowerCase();
+                        
+                        if (subName.includes(searchString) || subId.includes(searchString)) {
+                            item.style.display = 'flex';
+                            deepMatchCount++;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
 
-  function getTime() {
-    const d = new Date();
-    return d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-  }
+                    block.style.display = deepMatchCount > 0 ? 'block' : 'none';
+                });
+            });
+        }
 
-  // ═══════════════════════════════════════════════════════════════
-  // SEND MESSAGE
-  // ═══════════════════════════════════════════════════════════════
-  async function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text || isLoading || !activeSubjectId) return;
+        /* Active Core Subject Allocation & Switching Driver */
+        function selectActiveSubjectContext(subjectData, departmentName) {
+            if (activeSelectedSubject && activeSelectedSubject.id === subjectData.id) return;
+            
+            activeSelectedSubject = subjectData;
+            
+            // Re-render selection indicator arrays
+            document.querySelectorAll('.subject-tab-element').forEach(btn => {
+                if (btn.getAttribute('data-id') === subjectData.id) {
+                    btn.classList.add('is-active');
+                } else {
+                    btn.classList.remove('is-active');
+                }
+            });
 
-    const subject = SUBJECTS.find(s => s.id === activeSubjectId);
-    if (!subject) return;
+            // Transition UI displays away from empty placeholder states
+            emptyStateWindowNode.classList.add('is-hidden');
+            activeWorkspaceWindowNode.classList.add('is-visible');
+            
+            // Set Dynamic Header Fields
+            textMetaDeptLabel.textContent = departmentName;
+            textMetaTitleLabel.textContent = `${subjectData.id}. ${subjectData.name}`;
+            textMetaDescLabel.textContent = subjectData.desc;
+            pathSubNodeLabel.textContent = subjectData.name;
 
-    // Clear welcome if present
-    const welcome = chatMessages.querySelector('.chat-welcome');
-    if (welcome) welcome.remove();
+            // Unlock and adjust control elements
+            terminalInputTextField.disabled = false;
+            terminalSubmitActionBtn.disabled = false;
+            terminalInputTextField.placeholder = `Input message matrix payload query for ${subjectData.name}...`;
+            consoleStatusTextNode.innerHTML = `Topic-Isolated Mode — <span>${subjectData.name.toUpperCase()} ENGINE ACTIVE</span>`;
 
-    // Init history
-    if (!chatHistory[activeSubjectId]) chatHistory[activeSubjectId] = [];
-    const now = getTime();
+            // Reload or initialize chat logs
+            loadSubjectChatLogs(subjectData.id);
+        }
 
-    // Add user message
-    chatHistory[activeSubjectId].push({ role:'user', content:text, time:now });
-    renderMessage('user', text, now);
-    chatInput.value = '';
-    chatInput.style.height = 'auto';
+        /* Simulation Chat Storage Log Allocator */
+        function loadSubjectChatLogs(subjectId) {
+            chatOutputStreamView.innerHTML = "";
+            
+            if (!runningChatHistories[subjectId]) {
+                // Initialize default introductory message construct
+                runningChatHistories[subjectId] = [
+                    {
+                        senderId: "SYSTEM",
+                        textPayload: `Knowledge simulation channel linked successfully for **${activeSelectedSubject.name}**. System parameters are optimized for analysis routines. Enter an instruction query down below to execute processing simulations.`,
+                        timestamp: Date.now()
+                    }
+                ];
+            }
 
-    isLoading = true;
-    sendBtn.disabled = true;
-    typingIndicator.classList.add('show');
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+            runningChatHistories[subjectId].forEach(msgPacket => {
+                renderMessagePacketNode(msgPacket.senderId, msgPacket.textPayload);
+            });
 
-    // Build messages for API
-    const dm = DEPT_META[subject.dept];
-    const systemPrompt = `You are an expert academic simulation for the subject "${subject.name}" (${dm.label} department, ${subject.field}, ${subject.level} level).
+            scrollConsoleToBottom();
+        }
 
-Your role is to act as a brilliant, deeply knowledgeable tutor who is exclusively focused on ${subject.name}. You explain concepts with precision, depth, and clarity. You can use analogies, formal definitions, historical context, and worked examples as appropriate.
+        /* Message Node Creation Engine */
+        function renderMessagePacketNode(senderId, rawText) {
+            const packetBlock = document.createElement('div');
+            packetBlock.className = `sim-message-packet ${senderId === 'SYSTEM' ? 'system-variant' : 'user-variant'}`;
+            
+            const avatarNode = document.createElement('div');
+            avatarNode.className = 'message-avatar-node';
+            avatarNode.textContent = senderId === 'SYSTEM' ? 'SYS' : 'USR';
+            
+            const balloonElement = document.createElement('div');
+            balloonElement.className = 'message-content-balloon';
+            
+            // Evaluate structural formatting tags
+            balloonElement.innerHTML = parseMarkdownToHTML(rawText);
+            
+            packetBlock.appendChild(avatarNode);
+            packetBlock.appendChild(balloonElement);
+            chatOutputStreamView.appendChild(packetBlock);
+        }
 
-Key concepts you should be well-versed in: ${subject.concepts.join(', ')}.
+        /* Form Processing Controller Intercept */
+        function executeMessageTransaction(event) {
+            event.preventDefault();
+            if (!activeSelectedSubject) return;
 
-Keep responses focused, educational, and appropriately rigorous for the stated level. Do not go off-topic — every response must relate to ${subject.name}. Format with clear paragraphs. Aim for responses that are genuinely useful and illuminating, not vague or overly brief.`;
+            const textInputBuffer = terminalInputTextField.value.trim();
+            if (!textInputBuffer) return;
 
-    const apiMessages = chatHistory[activeSubjectId]
-      .slice(-10) // last 10 for context window
-      .map(m => ({ role: m.role, content: m.content }));
+            // Buffer current ID to handle race conditions
+            const targetSubjectId = activeSelectedSubject.id;
 
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: apiMessages,
-        })
-      });
+            // Commit user payload packet to system storage fields
+            const userPacket = {
+                senderId: "USER",
+                textPayload: textInputBuffer,
+                timestamp: Date.now()
+            };
+            runningChatHistories[targetSubjectId].push(userPacket);
+            renderMessagePacketNode("USER", textInputBuffer);
+            
+            // Clear input buffer mechanisms immediately
+            terminalInputTextField.value = "";
+            scrollConsoleToBottom();
 
-      const data = await response.json();
-      const replyText = data.content?.map(b => b.text || '').join('') || 'No response received.';
-      const replyTime = getTime();
+            // Trigger system automation simulator response delays
+            triggerAutomatedSimulationResponse(targetSubjectId, textInputBuffer);
+        }
 
-      typingIndicator.classList.remove('show');
-      chatHistory[activeSubjectId].push({ role:'assistant', content:replyText, time:replyTime });
-      renderMessage('assistant', replyText, replyTime);
-    } catch (err) {
-      typingIndicator.classList.remove('show');
-      const errMsg = 'Connection error. Please check your network and try again.';
-      const t = getTime();
-      chatHistory[activeSubjectId].push({ role:'assistant', content:errMsg, time:t });
-      renderMessage('assistant', errMsg, t);
-    }
+        /* Automated Simulated AI System Pipeline Response Script */
+        function triggerAutomatedSimulationResponse(subjectId, inboundQuery) {
+            terminalInputTextField.disabled = true;
+            terminalSubmitActionBtn.disabled = true;
+            consoleStatusTextNode.innerHTML = `Topic-Isolated Mode — <span style="color: var(--glow-blue)">PROCESSING RESPONSE VECTOR...</span>`;
+            
+            setTimeout(() => {
+                // Confirm subject state remains synchronous before printing payload execution results
+                if (!activeSelectedSubject || activeSelectedSubject.id !== subjectId) return;
 
-    isLoading = false;
-    sendBtn.disabled = false;
-    chatInput.focus();
-  }
+                const responseString = generateDynamicResponsePayload(activeSelectedSubject.name, inboundQuery);
+                
+                const systemPacket = {
+                    senderId: "SYSTEM",
+                    textPayload: responseString,
+                    timestamp: Date.now()
+                };
+                runningChatHistories[subjectId].push(systemPacket);
+                renderMessagePacketNode("SYSTEM", responseString);
+                
+                // Release operational states
+                terminalInputTextField.disabled = false;
+                terminalSubmitActionBtn.disabled = false;
+                consoleStatusTextNode.innerHTML = `Topic-Isolated Mode — <span>${activeSelectedSubject.name.toUpperCase()} ENGINE ACTIVE</span>`;
+                terminalInputTextField.focus();
+                scrollConsoleToBottom();
+            }, 1200 + Math.random() * 800);
+        }
 
-  // ═══════════════════════════════════════════════════════════════
-  // MOBILE SIDEBAR
-  // ═══════════════════════════════════════════════════════════════
-  function closeMobileSidebar() {
-    sidebar.classList.remove('mobile-open');
-    sidebarOverlay.classList.remove('show');
-  }
-  sidebarToggle.addEventListener('click', () => {
-    const open = sidebar.classList.toggle('mobile-open');
-    sidebarOverlay.classList.toggle('show', open);
-  });
-  sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        /* Context-Aware Dynamic Algorithmic Text Synthesizer Matrix Engine */
+        function generateDynamicResponsePayload(subjectName, queryText) {
+            const baseTargetString = queryText.toLowerCase();
+            
+            const dynamicResponses = [
+                `Simulation analysis sequence complete for target configuration: **${subjectName}**. Data flow streams have settled into standard equilibrium nodes. Here is the active terminal structural execution data logging for your assessment:\n\n<div class="code-syntax-block">[NEXUS_EXECUTION_LOG]\nState: SUCCESS\nSubject: ${subjectName.toUpperCase()}\nTarget Stream: ${queryText.substring(0, 20)}...\nProcess Time: ${(Math.random() * 12).toFixed(4)}ms\nStatus: STABLE</div>\n\nIs there an additional vector loop configuration or theoretical equation path you wish to test across this architecture?`,
+                
+                `Incoming diagnostic packet payload parsed successfully for **${subjectName}** simulation routines. Query vectors suggest checking parameters relative to the tracking indices. Structural boundaries remain fully nominal inside this sandbox environment.`,
+                
+                `Data processing loops mapped to **${subjectName}** context bounds have completed processing algorithms. Evaluated structural calculations output zero exception loops. All parameters match expected performance curves seamlessly.`,
+                
+                `Matrix compilation completed for the requested path inside **${subjectName}** parameters. All processing dependencies cleared code checks without triggering structural faults. Enter your next structural evaluation requirement to explore further.`
+            ];
 
-  // ═══════════════════════════════════════════════════════════════
-  // DEPT TABS
-  // ═══════════════════════════════════════════════════════════════
-  deptTabsEl.addEventListener('click', e => {
-    const btn = e.target.closest('.dept-tab');
-    if (!btn) return;
-    activeDept = btn.dataset.dept;
-    searchInput.value = '';
-    document.querySelectorAll('.dept-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    renderSubjectList(activeDept, '');
-  });
+            if (baseTargetString.includes("help") || baseTargetString.includes("status")) {
+                return `Current Simulation Terminal Status: **ACTIVE**\nTarget Sector: **${subjectName}**\nOperational Constraints: Zero Sandbox Leakage Allowed.\n\nReady for immediate deployment processing routines.`;
+            }
 
-  // ═══════════════════════════════════════════════════════════════
-  // SEARCH
-  // ═══════════════════════════════════════════════════════════════
-  searchInput.addEventListener('input', () => {
-    renderSubjectList(activeDept, searchInput.value);
-  });
+            return dynamicResponses[Math.floor(Math.random() * dynamicResponses.length)];
+        }
 
-  // ═══════════════════════════════════════════════════════════════
-  // CHAT INPUT EVENTS
-  // ═══════════════════════════════════════════════════════════════
-  chatInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-  sendBtn.addEventListener('click', sendMessage);
+        /* Micro-Formatting RegEx Compilation Processor Engine */
+        function parseMarkdownToHTML(text) {
+            let processedString = text;
+            // Clean HTML entity flags to secure input flows
+            processedString = processedString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            // Restore structural code elements bypassed by safety sanitizers
+            processedString = processedString.replace(/&lt;div class="code-syntax-block"&gt;/g, '<div class="code-syntax-block">').replace(/&lt;\/div&gt;/g, '</div>');
+            // Bold element syntax conversions
+            processedString = processedString.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return processedString;
+        }
 
-  // Auto-resize textarea
-  chatInput.addEventListener('input', () => {
-    chatInput.style.height = 'auto';
-    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-  });
-
-  // ═══════════════════════════════════════════════════════════════
-  // INIT
-  // ═══════════════════════════════════════════════════════════════
-  renderSubjectList('math', '');
-  </script>
+        /* UI Scroller View Utility */
+        function scrollConsoleToBottom() {
+            chatOutputStreamView.scrollTo({
+                top: chatOutputStreamView.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 </body>
 </html>
