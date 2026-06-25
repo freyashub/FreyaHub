@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freya's Nexus — Directory Engine</title>
+    <title>Freya's Nexus — Directory Engine v2</title>
     <style>
         /* ==========================================================================
            1. CORE CORE BRANDING, LUMINANCE & DESIGN VARIABLE ENGINE
@@ -30,7 +30,6 @@
             --glass-blur: blur(20px);
         }
 
-        /* Reset & Base System Configuration */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -48,7 +47,6 @@
             position: relative;
         }
 
-        /* Ambient Fluid Light Fields */
         body::before, body::after {
             content: "";
             position: absolute;
@@ -74,7 +72,6 @@
             background: radial-gradient(circle, var(--glow-sapphire) 0%, transparent 70%);
         }
 
-        /* Master Framework Layout Container */
         .nexus-app-container {
             position: relative;
             z-index: 1;
@@ -104,32 +101,6 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-        }
-
-        .menu-trigger-btn {
-            background: var(--bg-surface-glass);
-            border: 1px solid var(--border-hairline);
-            border-radius: 8px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition-fluid);
-        }
-
-        .menu-trigger-btn:hover {
-            background: var(--bg-surface-glass-hover);
-            border-color: rgba(0, 240, 255, 0.3);
-        }
-
-        .menu-trigger-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: var(--color-text-primary);
-            stroke-width: 2;
         }
 
         .brand-monogram-box {
@@ -170,6 +141,28 @@
 
         .path-caret {
             color: var(--color-text-dark);
+        }
+
+        .header-right-cluster {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .clear-cache-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: #f87171;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fluid);
+        }
+
+        .clear-cache-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #ef4444;
         }
 
         .home-navigation-anchor {
@@ -259,7 +252,6 @@
             pointer-events: none;
         }
 
-        /* Scrollable Repository Department Track */
         .sidebar-scrollable-track {
             flex: 1;
             overflow-y: auto;
@@ -268,14 +260,8 @@
             scrollbar-color: var(--border-hairline) transparent;
         }
 
-        .sidebar-scrollable-track::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar-scrollable-track::-webkit-scrollbar-thumb {
-            background: var(--border-hairline);
-            border-radius: 2px;
-        }
+        .sidebar-scrollable-track::-webkit-scrollbar { width: 4px; }
+        .sidebar-scrollable-track::-webkit-scrollbar-thumb { background: var(--border-hairline); border-radius: 2px; }
 
         .department-wrapper-block {
             margin-bottom: 2rem;
@@ -312,7 +298,6 @@
             gap: 0.35rem;
         }
 
-        /* Subject Tab Micro-Engine */
         .subject-tab-element {
             display: flex;
             align-items: center;
@@ -359,23 +344,9 @@
             flex: 1;
         }
 
-        .subject-tab-element.is-active .subject-tab-name {
-            color: var(--color-text-primary);
-        }
-
-        .subject-tab-indicator-node {
-            width: 4px;
-            height: 4px;
-            background: var(--glow-cyan);
-            border-radius: 50%;
-            opacity: 0;
-            transition: var(--transition-fluid);
-            box-shadow: 0 0 8px var(--glow-cyan);
-        }
-
-        .subject-tab-element.is-active .subject-tab-indicator-node {
-            opacity: 1;
-        }
+        .subject-tab-element.is-active .subject-tab-name { color: var(--color-text-primary); }
+        .subject-tab-indicator-node { width: 4px; height: 4px; background: var(--glow-cyan); border-radius: 50%; opacity: 0; transition: var(--transition-fluid); box-shadow: 0 0 8px var(--glow-cyan); }
+        .subject-tab-element.is-active .subject-tab-indicator-node { opacity: 1; }
 
         /* RIGHT CONTEXTUAL DISPLAY DISPLAY PANEL */
         .workspace-display-panel {
@@ -387,7 +358,6 @@
             position: relative;
         }
 
-        /* Non-Selected Empty State Module */
         .panel-empty-state-container {
             position: absolute;
             inset: 0;
@@ -422,86 +392,11 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             margin-bottom: 1.5rem;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
         }
 
-        .directory-badge-capsule::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            background: var(--glow-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--glow-cyan);
-        }
+        .empty-state-headline { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; }
+        .empty-state-paragraph { max-width: 520px; color: var(--color-text-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 3rem; }
 
-        .empty-state-headline {
-            font-size: 2.25rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state-paragraph {
-            max-width: 520px;
-            color: var(--color-text-muted);
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 3rem;
-        }
-
-        .central-geometric-node {
-            width: 64px;
-            height: 64px;
-            position: relative;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .geometric-hexagon {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--border-hairline);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            animation: geoRotate 12s linear infinite;
-        }
-
-        .geometric-hexagon.inner {
-            width: 60%;
-            height: 60%;
-            border-color: var(--glow-cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-            animation: geoRotateInner 8s linear infinite;
-        }
-
-        @keyframes geoRotate {
-            0% { transform: rotate(0deg); border-color: var(--border-hairline); }
-            50% { border-color: var(--glow-blue); }
-            100% { transform: rotate(360deg); border-color: var(--border-hairline); }
-        }
-        @keyframes geoRotateInner {
-            0% { transform: rotate(360deg); opacity: 0.6; }
-            50% { opacity: 1; transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); opacity: 0.6; }
-        }
-
-        .engine-title-string {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
-
-        .engine-subtitle-string {
-            font-size: 0.95rem;
-            color: var(--color-text-dark);
-            max-width: 400px;
-            line-height: 1.5;
-        }
-
-        /* Active Workspace Dashboard Layout */
         .panel-active-workspace {
             flex: 1;
             display: flex;
@@ -522,40 +417,42 @@
             position: relative;
         }
 
-        /* Knowledge System Manifest Header Block */
         .workspace-knowledge-card {
-            padding: 1.75rem 2.5rem;
+            padding: 1.5rem 2.5rem;
             background: rgba(15, 23, 42, 0.25);
             border-bottom: 1px solid var(--border-hairline);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .knowledge-department-route {
-            font-size: 0.75rem;
+        .knowledge-department-route { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--glow-cyan); font-weight: 700; margin-bottom: 0.25rem; }
+        .knowledge-subject-headline { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+        .knowledge-subject-summary { color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.4; max-width: 650px; }
+
+        /* Mode Pill Indicators */
+        .analytics-pill-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .mode-status-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-hairline);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--glow-cyan);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
         }
 
-        .knowledge-subject-headline {
-            font-size: 1.75rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
+        .mode-status-badge.ai-engine { background: rgba(0, 240, 255, 0.05); color: var(--glow-cyan); border-color: rgba(0, 240, 255, 0.15); }
+        .mode-status-badge.detected-intent { background: rgba(59, 130, 246, 0.05); color: var(--glow-blue); border-color: rgba(59, 130, 246, 0.15); transition: var(--transition-fluid); }
 
-        .knowledge-subject-summary {
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            max-width: 800px;
-        }
-
-        /* Sandbox Simulation Execution Chat Frame */
+        /* SIMULATION TERMINAL FRAMEWORK */
         .simulation-engine-terminal {
             flex: 1;
             display: flex;
@@ -567,43 +464,33 @@
         .terminal-output-stream {
             flex: 1;
             overflow-y: auto;
-            padding: 2.5rem;
+            padding: 2rem 2.5rem;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
             scrollbar-width: thin;
             scrollbar-color: var(--border-hairline) transparent;
         }
 
-        .terminal-output-stream::-webkit-scrollbar {
-            width: 4px;
-        }
+        .terminal-output-stream::-webkit-scrollbar { width: 4px; }
+        .terminal-output-stream::-webkit-scrollbar-thumb { background: var(--border-hairline); }
 
-        .terminal-output-stream::-webkit-scrollbar-thumb {
-            background: var(--border-hairline);
-        }
-
-        /* Message Structure Blueprints */
+        /* MESSAGE PACKETS */
         .sim-message-packet {
             display: flex;
             gap: 1rem;
-            max-width: 85%;
-            animation: messageRender 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            max-width: 80%;
+            animation: messageRender 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes messageRender {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .sim-message-packet.system-variant {
-            align-self: flex-start;
-        }
-
-        .sim-message-packet.user-variant {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
+        .sim-message-packet.system-variant { align-self: flex-start; }
+        .sim-message-packet.user-variant { align-self: flex-end; flex-direction: row-reverse; }
+        .sim-message-packet.peer-variant { align-self: flex-start; }
 
         .message-avatar-node {
             width: 32px;
@@ -612,43 +499,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             flex-shrink: 0;
             border: 1px solid var(--border-hairline);
+            text-transform: uppercase;
         }
 
-        .sim-message-packet.system-variant .message-avatar-node {
-            background: rgba(0, 240, 255, 0.1);
-            color: var(--glow-cyan);
-            border-color: rgba(0, 240, 255, 0.2);
-        }
-
-        .sim-message-packet.user-variant .message-avatar-node {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--glow-blue);
-            border-color: rgba(59, 130, 246, 0.2);
-        }
+        .sim-message-packet.system-variant .message-avatar-node { background: rgba(0, 240, 255, 0.1); color: var(--glow-cyan); border-color: rgba(0, 240, 255, 0.2); }
+        .sim-message-packet.user-variant .message-avatar-node { background: rgba(59, 130, 246, 0.1); color: var(--glow-blue); border-color: rgba(59, 130, 246, 0.2); }
+        .sim-message-packet.peer-variant .message-avatar-node { background: rgba(168, 85, 247, 0.1); color: #c084fc; border-color: rgba(168, 85, 247, 0.2); }
 
         .message-content-balloon {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border-hairline);
-            padding: 1rem 1.25rem;
+            padding: 0.85rem 1.15rem;
             border-radius: 12px;
             font-size: 0.95rem;
             line-height: 1.5;
+            position: relative;
         }
 
-        .sim-message-packet.system-variant .message-content-balloon {
-            border-top-left-radius: 0;
+        .message-metadata-stamp {
+            font-size: 0.65rem;
+            color: var(--color-text-dark);
+            margin-top: 0.35rem;
+            display: block;
+            text-align: right;
         }
 
-        .sim-message-packet.user-variant .message-content-balloon {
-            border-top-right-radius: 0;
-            background: rgba(30, 41, 59, 0.4);
-        }
+        .sim-message-packet.system-variant .message-content-balloon { border-top-left-radius: 0; }
+        .sim-message-packet.user-variant .message-content-balloon { border-top-right-radius: 0; background: rgba(30, 41, 59, 0.4); }
+        .sim-message-packet.peer-variant .message-content-balloon { border-top-left-radius: 0; background: rgba(88, 28, 135, 0.15); border-color: rgba(168, 85, 247, 0.15); }
 
-        /* Console Stream Code Highlights */
         .code-syntax-block {
             margin-top: 0.75rem;
             background: #010409;
@@ -662,9 +545,7 @@
             white-space: pre;
         }
 
-        /* ==========================================================================
-           4. PERSISTENT CONSOLE FOOTER SYSTEM
-           ========================================================================== */
+        /* PERSISTENT DOCK INPUT SYSTEM */
         .terminal-input-dock {
             padding: 1.5rem 2.5rem;
             background: rgba(2, 6, 23, 0.7);
@@ -677,11 +558,12 @@
         .system-status-registry-bar {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: space-between;
             margin-bottom: 0.75rem;
             font-size: 0.8rem;
-            font-weight: 500;
         }
+
+        .registry-left-cluster { display: flex; align-items: center; gap: 0.75rem; }
 
         .status-pulse-dot {
             width: 8px;
@@ -692,25 +574,12 @@
             animation: pulse-glow 2s infinite ease-in-out;
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
+        @keyframes pulse-glow { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        .status-state-string { color: var(--color-text-dark); font-weight: 500; }
+        .status-state-string span { color: var(--color-text-primary); font-weight: 600; }
+        .room-isolation-notice { font-size: 0.75rem; color: var(--color-text-dark); font-family: monospace; }
 
-        .status-state-string {
-            color: var(--color-text-dark);
-        }
-
-        .status-state-string span {
-            color: var(--color-text-primary);
-            font-weight: 600;
-        }
-
-        .input-form-control-node {
-            display: flex;
-            gap: 1rem;
-            position: relative;
-        }
+        .input-form-control-node { display: flex; gap: 1rem; position: relative; }
 
         .input-text-stream-area {
             flex: 1;
@@ -722,22 +591,12 @@
             font-size: 0.95rem;
             outline: none;
             transition: var(--transition-fluid);
-            resize: none;
             height: 52px;
             font-family: var(--font-family);
-            line-height: 1.2;
         }
 
-        .input-text-stream-area:focus {
-            border-color: rgba(0, 240, 255, 0.4);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.08);
-        }
-
-        .input-text-stream-area:disabled {
-            background: rgba(15, 23, 42, 0.2);
-            cursor: not-allowed;
-            color: var(--color-text-dark);
-        }
+        .input-text-stream-area:focus { border-color: rgba(0, 240, 255, 0.4); box-shadow: 0 0 20px rgba(0, 240, 255, 0.08); }
+        .input-text-stream-area:disabled { background: rgba(15, 23, 42, 0.2); cursor: not-allowed; color: var(--color-text-dark); }
 
         .transmission-dispatch-btn {
             background: var(--bg-surface-glass);
@@ -754,121 +613,40 @@
             flex-shrink: 0;
         }
 
-        .transmission-dispatch-btn:hover:not(:disabled) {
-            background: var(--glow-cyan);
-            color: var(--bg-base);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .transmission-dispatch-btn:disabled {
-            color: var(--color-text-dark);
-            cursor: not-allowed;
-            background: rgba(15, 23, 42, 0.1);
-        }
-
-        .transmission-dispatch-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
+        .transmission-dispatch-btn:hover:not(:disabled) { background: var(--glow-cyan); color: var(--bg-base); box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); transform: translateY(-1px); }
+        .transmission-dispatch-btn:disabled { color: var(--color-text-dark); cursor: not-allowed; background: rgba(15, 23, 42, 0.1); }
+        .transmission-dispatch-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
         /* ==========================================================================
            5. THREE-TIER RESPONSIVE SCALING ENGINE
            ========================================================================== */
-        
-        /* Desktop Default Monitors Monitor Rule System (769px to 1399px) */
         @media (max-width: 1399px) {
-            .workspace-sidebar {
-                width: 320px;
-            }
-            .empty-state-headline {
-                font-size: 2rem;
-            }
-            .terminal-output-stream {
-                padding: 1.75rem;
-            }
+            .workspace-sidebar { width: 320px; }
+            .empty-state-headline { font-size: 2rem; }
+            .terminal-output-stream { padding: 1.5rem; }
         }
 
-        /* Mobile Breakpoints Interface Overhaul Structure (<=768px) */
         @media (max-width: 768px) {
-            body {
-                overflow: auto;
-            }
-            .nexus-app-container {
-                height: auto;
-                min-height: 100vh;
-                overflow: visible;
-            }
-            .nexus-workspace-grid {
-                flex-direction: column;
-                height: auto;
-                overflow: visible;
-            }
-            .workspace-sidebar {
-                width: 100vw;
-                height: auto;
-                max-height: 400px;
-                border-right: none;
-                border-bottom: 1px solid var(--border-hairline);
-            }
-            .sidebar-scrollable-track {
-                display: flex;
-                gap: 1.5rem;
-                overflow-x: auto;
-                overflow-y: hidden;
-                padding: 1rem;
-            }
-            .department-wrapper-block {
-                margin-bottom: 0;
-                flex-shrink: 0;
-                width: 280px;
-            }
-            .department-subject-list {
-                max-height: 220px;
-                overflow-y: auto;
-                padding-right: 0.25rem;
-            }
-            .workspace-display-panel {
-                width: 100vw;
-                height: calc(100vh - 472px);
-                min-height: 500px;
-                position: relative;
-            }
-            .panel-empty-state-container, .panel-active-workspace {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-            }
-            .terminal-input-dock {
-                padding: 1rem;
-            }
-            .workspace-knowledge-card {
-                padding: 1rem 1.5rem;
-            }
-            .terminal-output-stream {
-                padding: 1.25rem;
-            }
+            body { overflow: auto; }
+            .nexus-app-container { height: auto; min-height: 100vh; overflow: visible; }
+            .nexus-workspace-grid { flex-direction: column; height: auto; overflow: visible; }
+            .workspace-sidebar { width: 100vw; height: auto; max-height: 380px; border-right: none; border-bottom: 1px solid var(--border-hairline); }
+            .sidebar-scrollable-track { display: flex; gap: 1.5rem; overflow-x: auto; overflow-y: hidden; padding: 1rem; }
+            .department-wrapper-block { margin-bottom: 0; flex-shrink: 0; width: 260px; }
+            .department-subject-list { max-height: 200px; overflow-y: auto; }
+            .workspace-display-panel { width: 100vw; height: calc(100vh - 452px); min-height: 480px; position: relative; }
+            .panel-empty-state-container, .panel-active-workspace { position: absolute; width: 100%; height: 100%; }
+            .terminal-input-dock { padding: 1rem; }
+            .workspace-knowledge-card { padding: 1rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .analytics-pill-box { width: 100%; justify-content: flex-start; }
+            .terminal-output-stream { padding: 1rem; }
         }
 
-        /* Larger Displays Framework Scale Expansion (>=1400px) */
         @media (min-width: 1400px) {
-            .workspace-sidebar {
-                width: 420px;
-            }
-            .empty-state-headline {
-                font-size: 2.75rem;
-            }
-            .workspace-knowledge-card {
-                padding: 2.25rem 3.5rem;
-            }
-            .terminal-output-stream {
-                padding: 3.5rem;
-            }
-            .message-content-balloon {
-                font-size: 1.05rem;
-                padding: 1.25rem 1.5rem;
-            }
+            .workspace-sidebar { width: 420px; }
+            .empty-state-headline { font-size: 2.75rem; }
+            .workspace-knowledge-card { padding: 2rem 3.5rem; }
+            .terminal-output-stream { padding: 3rem 3.5rem; }
         }
     </style>
 </head>
@@ -878,9 +656,6 @@
         
         <header class="nexus-header">
             <div class="header-left-cluster">
-                <button class="menu-trigger-btn" aria-label="Toggle Navigation Module">
-                    <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                </button>
                 <div class="brand-monogram-box">F</div>
                 <h1 class="brand-title-string">Freya's <span>Nexus</span></h1>
                 <div class="current-path-indicator">
@@ -889,10 +664,13 @@
                     <span id="path-sub-node">—</span>
                 </div>
             </div>
-            <a href="index.html" class="home-navigation-anchor">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span>Home</span>
-            </a>
+            <div class="header-right-cluster">
+                <button class="clear-cache-btn" onclick="wipeLocalWorkspaceChains()" title="Resets all local client-side message databases">Wipe Chat Matrix</button>
+                <a href="index.html" class="home-navigation-anchor">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Home</span>
+                </a>
+            </div>
         </header>
 
         <main class="nexus-workspace-grid">
@@ -901,50 +679,48 @@
                 <div class="sidebar-search-container">
                     <div class="search-input-wrapper">
                         <svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="subject-search-core" class="search-input-field" placeholder="Search 100 specialized disciplines...">
+                        <input type="text" id="subject-search-core" class="search-input-field" placeholder="Filter 100 specialized subjects...">
                     </div>
                 </div>
-
-                <div class="sidebar-scrollable-track" id="master-sidebar-track">
-                    </div>
+                <div class="sidebar-scrollable-track" id="master-sidebar-track"></div>
             </aside>
 
             <section class="workspace-display-panel">
                 
                 <div class="panel-empty-state-container" id="engine-empty-state">
-                    <div class="directory-badge-capsule">Directory</div>
-                    <h2 class="empty-state-headline">Select a Subject</h2>
-                    <p class="empty-state-paragraph">
-                        Choose any of the 100 subjects from the sidebar to load its knowledge panel and begin a focused simulation conversation.
-                    </p>
-                    <div class="central-geometric-node">
-                        <div class="geometric-hexagon out"></div>
-                        <div class="geometric-hexagon inner"></div>
-                    </div>
-                    <h3 class="engine-title-string">Knowledge Simulation Engine</h3>
-                    <p class="engine-subtitle-string">Each subject opens an isolated chat tuned to that discipline. Select a topic from the sidebar to begin.</p>
+                    <div class="directory-badge-capsule">Directory Dashboard</div>
+                    <h2 class="empty-state-headline">Initialize Sandbox Matrix</h2>
+                    <p class="empty-state-paragraph">Select one of the 100 specialized operational modules inside the directory timeline rail to boot the client-isolated sandbox network environments.</p>
                 </div>
 
                 <div class="panel-active-workspace" id="engine-active-workspace">
                     
                     <div class="workspace-knowledge-card">
-                        <div class="knowledge-department-route" id="display-meta-dept">DEPARTMENT</div>
-                        <h2 class="knowledge-subject-headline" id="display-meta-title">Subject Title String</h2>
-                        <p class="knowledge-subject-summary" id="display-meta-desc">Analytical conceptual framework profile documentation index detailing algorithmic models and simulation criteria.</p>
+                        <div>
+                            <div class="knowledge-department-route" id="display-meta-dept">DEPARTMENT</div>
+                            <h2 class="knowledge-subject-headline" id="display-meta-title">Subject Profile</h2>
+                            <p class="knowledge-subject-summary" id="display-meta-desc">Loading system logs...</p>
+                        </div>
+                        <div class="analytics-pill-box">
+                            <div class="mode-status-badge ai-engine" id="engine-ai-tag">MATH_AI v1.4</div>
+                            <div class="mode-status-badge detected-intent" id="engine-intent-tag">Intent: Neutral</div>
+                        </div>
                     </div>
 
                     <div class="simulation-engine-terminal">
-                        <div class="terminal-output-stream" id="chat-output-stream-container">
-                            </div>
+                        <div class="terminal-output-stream" id="chat-output-stream-container"></div>
 
                         <div class="terminal-input-dock">
                             <div class="system-status-registry-bar">
-                                <div class="status-pulse-dot" id="console-pulse-indicator"></div>
-                                <div class="status-state-string" id="console-status-text">Topic-Isolated Mode — <span>No subject selected</span></div>
+                                <div class="registry-left-cluster">
+                                    <div class="status-pulse-dot"></div>
+                                    <div class="status-state-string" id="console-status-text">Isolated Node Operational</div>
+                                </div>
+                                <div class="room-isolation-notice" id="room-isolation-id">ROOM_REF: NULL</div>
                             </div>
                             <form class="input-form-control-node" id="console-transmission-form" onsubmit="executeMessageTransaction(event)">
-                                <input type="text" id="console-input-buffer" class="input-text-stream-area" placeholder="Select a subject to start asking..." disabled>
-                                <button type="submit" id="console-dispatch-btn" class="transmission-dispatch-btn" aria-label="Transmit Console Packet Data" disabled>
+                                <input type="text" id="console-input-buffer" class="input-text-stream-area" placeholder="Provide simulation directive data..." autocomplete="off" disabled>
+                                <button type="submit" id="console-dispatch-btn" class="transmission-dispatch-btn" disabled>
                                     <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                                 </button>
                             </form>
@@ -952,9 +728,7 @@
                     </div>
 
                 </div>
-
             </section>
-
         </main>
     </div>
 
@@ -962,6 +736,8 @@
         const NEXUS_DIRECTORY_MANIFEST = [
             {
                 departmentName: "Mathematics Department",
+                aiType: "MATH_COGNITION_CORE",
+                aiBadge: "MATH_AI v2.1",
                 subjects: [
                     { id: "01", name: "Linear Algebra", desc: "Vector spaces, matrix transformation mechanics, eigenspaces, and canonical decomposition algorithms." },
                     { id: "02", name: "Calculus AB", desc: "Differential and integral analysis limits, mean value theorems, and baseline rate derivatives." },
@@ -987,6 +763,8 @@
             },
             {
                 departmentName: "Physical Sciences Department",
+                aiType: "PHYS_QUANTUM_CORE",
+                aiBadge: "PHYSICS_AI v3.0",
                 subjects: [
                     { id: "21", name: "Quantum Mechanics", desc: "Schrödinger wave state equations, Hilbert spaces, operators, and quantum entanglement vectors." },
                     { id: "22", name: "Astrophysics", desc: "Stellar nucleosynthesis, gravitational collapse mechanics, and orbital thermodynamic metrics." },
@@ -1012,6 +790,8 @@
             },
             {
                 departmentName: "Life & Neuroscience Department",
+                aiType: "NEURO_SYNAPSE_CORE",
+                aiBadge: "BIO_NEURO_AI v1.9",
                 subjects: [
                     { id: "41", name: "Cellular Neuroscience", desc: "Ion channel kinetics, Hodgkin-Huxley models, and axonal membrane parameters." },
                     { id: "42", name: "Cognitive Neuroscience", desc: "Neural network maps of memory encoding, visual attention streams, and processing schemas." },
@@ -1037,6 +817,8 @@
             },
             {
                 departmentName: "Philosophy Department",
+                aiType: "PHIL_DIALECTIC_CORE",
+                aiBadge: "PHILOSOPHY_AI v4.2",
                 subjects: [
                     { id: "61", name: "Epistemology", desc: "Justification parameters, skepticism variants, coherentism, and Gettier problem edge cases." },
                     { id: "62", name: "Metaphysics", desc: "Ontological categorizations, mereological structures, and modal worlds." },
@@ -1062,6 +844,8 @@
             },
             {
                 departmentName: "Computer Science & Advanced Tech Department",
+                aiType: "COMP_AUTOMATION_CORE",
+                aiBadge: "COMP_SCI_AI v5.0",
                 subjects: [
                     { id: "81", name: "Artificial Intelligence", desc: "Heuristic agent optimization, expert system structures, and search graph solvers." },
                     { id: "82", name: "Machine Learning", desc: "Gradient descent optimizations, loss configurations, and generalization bounds." },
@@ -1087,11 +871,15 @@
             }
         ];
 
-        // Global State Drivers
-        let activeSelectedSubject = null;
-        let runningChatHistories = {}; 
+        // Simulated Network Bot User Generation Matrices
+        const SIMULATED_PEER_NAMES = ["Xenon_Dev", "Quantum_Alpha", "Nova_Core", "Cyber_Wanda", "Kardashev_Scribe", "Vortex_Editor", "Entropy_Engine", "Pixel_Architect"];
+        const CASUAL_PHRASE_BANK = ["Sup y'all, what are we building today?", "Anyone testing out new macro configurations on this file?", "This layout blur effect is clean.", "Working through this module right now.", "Ayo, what's up?", "Ngl this section makes absolute sense."];
 
-        // Core UI Node Cache References
+        // Global State Registers
+        let currentSubject = null;
+        let currentDeptData = null;
+
+        // Cached UI Nodes
         const sidebarScrollTrackNode = document.getElementById('master-sidebar-track');
         const globalSearchInputField = document.getElementById('subject-search-core');
         const emptyStateWindowNode = document.getElementById('engine-empty-state');
@@ -1101,274 +889,314 @@
         const textMetaTitleLabel = document.getElementById('display-meta-title');
         const textMetaDescLabel = document.getElementById('display-meta-desc');
         const pathSubNodeLabel = document.getElementById('path-sub-node');
+        const engineAiTag = document.getElementById('engine-ai-tag');
+        const engineIntentTag = document.getElementById('engine-intent-tag');
+        const roomIsolationId = document.getElementById('room-isolation-id');
         
         const chatOutputStreamView = document.getElementById('chat-output-stream-container');
         const terminalInputTextField = document.getElementById('console-input-buffer');
         const terminalSubmitActionBtn = document.getElementById('console-dispatch-btn');
         const consoleStatusTextNode = document.getElementById('console-status-text');
 
-        /* Initialize Component View Tree */
         document.addEventListener("DOMContentLoaded", () => {
-            renderDirectorySidebarElements(NEXUS_DIRECTORY_MANIFEST);
+            renderMatrixNavigationStructure();
             setupSearchEngineFilters();
         });
 
-        /* Structural Template Element Insertion Engine */
-        function renderDirectorySidebarElements(manifestData) {
+        function renderMatrixNavigationStructure() {
             sidebarScrollTrackNode.innerHTML = "";
-            
-            manifestData.forEach(dept => {
+            NEXUS_DIRECTORY_MANIFEST.forEach((dept, deptIdx) => {
                 const deptBlock = document.createElement('div');
                 deptBlock.className = 'department-wrapper-block';
                 
-                const headerStrip = document.createElement('div');
-                headerStrip.className = 'department-header-strip';
+                deptBlock.innerHTML = `
+                    <div class="department-header-strip">
+                        <h4 class="department-title-label">${dept.departmentName}</h4>
+                        <span class="department-count-badge">${dept.subjects.length} Tracks</span>
+                    </div>
+                    <div class="department-subject-list" id="dept-list-${deptIdx}"></div>
+                `;
+                sidebarScrollTrackNode.appendChild(deptBlock);
                 
-                const titleLabel = document.createElement('h4');
-                titleLabel.className = 'department-title-label';
-                titleLabel.textContent = dept.departmentName;
-                
-                const badgeCount = document.createElement('span');
-                badgeCount.className = 'department-count-badge';
-                badgeCount.textContent = `${dept.subjects.length} Topics`;
-                
-                headerStrip.appendChild(titleLabel);
-                headerStrip.appendChild(badgeCount);
-                deptBlock.appendChild(headerStrip);
-                
-                const subjectListContainer = document.createElement('div');
-                subjectListContainer.className = 'department-subject-list';
-                
+                const listContainer = document.getElementById(`dept-list-${deptIdx}`);
                 dept.subjects.forEach(subject => {
                     const subjectBtn = document.createElement('button');
                     subjectBtn.className = 'subject-tab-element';
                     subjectBtn.setAttribute('data-id', subject.id);
-                    subjectBtn.setAttribute('aria-label', `Load matrix channel for ${subject.name}`);
-                    subjectBtn.onclick = () => selectActiveSubjectContext(subject, dept.departmentName);
-                    
-                    const indexText = document.createElement('span');
-                    indexText.className = 'subject-tab-index';
-                    indexText.textContent = subject.id;
-                    
-                    const nameText = document.createElement('span');
-                    nameText.className = 'subject-tab-name';
-                    nameText.textContent = subject.name;
-                    
-                    const activeIndicator = document.createElement('div');
-                    activeIndicator.className = 'subject-tab-indicator-node';
-                    
-                    subjectBtn.appendChild(indexText);
-                    subjectBtn.appendChild(nameText);
-                    subjectBtn.appendChild(activeIndicator);
-                    subjectListContainer.appendChild(subjectBtn);
+                    subjectBtn.innerHTML = `
+                        <span class="subject-tab-index">${subject.id}</span>
+                        <span class="subject-tab-name">${subject.name}</span>
+                        <div class="subject-tab-indicator-node"></div>
+                    `;
+                    subjectBtn.onclick = () => instantiateIsolatedSubjectRoom(subject, dept);
+                    listContainer.appendChild(subjectBtn);
                 });
-                
-                deptBlock.appendChild(subjectListContainer);
-                sidebarScrollTrackNode.appendChild(deptBlock);
             });
         }
 
-        /* Real-Time Matrix Search Engine Filtering System */
         function setupSearchEngineFilters() {
             globalSearchInputField.addEventListener('input', (e) => {
-                const searchString = e.target.value.toLowerCase().trim();
-                const subjectItemElements = document.querySelectorAll('.subject-tab-element');
-                const deptBlocks = document.querySelectorAll('.department-wrapper-block');
-
-                deptBlocks.forEach(block => {
-                    let deepMatchCount = 0;
-                    const items = block.querySelectorAll('.subject-tab-element');
-                    
-                    items.forEach(item => {
-                        const subName = item.querySelector('.subject-tab-name').textContent.toLowerCase();
-                        const subId = item.querySelector('.subject-tab-index').textContent.toLowerCase();
-                        
-                        if (subName.includes(searchString) || subId.includes(searchString)) {
-                            item.style.display = 'flex';
-                            deepMatchCount++;
+                const query = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('.department-wrapper-block').forEach(block => {
+                    let visibleMatches = 0;
+                    block.querySelectorAll('.subject-tab-element').forEach(btn => {
+                        const name = btn.querySelector('.subject-tab-name').textContent.toLowerCase();
+                        const id = btn.querySelector('.subject-tab-index').textContent.toLowerCase();
+                        if (name.includes(query) || id.includes(query)) {
+                            btn.style.display = 'flex';
+                            visibleMatches++;
                         } else {
-                            item.style.display = 'none';
+                            btn.style.display = 'none';
                         }
                     });
-
-                    block.style.display = deepMatchCount > 0 ? 'block' : 'none';
+                    block.style.display = visibleMatches > 0 ? 'block' : 'none';
                 });
             });
         }
 
-        /* Active Core Subject Allocation & Switching Driver */
-        function selectActiveSubjectContext(subjectData, departmentName) {
-            if (activeSelectedSubject && activeSelectedSubject.id === subjectData.id) return;
+        /* 100-SEPARATED ENVIRONMENT CONFIGURATION CONTROLLER */
+        function instantiateIsolatedSubjectRoom(subject, department) {
+            currentSubject = subject;
+            currentDeptData = department;
             
-            activeSelectedSubject = subjectData;
-            
-            // Re-render selection indicator arrays
             document.querySelectorAll('.subject-tab-element').forEach(btn => {
-                if (btn.getAttribute('data-id') === subjectData.id) {
-                    btn.classList.add('is-active');
-                } else {
-                    btn.classList.remove('is-active');
-                }
+                btn.classList.toggle('is-active', btn.getAttribute('data-id') === subject.id);
             });
 
-            // Transition UI displays away from empty placeholder states
             emptyStateWindowNode.classList.add('is-hidden');
             activeWorkspaceWindowNode.classList.add('is-visible');
             
-            // Set Dynamic Header Fields
-            textMetaDeptLabel.textContent = departmentName;
-            textMetaTitleLabel.textContent = `${subjectData.id}. ${subjectData.name}`;
-            textMetaDescLabel.textContent = subjectData.desc;
-            pathSubNodeLabel.textContent = subjectData.name;
+            textMetaDeptLabel.textContent = department.departmentName;
+            textMetaTitleLabel.textContent = `${subject.id}. ${subject.name}`;
+            textMetaDescLabel.textContent = subject.desc;
+            pathSubNodeLabel.textContent = subject.name;
+            engineAiTag.textContent = department.aiBadge;
+            roomIsolationId.textContent = `ROOM_REF: RM_${subject.id}_NX`;
+            engineIntentTag.textContent = "Intent: Neutral";
+            engineIntentTag.className = "mode-status-badge detected-intent";
 
-            // Unlock and adjust control elements
             terminalInputTextField.disabled = false;
             terminalSubmitActionBtn.disabled = false;
-            terminalInputTextField.placeholder = `Input message matrix payload query for ${subjectData.name}...`;
-            consoleStatusTextNode.innerHTML = `Topic-Isolated Mode — <span>${subjectData.name.toUpperCase()} ENGINE ACTIVE</span>`;
+            terminalInputTextField.placeholder = `Broadcast matrix packet to Room ${subject.id}...`;
+            consoleStatusTextNode.innerHTML = `Isolated Channel Connected`;
 
-            // Reload or initialize chat logs
-            loadSubjectChatLogs(subjectData.id);
+            loadRoomDataChains(subject.id);
         }
 
-        /* Simulation Chat Storage Log Allocator */
-        function loadSubjectChatLogs(subjectId) {
+        /* STORAGE CONTROLLERS FOR TRUE SECURE LOCAL STORAGE MATRIX */
+        function getRoomStorageKey(subjectId) {
+            return `FREYA_NEXUS_RM_${subjectId}_DATASTREAM`;
+        }
+
+        function loadRoomDataChains(subjectId) {
             chatOutputStreamView.innerHTML = "";
-            
-            if (!runningChatHistories[subjectId]) {
-                // Initialize default introductory message construct
-                runningChatHistories[subjectId] = [
+            const storageKey = getRoomStorageKey(subjectId);
+            let history = localStorage.getItem(storageKey);
+
+            if (!history) {
+                const initialSeed = [
                     {
-                        senderId: "SYSTEM",
-                        textPayload: `Knowledge simulation channel linked successfully for **${activeSelectedSubject.name}**. System parameters are optimized for analysis routines. Enter an instruction query down below to execute processing simulations.`,
-                        timestamp: Date.now()
+                        sender: "SYSTEM",
+                        type: "SYS",
+                        msg: `Isolated network channel locked onto **${currentSubject.name}**. Personal data space initialized. Sub-AI controller **${currentDeptData.aiBadge}** active. Casually message the room or ask technical questions.`,
+                        time: getFormattedTimestamp()
                     }
                 ];
+                localStorage.setItem(storageKey, JSON.stringify(initialSeed));
+                history = JSON.stringify(initialSeed);
             }
 
-            runningChatHistories[subjectId].forEach(msgPacket => {
-                renderMessagePacketNode(msgPacket.senderId, msgPacket.textPayload);
+            JSON.parse(history).forEach(packet => {
+                appendPacketNodeToViewport(packet);
             });
-
-            scrollConsoleToBottom();
+            scrollStreamToBottom();
         }
 
-        /* Message Node Creation Engine */
-        function renderMessagePacketNode(senderId, rawText) {
-            const packetBlock = document.createElement('div');
-            packetBlock.className = `sim-message-packet ${senderId === 'SYSTEM' ? 'system-variant' : 'user-variant'}`;
-            
-            const avatarNode = document.createElement('div');
-            avatarNode.className = 'message-avatar-node';
-            avatarNode.textContent = senderId === 'SYSTEM' ? 'SYS' : 'USR';
-            
-            const balloonElement = document.createElement('div');
-            balloonElement.className = 'message-content-balloon';
-            
-            // Evaluate structural formatting tags
-            balloonElement.innerHTML = parseMarkdownToHTML(rawText);
-            
-            packetBlock.appendChild(avatarNode);
-            packetBlock.appendChild(balloonElement);
-            chatOutputStreamView.appendChild(packetBlock);
+        function appendPacketNodeToViewport(packet) {
+            const block = document.createElement('div');
+            let typeClass = "system-variant";
+            if (packet.type === "USR") typeClass = "user-variant";
+            if (packet.type === "PEER") typeClass = "peer-variant";
+
+            block.className = `sim-message-packet ${typeClass}`;
+            block.innerHTML = `
+                <div class="message-avatar-node">${packet.sender}</div>
+                <div class="message-content-balloon">
+                    ${parseStructuralSyntax(packet.msg)}
+                    <span class="message-metadata-stamp">${packet.time}</span>
+                </div>
+            `;
+            chatOutputStreamView.appendChild(block);
         }
 
-        /* Form Processing Controller Intercept */
+        /* DISPATCH INTERCEPT TRANSACTION ARCHITECTURE */
         function executeMessageTransaction(event) {
             event.preventDefault();
-            if (!activeSelectedSubject) return;
+            if (!currentSubject) return;
 
-            const textInputBuffer = terminalInputTextField.value.trim();
-            if (!textInputBuffer) return;
+            const bufferText = terminalInputTextField.value.trim();
+            if (!bufferText) return;
 
-            // Buffer current ID to handle race conditions
-            const targetSubjectId = activeSelectedSubject.id;
+            const roomId = currentSubject.id;
+            const currentTimestamp = getFormattedTimestamp();
 
-            // Commit user payload packet to system storage fields
-            const userPacket = {
-                senderId: "USER",
-                textPayload: textInputBuffer,
-                timestamp: Date.now()
-            };
-            runningChatHistories[targetSubjectId].push(userPacket);
-            renderMessagePacketNode("USER", textInputBuffer);
-            
-            // Clear input buffer mechanisms immediately
+            const userPacket = { sender: "YOU", type: "USR", msg: bufferText, time: currentTimestamp };
+            commitPacketToLocalStorage(roomId, userPacket);
+            appendPacketNodeToViewport(userPacket);
+
             terminalInputTextField.value = "";
-            scrollConsoleToBottom();
+            scrollStreamToBottom();
 
-            // Trigger system automation simulator response delays
-            triggerAutomatedSimulationResponse(targetSubjectId, textInputBuffer);
+            // Run Client-Sided Linguistic Intent Processing Vector
+            const userIntent = analyzeInboundLinguisticIntent(bufferText);
+            updateIntentUIFeedback(userIntent);
+
+            triggerAIAndNetworkPeerSimulations(roomId, bufferText, userIntent);
         }
 
-        /* Automated Simulated AI System Pipeline Response Script */
-        function triggerAutomatedSimulationResponse(subjectId, inboundQuery) {
+        function commitPacketToLocalStorage(roomId, packet) {
+            const key = getRoomStorageKey(roomId);
+            const history = JSON.parse(localStorage.getItem(key) || "[]");
+            history.push(packet);
+            localStorage.setItem(key, JSON.stringify(history));
+        }
+
+        /* CLIENT-SIDED RAW INTENT RESOLUTION ENGINE (NLP SIMULATOR) */
+        function analyzeInboundLinguisticIntent(text) {
+            const cleanText = text.toLowerCase();
+            const casualKeywords = ["sup", "hey", "hello", "yo", "bro", "cool", "clean", "lol", "ngl", "bruh", "vibes", "app", "site"];
+            const academicKeywords = ["what", "how", "explain", "derive", "theory", "matrix", "equation", "proof", "quantum", "system", "architecture", "function", "code"];
+
+            let casualScore = 0;
+            let academicScore = 0;
+
+            casualKeywords.forEach(word => { if (cleanText.includes(word)) casualScore++; });
+            academicKeywords.forEach(word => { if (cleanText.includes(word)) academicScore++; });
+
+            if (casualScore > academicScore) return "Casual";
+            if (academicScore > casualScore) return "Academic";
+            return "General";
+        }
+
+        function updateIntentUIFeedback(intent) {
+            engineIntentTag.textContent = `Intent: ${intent}`;
+            if (intent === "Casual") {
+                engineIntentTag.style.color = "#c084fc";
+                engineIntentTag.style.borderColor = "rgba(168, 85, 247, 0.3)";
+                engineIntentTag.style.background = "rgba(168, 85, 247, 0.05)";
+            } else if (intent === "Academic") {
+                engineIntentTag.style.color = "var(--glow-cyan)";
+                engineIntentTag.style.borderColor = "rgba(0, 240, 255, 0.3)";
+                engineIntentTag.style.background = "rgba(0, 240, 255, 0.05)";
+            } else {
+                engineIntentTag.style.color = "var(--glow-blue)";
+                engineIntentTag.style.borderColor = "rgba(59, 130, 246, 0.3)";
+                engineIntentTag.style.background = "rgba(59, 130, 246, 0.05)";
+            }
+        }
+
+        /* AUTOMATED MULTI-ENGINE PIPELINE RESPONSIBLE FOR SIMULATED CONVERSATION GENERATION */
+        function triggerAIAndNetworkPeerSimulations(roomId, promptText, intent) {
             terminalInputTextField.disabled = true;
             terminalSubmitActionBtn.disabled = true;
-            consoleStatusTextNode.innerHTML = `Topic-Isolated Mode — <span style="color: var(--glow-blue)">PROCESSING RESPONSE VECTOR...</span>`;
-            
-            setTimeout(() => {
-                // Confirm subject state remains synchronous before printing payload execution results
-                if (!activeSelectedSubject || activeSelectedSubject.id !== subjectId) return;
+            consoleStatusTextNode.innerHTML = `<span style="color:var(--glow-blue)">COMPILE LAYER RESPONSES...</span>`;
 
-                const responseString = generateDynamicResponsePayload(activeSelectedSubject.name, inboundQuery);
+            // Step 1: Sub-AI Cognitive Processing Block Delayed
+            setTimeout(() => {
+                if (!currentSubject || currentSubject.id !== roomId) return;
+
+                const aiOutputString = synthesizeDepartmentAIResponse(currentDeptData.aiType, currentSubject.name, promptText, intent);
+                const aiPacket = { sender: "AI", type: "SYSTEM", msg: aiOutputString, time: getFormattedTimestamp() };
                 
-                const systemPacket = {
-                    senderId: "SYSTEM",
-                    textPayload: responseString,
-                    timestamp: Date.now()
-                };
-                runningChatHistories[subjectId].push(systemPacket);
-                renderMessagePacketNode("SYSTEM", responseString);
-                
-                // Release operational states
-                terminalInputTextField.disabled = false;
-                terminalSubmitActionBtn.disabled = false;
-                consoleStatusTextNode.innerHTML = `Topic-Isolated Mode — <span>${activeSelectedSubject.name.toUpperCase()} ENGINE ACTIVE</span>`;
-                terminalInputTextField.focus();
-                scrollConsoleToBottom();
-            }, 1200 + Math.random() * 800);
+                commitPacketToLocalStorage(roomId, aiPacket);
+                appendPacketNodeToViewport(aiPacket);
+                scrollStreamToBottom();
+
+                // Step 2: Simulated Network Peer Response Engine Loop
+                setTimeout(() => {
+                    if (!currentSubject || currentSubject.id !== roomId) return;
+
+                    const activePeerName = SIMULATED_PEER_NAMES[Math.floor(Math.random() * SIMULATED_PEER_NAMES.length)];
+                    const peerOutputString = synthesizePeerSimulatedDialogue(intent, currentSubject.name);
+                    const peerPacket = { sender: activePeerName, type: "PEER", msg: peerOutputString, time: getFormattedTimestamp() };
+
+                    commitPacketToLocalStorage(roomId, peerPacket);
+                    appendPacketNodeToViewport(peerPacket);
+                    scrollStreamToBottom();
+
+                    // Re-enable input capabilities
+                    terminalInputTextField.disabled = false;
+                    terminalSubmitActionBtn.disabled = false;
+                    consoleStatusTextNode.innerHTML = `Isolated Channel Connected`;
+                    terminalInputTextField.focus();
+                }, 1000 + Math.random() * 800);
+
+            }, 1200 + Math.random() * 600);
         }
 
-        /* Context-Aware Dynamic Algorithmic Text Synthesizer Matrix Engine */
-        function generateDynamicResponsePayload(subjectName, queryText) {
-            const baseTargetString = queryText.toLowerCase();
-            
-            const dynamicResponses = [
-                `Simulation analysis sequence complete for target configuration: **${subjectName}**. Data flow streams have settled into standard equilibrium nodes. Here is the active terminal structural execution data logging for your assessment:\n\n<div class="code-syntax-block">[NEXUS_EXECUTION_LOG]\nState: SUCCESS\nSubject: ${subjectName.toUpperCase()}\nTarget Stream: ${queryText.substring(0, 20)}...\nProcess Time: ${(Math.random() * 12).toFixed(4)}ms\nStatus: STABLE</div>\n\nIs there an additional vector loop configuration or theoretical equation path you wish to test across this architecture?`,
-                
-                `Incoming diagnostic packet payload parsed successfully for **${subjectName}** simulation routines. Query vectors suggest checking parameters relative to the tracking indices. Structural boundaries remain fully nominal inside this sandbox environment.`,
-                
-                `Data processing loops mapped to **${subjectName}** context bounds have completed processing algorithms. Evaluated structural calculations output zero exception loops. All parameters match expected performance curves seamlessly.`,
-                
-                `Matrix compilation completed for the requested path inside **${subjectName}** parameters. All processing dependencies cleared code checks without triggering structural faults. Enter your next structural evaluation requirement to explore further.`
-            ];
+        /* COMPARTMENTALIZED 5-DEPARTMENT AI GENERATOR MATRIX RULES */
+        function synthesizeDepartmentAIResponse(aiType, subjectName, prompt, intent) {
+            const baseText = prompt.toLowerCase();
 
-            if (baseTargetString.includes("help") || baseTargetString.includes("status")) {
-                return `Current Simulation Terminal Status: **ACTIVE**\nTarget Sector: **${subjectName}**\nOperational Constraints: Zero Sandbox Leakage Allowed.\n\nReady for immediate deployment processing routines.`;
+            if (intent === "Casual") {
+                return `Hey there! Processing your feedback within the scope of **${subjectName}**. The node looks solid. If you want to dive deep into the math models or code configs later, just drop the core query strings!`;
             }
 
-            return dynamicResponses[Math.floor(Math.random() * dynamicResponses.length)];
+            switch(aiType) {
+                case "MATH_COGNITION_CORE":
+                    return `[**MATH_COGNITION_CORE V2.1** Evaluation Complete]\n\nProcessing logical theorems concerning **${subjectName}**. Validating mathematical boundary layers for consistency:\n\n<div class="code-syntax-block">f(x) = lim (h -> 0) [f(x + h) - f(x)] / h\nMatrix Delta Evaluation: Nominal\nVariance Constraints: Stable</div>\n\nQuery input parameters successfully plotted onto the multi-dimensional grid. Specify coordinate matrices for transform maps.`;
+                
+                case "PHYS_QUANTUM_CORE":
+                    return `[**PHYS_QUANTUM_CORE V3.0** Matrix Analysis]\n\nState vectors for **${subjectName}** simulation environments mapped onto a Hilbert space matrix. Waveform measurements indicate absolute alignment:\n\n<div class="code-syntax-block">ψ(t) = e^(-iHt/ћ) |ψ(0)⟩\nEntanglement Field Check: 100% Isolated\nThermal Leakage: 0.00K</div>\n\nParticle tracking metrics successfully loaded within the client-sided terminal configuration fields.`;
+                
+                case "NEURO_SYNAPSE_CORE":
+                    return `[**NEURO_SYNAPSE_CORE V1.9** Synaptic Readout]\n\nAction potential metrics relative to **${subjectName}** configurations have triggered signal paths across the node array. Processing transmission values:\n\n<div class="code-syntax-block">Threshold Potential: -55mV -> Checked\nAxonal Signal Velocity: Nominal\nPruning Routine: Idle</div>\n\nStructural cognitive pathways are tracking inside normal parameters. Ready for downstream network commands.`;
+                
+                case "PHIL_DIALECTIC_CORE":
+                    return `[**PHIL_DIALECTIC_CORE V4.2** Discourse Output]\n\nAnalyzing existential variables and propositional configurations inside the matrix of **${subjectName}**.\n\nEvaluating the tension between structural objective parameters and subjective interpretative frameworks. Demarcation lines remain clear within this client-isolated database layer. How shall we expand this critique?`;
+                
+                case "COMP_AUTOMATION_CORE":
+                    return `[**COMP_AUTOMATION_CORE V5.0** Structural Runtime]\n\nParsing runtime operations within **${subjectName}** compiler boundaries. Executing event loops across zero-dependency framework states:\n\n<div class="code-syntax-block">async function processNexusPayload() {\n    const responseVector = await localClientCache.fetch(ROOM_ID);\n    return responseVector.optimizePipeline();\n}</div>\n\nHardware transforms fully accelerated. Performance profile remains optimal.`;
+                
+                default:
+                    return `Data parsed inside room sector tracking indexes. System parameters verified.`;
+            }
         }
 
-        /* Micro-Formatting RegEx Compilation Processor Engine */
-        function parseMarkdownToHTML(text) {
-            let processedString = text;
-            // Clean HTML entity flags to secure input flows
-            processedString = processedString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            // Restore structural code elements bypassed by safety sanitizers
-            processedString = processedString.replace(/&lt;div class="code-syntax-block"&gt;/g, '<div class="code-syntax-block">').replace(/&lt;\/div&gt;/g, '</div>');
-            // Bold element syntax conversions
-            processedString = processedString.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            return processedString;
+        function synthesizePeerSimulatedDialogue(intent, subjectName) {
+            if (intent === "Casual") {
+                return CASUAL_PHRASE_BANK[Math.floor(Math.random() * CASUAL_PHRASE_BANK.length)];
+            }
+            return `Whoa, that sub-AI compile breakdown for **${subjectName}** is wild. Following this logic trail closely, configuration strings look accurate.`;
         }
 
-        /* UI Scroller View Utility */
-        function scrollConsoleToBottom() {
-            chatOutputStreamView.scrollTo({
-                top: chatOutputStreamView.scrollHeight,
-                behavior: 'smooth'
-            });
+        /* CLEANUP & FORMATTING UTILITIES */
+        function parseStructuralSyntax(text) {
+            let clean = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            clean = clean.replace(/&lt;div class="code-syntax-block"&gt;/g, '<div class="code-syntax-block">').replace(/&lt;\/div&gt;/g, '</div>');
+            clean = clean.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return clean;
+        }
+
+        function getFormattedTimestamp() {
+            const d = new Date();
+            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        function scrollStreamToBottom() {
+            chatOutputStreamView.scrollTo({ top: chatOutputStreamView.scrollHeight, behavior: 'smooth' });
+        }
+
+        function wipeLocalWorkspaceChains() {
+            if (confirm("Are you sure you want to delete all client-side chat histories stored in your local browser storage? This resets all 100 rooms.")) {
+                for (let i = 1; i <= 100; i++) {
+                    const idxStr = i.toString().padStart(2, '0');
+                    localStorage.removeItem(getRoomStorageKey(idxStr));
+                }
+                if (currentSubject) {
+                    loadRoomDataChains(currentSubject.id);
+                }
+            }
         }
     </script>
 </body>
