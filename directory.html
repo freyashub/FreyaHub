@@ -3,30 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freya's Nexus — Premium Directory Platform v3</title>
+    <title>Nexus Premium Matrix Core v4</title>
     <style>
         /* ==========================================================================
-           1. PREMIUM BRANDING, METRIC VARIABLES & DESIGN SYSTEM
+           1. MODERN MODERN ARCHITECTURE VARIABLES & RESET SYSTEM
            ========================================================================== */
         :root {
-            --bg-base: #030712;
-            --bg-surface-glass: rgba(17, 24, 39, 0.5);
-            --bg-surface-hover: rgba(31, 41, 55, 0.7);
-            --bg-surface-active: rgba(17, 24, 39, 0.9);
+            --bg-base: #020617;
+            --bg-surface: #0f172a;
+            --bg-surface-elevated: #1e293b;
+            --bg-surface-glass: rgba(15, 23, 42, 0.65);
             
-            --border-hairline: rgba(255, 255, 255, 0.06);
-            --border-glow: rgba(0, 240, 255, 0.2);
+            --border-muted: rgba(255, 255, 255, 0.06);
+            --border-bright: rgba(0, 240, 255, 0.25);
+            --border-glow-active: rgba(0, 240, 255, 0.6);
             
-            --color-text-primary: #f9fafb;
-            --color-text-muted: #9ca3af;
-            --color-text-dark: #4b5563;
+            --accent-cyan: #00f0ff;
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --accent-emerald: #10b981;
             
-            --glow-cyan: #00f0ff;
-            --glow-blue: #3b82f6;
-            --glow-purple: #a855f7;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dark: #64748b;
             
-            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-monospace: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-circle: 50%;
+            
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --shadow-glow: 0 0 20px rgba(0, 240, 255, 0.15);
+            --shadow-bubble: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         * {
@@ -34,242 +47,452 @@
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
             background-color: var(--bg-base);
-            color: var(--color-text-primary);
-            font-family: var(--font-stack);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
             min-height: 100vh;
+            max-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* BACKGROUND AMBIENT GLOWS */
-        .ambient-glow {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(120px);
-            opacity: 0.12;
-            z-index: 0;
+        ul, ol {
+            list-style: none;
         }
-        .glow-top-left { top: -10%; left: -10%; background: var(--glow-cyan); }
-        .glow-bottom-right { bottom: -10%; right: -10%; background: var(--glow-purple); }
 
-        .nexus-app-frame {
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button, input, select, textarea {
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* Ambient Glow Backdrop Layer */
+        .ambient-background-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: var(--radius-circle);
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(59, 130, 246, 0.03) 50%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            z-index: 0;
+            top: -200px;
+            left: -200px;
+            filter: blur(80px);
+        }
+
+        .ambient-background-glow-secondary {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: var(--radius-circle);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, rgba(0, 240, 255, 0.02) 60%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            z-index: 0;
+            bottom: -150px;
+            right: -150px;
+            filter: blur(60px);
+        }
+
+        /* ==========================================================================
+           2. APP FRAME DOCK LAYOUT MANAGER
+           ========================================================================== */
+        .app-shell-container {
             position: relative;
             z-index: 1;
             display: flex;
             flex-direction: column;
             width: 100vw;
             height: 100vh;
+            overflow: hidden;
         }
 
         /* ==========================================================================
-           2. HEADER HEADER COMPONENT WITH INTEGRATED AUDIO TRACKER
+           3. MASTER PLATFORM HEADER & PREMIUM AUDIO INTEGRATION MODULE
            ========================================================================== */
-        .nexus-header {
+        .app-header-node {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 1.5rem;
-            background: rgba(3, 7, 18, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-hairline);
-            height: 70px;
+            padding: 0 2rem;
+            background: var(--bg-surface-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-muted);
+            height: 75px;
             flex-shrink: 0;
         }
 
-        .header-brand-group {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .brand-logo-box {
-            background: linear-gradient(135deg, var(--glow-blue), var(--glow-cyan));
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: var(--bg-base);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-        }
-
-        .brand-title-text {
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .brand-title-text span {
-            color: var(--glow-cyan);
-        }
-
-        /* CORE COGNITIVE UTILITIES (AUDIO + CONTROLS) */
-        .header-utility-group {
+        .header-brand-cluster {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .audio-player-capsule {
+        .brand-core-icon {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--bg-base);
+            font-size: 1.3rem;
+            box-shadow: var(--shadow-glow);
+            letter-spacing: -0.05em;
+        }
+
+        .brand-text-matrix {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title-main {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .brand-title-main span {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .brand-version-sub {
+            font-size: 0.7rem;
+            color: var(--text-dark);
+            font-family: var(--font-monospace);
+            letter-spacing: 0.05em;
+            margin-top: 2px;
+        }
+
+        /* Integrated Pro-Grade Audio Console Controls */
+        .header-audio-console {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-muted);
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            transition: var(--transition-normal);
+        }
+
+        .header-audio-console:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 240, 255, 0.15);
+        }
+
+        .audio-track-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 130px;
+        }
+
+        .audio-track-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .audio-track-name {
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        .audio-actions-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .audio-btn-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-circle);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            transition: var(--transition-fast);
+        }
+
+        .audio-btn-circle:hover {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        .audio-btn-circle svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .audio-slider-rack {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-hairline);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
         }
 
-        .audio-toggle-btn {
-            background: transparent;
-            border: none;
-            color: var(--glow-cyan);
+        .audio-slider-rack svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--text-muted);
+        }
+
+        .premium-volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 70px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .premium-volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: var(--radius-circle);
+            background: var(--accent-cyan);
             cursor: pointer;
-            font-weight: bold;
+            box-shadow: 0 0 8px var(--accent-cyan);
+            transition: var(--transition-fast);
+        }
+
+        .premium-volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .header-system-navigation {
             display: flex;
             align-items: center;
+            gap: 1rem;
         }
 
-        .nav-home-anchor {
-            background: var(--bg-surface-glass);
-            border: 1px solid var(--border-hairline);
-            color: var(--color-text-primary);
-            padding: 0.45rem 1rem;
-            border-radius: 8px;
+        .nav-capsule-button {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-muted);
+            color: var(--text-primary);
+            padding: 0.55rem 1.25rem;
+            border-radius: var(--radius-md);
             font-size: 0.85rem;
-            text-decoration: none;
-            transition: var(--transition-smooth);
+            font-weight: 600;
+            transition: var(--transition-normal);
         }
 
-        .nav-home-anchor:hover {
-            border-color: var(--glow-cyan);
-            background: var(--bg-surface-hover);
+        .nav-capsule-button:hover {
+            background: var(--bg-surface-elevated);
+            border-color: var(--accent-cyan);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Future Authentication State Configuration Placeholder Blocks */
+        .auth-status-placeholder-node {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            border-left: 1px solid var(--border-muted);
+            padding-left: 1rem;
+            font-family: var(--font-monospace);
+        }
+
+        .auth-status-indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: var(--radius-circle);
+            background: var(--text-dark);
         }
 
         /* ==========================================================================
-           3. MASTER RESPONSIVE GRID LAYOUT ARCHITECTURE (PC VS MOBILE)
+           4. RESPONSIVE VIEW GRID LAYOUT ENGINE (PC CONFIGURATION)
            ========================================================================== */
-        .nexus-workspace-grid {
-            display: flex;
+        .workspace-layout-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr 380px;
             flex: 1;
             overflow: hidden;
             width: 100vw;
             position: relative;
         }
 
-        /* SIDEBAR PANEL TRACK */
-        .workspace-sidebar {
-            width: 360px;
-            background: rgba(3, 7, 18, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border-hairline);
+        /* DESKTOP SIDEBARS COMMON PARAMS */
+        .workspace-panel-sidebar {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            flex-shrink: 0;
-            z-index: 10;
-            transition: var(--transition-smooth);
+            z-index: 5;
+            transition: var(--transition-normal);
         }
 
-        .sidebar-search-box {
+        .left-navigation-sidebar {
+            border-right: 1px solid var(--border-muted);
+        }
+
+        .right-stream-sidebar {
+            border-left: 1px solid var(--border-muted);
+        }
+
+        /* DIRECTORY SEARCH & SECTOR NAV-BLOCKS */
+        .sidebar-search-dock {
             padding: 1.25rem;
-            border-bottom: 1px solid var(--border-hairline);
+            border-bottom: 1px solid var(--border-muted);
+            flex-shrink: 0;
         }
 
-        .search-input {
+        .search-input-wrapper {
+            position: relative;
             width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-hairline);
-            padding: 0.65rem 1rem;
-            border-radius: 8px;
-            color: var(--color-text-primary);
+        }
+
+        .search-field-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-muted);
+            padding: 0.7rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
             font-size: 0.85rem;
             outline: none;
+            transition: var(--transition-normal);
         }
 
-        .search-input:focus {
-            border-color: var(--glow-cyan);
+        .search-field-control:focus {
+            border-color: var(--accent-cyan);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.1);
         }
 
-        .sidebar-scroll-container {
+        .sidebar-scroller-viewport {
             flex: 1;
             overflow-y: auto;
             padding: 1.25rem;
         }
 
-        .dept-group-wrapper {
-            margin-bottom: 1.5rem;
+        /* Custom Modern Scrollbars for Matrix Channels */
+        .sidebar-scroller-viewport::-webkit-scrollbar,
+        .chat-stream-render-zone::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
         }
 
-        .dept-group-title {
+        .sidebar-scroller-viewport::-webkit-scrollbar-track,
+        .chat-stream-render-zone::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-scroller-viewport::-webkit-scrollbar-thumb,
+        .chat-stream-render-zone::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .sidebar-scroller-viewport::-webkit-scrollbar-thumb:hover,
+        .chat-stream-render-zone::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 240, 255, 0.2);
+        }
+
+        .directory-department-cluster {
+            margin-bottom: 1.75rem;
+        }
+
+        .department-label-heading {
             font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--color-text-dark);
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.08em;
+            color: var(--text-dark);
+            margin-bottom: 0.65rem;
             font-weight: 700;
+            padding-left: 0.5rem;
         }
 
-        .subject-item-btn {
+        .subject-navigation-row-btn {
             width: 100%;
             background: transparent;
             border: 1px solid transparent;
-            padding: 0.6rem 0.75rem;
-            border-radius: 6px;
-            color: var(--color-text-muted);
+            padding: 0.65rem 0.75rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
             text-align: left;
             font-size: 0.85rem;
-            cursor: pointer;
+            font-weight: 500;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: var(--transition-smooth);
+            transition: var(--transition-fast);
+            margin-bottom: 2px;
         }
 
-        .subject-item-btn:hover {
-            background: var(--bg-surface-hover);
-            color: var(--color-text-primary);
+        .subject-navigation-row-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
         }
 
-        .subject-item-btn.is-active {
-            background: rgba(0, 240, 255, 0.06);
-            border-color: rgba(0, 240, 255, 0.2);
-            color: var(--color-text-primary);
+        .subject-navigation-row-btn.is-active-node {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.15);
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
-        .subject-id-badge {
-            font-family: monospace;
-            color: var(--glow-cyan);
-            font-size: 0.75rem;
+        .subject-tag-badge-mono {
+            font-family: var(--font-monospace);
+            color: var(--accent-cyan);
+            font-size: 0.7rem;
             opacity: 0.8;
+            background: rgba(0, 240, 255, 0.08);
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
         }
 
-        /* DISPLAY AND CONVERSATION PANEL LAYER */
-        .workspace-display-panel {
-            flex: 1;
+        /* ==========================================================================
+           5. CENTER DISPLAY PANEL ARCHITECTURE
+           ========================================================================== */
+        .workspace-center-display-panel {
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
-            background: rgba(10, 15, 30, 0.2);
+            background: rgba(2, 6, 23, 0.2);
         }
 
-        /* EMPTY DASHBOARD VIEW */
-        .panel-empty-state {
+        /* DASHBOARD COLD BOOT VIEW SCREEN */
+        .dashboard-empty-fallback-layer {
             position: absolute;
             inset: 0;
             display: flex;
@@ -277,362 +500,759 @@
             align-items: center;
             justify-content: center;
             background: var(--bg-base);
-            z-index: 5;
+            z-index: 10;
             text-align: center;
-            padding: 2rem;
-            transition: var(--transition-smooth);
+            padding: 3rem;
+            transition: var(--transition-normal);
         }
 
-        .panel-empty-state.is-hidden {
+        .dashboard-empty-fallback-layer.is-hidden-node {
             opacity: 0;
             pointer-events: none;
-            transform: scale(0.98);
+            transform: scale(0.99);
         }
 
-        .empty-headline {
+        .fallback-brand-shield {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px solid var(--border-bright);
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.75rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-glow);
         }
 
-        .empty-subtitle {
-            color: var(--color-text-muted);
-            max-width: 400px;
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .fallback-headline-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
         }
 
-        /* ACTIVE WORKSPACE AREA */
-        .panel-active-workspace {
+        .fallback-subtitle-text {
+            color: var(--text-muted);
+            max-width: 460px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ACTIVE WORKSPACE AREA FRAME */
+        .panel-active-runtime-workspace {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             opacity: 0;
-            transition: var(--transition-smooth);
+            transition: var(--transition-normal);
             position: absolute;
             inset: 0;
             pointer-events: none;
         }
 
-        .panel-active-workspace.is-visible {
+        .panel-active-runtime-workspace.is-activated-node {
             opacity: 1;
             position: relative;
             pointer-events: all;
         }
 
-        /* WORKSPACE SUB-HEADER CARD */
-        .workspace-meta-card {
-            background: rgba(3, 7, 18, 0.5);
-            border-bottom: 1px solid var(--border-hairline);
-            padding: 1rem 1.5rem;
+        /* SUBJECT MAIN CONSOLE META CARD HEADER */
+        .workspace-subject-meta-card {
+            background: rgba(15, 23, 42, 0.3);
+            border-bottom: 1px solid var(--border-muted);
+            padding: 1.25rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
         }
 
-        .meta-title-text {
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-
-        .meta-desc-text {
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
-            margin-top: 0.15rem;
-        }
-
-        .meta-badge-box {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .status-pill {
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 0.25rem 0.6rem;
-            border-radius: 4px;
-            text-transform: uppercase;
-            border: 1px solid var(--border-hairline);
-        }
-        .status-pill.ai { color: var(--glow-cyan); background: rgba(0, 240, 255, 0.05); border-color: rgba(0, 240, 255, 0.15); }
-        .status-pill.nlp { color: var(--glow-purple); background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.15); }
-
-        /* THE LIVE MATRIX TERMINAL STREAM */
-        .terminal-stream-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
+        .meta-subject-identity-block {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            background: rgba(3, 7, 18, 0.2);
         }
 
-        /* PACKET CHAT MESSAGES */
-        .message-packet {
+        .meta-subject-headline {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .meta-subject-description-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .meta-subject-badge-rack {
             display: flex;
-            gap: 0.75rem;
-            max-width: 85%;
-            animation: msgFadeIn 0.25s ease-out forwards;
+            gap: 0.6rem;
+            align-items: center;
         }
 
-        @keyframes msgFadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+        .meta-status-pill-indicator {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.3rem 0.75rem;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid var(--border-muted);
+            font-family: var(--font-monospace);
+        }
+        
+        .meta-status-pill-indicator.ai-active-pill {
+            color: var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.04);
+            border-color: rgba(0, 240, 255, 0.2);
+        }
+        
+        .meta-status-pill-indicator.intent-analytics-pill {
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.04);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        /* THE LIVE CHAT STREAM AREAS */
+        .chat-stream-render-zone {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            background: rgba(2, 6, 23, 0.4);
+        }
+
+        /* PREMIUM REFACTORED MESSAGE BUBBLES (CLEAN DESIGN - NO BLACK BOXES, NO PURPLE) */
+        .chat-message-packet-row {
+            display: flex;
+            gap: 1rem;
+            max-width: 80%;
+            animation: packetNodeFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes packetNodeFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .message-packet.user { align-self: flex-end; flex-direction: row-reverse; }
-        .message-packet.ai { align-self: flex-start; }
-        .message-packet.peer { align-self: flex-start; }
+        .chat-message-packet-row.user-variant-packet {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
 
-        .packet-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
+        .chat-message-packet-row.ai-variant-packet {
+            align-self: flex-start;
+        }
+
+        .packet-identity-avatar-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-circle);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 700;
             flex-shrink: 0;
-            border: 1px solid var(--border-hairline);
+            border: 1px solid var(--border-muted);
+            font-family: var(--font-monospace);
         }
-        .message-packet.user .packet-avatar { background: rgba(59, 130, 246, 0.2); color: var(--glow-blue); border-color: rgba(59, 130, 246, 0.3); }
-        .message-packet.ai .packet-avatar { background: rgba(0, 240, 255, 0.2); color: var(--glow-cyan); border-color: rgba(0, 240, 255, 0.3); }
-        .message-packet.peer .packet-avatar { background: rgba(168, 85, 247, 0.2); color: var(--glow-purple); border-color: rgba(168, 85, 247, 0.3); }
-
-        .packet-bubble {
-            background: rgba(17, 24, 39, 0.8);
-            border: 1px solid var(--border-hairline);
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            line-height: 1.45;
-        }
-        .message-packet.user .packet-bubble { background: rgba(31, 41, 55, 0.5); border-color: rgba(255, 255, 255, 0.1); }
         
-        .packet-time {
-            font-size: 0.6rem;
-            color: var(--color-text-dark);
-            margin-top: 0.25rem;
+        .chat-message-packet-row.user-variant-packet .packet-identity-avatar-circle {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+        
+        .chat-message-packet-row.ai-variant-packet .packet-identity-avatar-circle {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 240, 255, 0.25);
+        }
+
+        /* Refactored Message Bubbles (Eliminating rigid boxes & removing any purple theme) */
+        .packet-content-bubble-container {
+            padding: 0.9rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            line-height: 1.55;
+            box-shadow: var(--shadow-bubble);
+            position: relative;
+        }
+
+        .chat-message-packet-row.user-variant-packet .packet-content-bubble-container {
+            background: var(--bg-surface-elevated);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top-right-radius: 2px;
+        }
+
+        /* Clean AI bubble style with subtle cyan accent line - entirely free of purple elements */
+        .chat-message-packet-row.ai-variant-packet .packet-content-bubble-container {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-muted);
+            border-left: 3px solid var(--accent-cyan);
+            border-top-left-radius: 2px;
+        }
+
+        .packet-timestamp-stamp {
+            font-size: 0.65rem;
+            color: var(--text-dark);
+            margin-top: 0.4rem;
             display: block;
+            font-family: var(--font-monospace);
+        }
+        
+        .chat-message-packet-row.user-variant-packet .packet-timestamp-stamp {
             text-align: right;
         }
 
-        .code-snippet-box {
-            margin-top: 0.5rem;
+        /* Premium Runtime Code View Containers */
+        .runtime-embedded-code-card {
+            margin-top: 0.75rem;
             background: #090d16;
-            border: 1px solid var(--border-hairline);
-            border-radius: 6px;
-            padding: 0.65rem;
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: #e5e7eb;
+            border: 1px solid var(--border-muted);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem;
+            font-family: var(--font-monospace);
+            font-size: 0.85rem;
+            color: #e2e8f0;
             overflow-x: auto;
             white-space: pre;
+            line-height: 1.4;
         }
 
-        /* CONSOLE ACTION INPUT DOCK */
-        .terminal-input-dock {
-            padding: 1.25rem 1.5rem;
-            background: rgba(3, 7, 18, 0.8);
-            border-top: 1px solid var(--border-hairline);
+        /* INPUT CONTROL CONSOLE INTERACTION PIPELINE */
+        .workspace-input-interaction-dock {
+            padding: 1.5rem 2rem;
+            background: rgba(15, 23, 42, 0.7);
+            border-top: 1px solid var(--border-muted);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             flex-shrink: 0;
         }
 
-        .dock-status-bar {
+        .interaction-dock-status-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.75rem;
-            color: var(--color-text-dark);
-            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.65rem;
+            padding: 0 0.25rem;
         }
 
-        .dock-status-left { display: flex; align-items: center; gap: 0.4rem; }
-        .status-dot { width: 6px; height: 6px; background: var(--glow-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--glow-cyan); }
-
-        .dock-form {
+        .status-row-left-node {
             display: flex;
-            gap: 0.75rem;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-monospace);
         }
 
-        .dock-input-field {
+        .realtime-status-pulse-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-cyan);
+            border-radius: var(--radius-circle);
+            box-shadow: 0 0 10px var(--accent-cyan);
+            animation: statusPulseGlow 2s infinite ease-in-out;
+        }
+
+        @keyframes statusPulseGlow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .interaction-dispatch-form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .console-input-field-control {
             flex: 1;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-hairline);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            color: var(--color-text-primary);
-            font-size: 0.9rem;
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid var(--border-muted);
+            border-radius: var(--radius-md);
+            padding: 0 1.25rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
             outline: none;
-            height: 46px;
-            transition: var(--transition-smooth);
+            height: 52px;
+            transition: var(--transition-normal);
         }
 
-        .dock-input-field:focus { border-color: rgba(0, 240, 255, 0.4); }
-        .dock-input-field:disabled { color: var(--color-text-dark); cursor: not-allowed; }
+        .console-input-field-control:focus {
+            border-color: rgba(0, 240, 255, 0.5);
+            background: rgba(2, 6, 23, 0.8);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
 
-        .dock-submit-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-hairline);
-            color: var(--glow-cyan);
-            width: 46px;
-            height: 46px;
-            border-radius: 8px;
+        .console-input-field-control:disabled {
+            color: var(--text-dark);
+            cursor: not-allowed;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .console-dispatch-submit-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-muted);
+            color: var(--accent-cyan);
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: var(--transition-smooth);
+            transition: var(--transition-normal);
         }
 
-        .dock-submit-btn:hover:not(:disabled) { background: var(--glow-cyan); color: var(--bg-base); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
-        .dock-submit-btn:disabled { color: var(--color-text-dark); cursor: not-allowed; }
-        .dock-submit-btn svg { width: 18px; height: 18px; fill: currentColor; }
-
-        /* Mobile View Switcher Tab (Only appears on mobile screen sizes) */
-        .mobile-nav-toggle-bar {
-            display: none;
-            background: rgba(3, 7, 18, 0.9);
-            border-bottom: 1px solid var(--border-hairline);
-            padding: 0.5rem 1rem;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 12;
-            flex-shrink: 0;
+        .console-dispatch-submit-btn:hover:not(:disabled) {
+            background: var(--accent-cyan);
+            color: var(--bg-base);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--accent-cyan);
         }
 
-        .toggle-view-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-hairline);
-            color: var(--color-text-primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            cursor: pointer;
+        .console-dispatch-submit-btn:disabled {
+            color: var(--text-dark);
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .console-dispatch-submit-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         /* ==========================================================================
-           4. MOBILE-FIRST RESPONSIVE ENGINE BREAKPOINTS (FIXES ALL CRUSHING)
+           6. RIGHT PANELS: THE STRUCTURALLY SEPARATED CHAT SYSTEMS
            ========================================================================== */
-        @media (max-width: 868px) {
-            .mobile-nav-toggle-bar { display: flex; }
-            
-            .nexus-workspace-grid {
-                flex-direction: column;
+        .right-stream-sidebar {
+            display: flex;
+            flex-direction: column;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        /* TAB DECK HEADER COUPLING */
+        .sidebar-tabs-navigation-deck {
+            display: flex;
+            border-bottom: 1px solid var(--border-muted);
+            background: rgba(2, 6, 23, 0.3);
+            flex-shrink: 0;
+        }
+
+        .sidebar-tab-trigger-anchor {
+            flex: 1;
+            padding: 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: center;
+            color: var(--text-dark);
+            border-bottom: 2px solid transparent;
+            transition: var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .sidebar-tab-trigger-anchor:hover {
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .sidebar-tab-trigger-anchor.is-active-tab-node {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.02);
+        }
+
+        /* CHAT DATA VIEWPORT CONTAINERS */
+        .sidebar-tab-viewports-box {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-viewport-stream-view {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease-in-out;
+        }
+
+        .tab-viewport-stream-view.is-visible-viewport {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* GLOBAL PUBLIC CHAT AREA & SPECIFIC USER CHAT FORMATTING ELEMENTS */
+        .tab-stream-scroller-zone {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Dedicated Users Only Chat Layout Formatting */
+        .user-exclusive-packet-block {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-muted);
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            transition: var(--transition-fast);
+        }
+
+        .user-exclusive-packet-block:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .exclusive-packet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exclusive-user-handle-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .exclusive-user-handle-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: var(--radius-circle);
+            background: var(--accent-emerald);
+        }
+
+        .exclusive-packet-timestamp {
+            font-size: 0.65rem;
+            color: var(--text-dark);
+            font-family: var(--font-monospace);
+        }
+
+        .exclusive-packet-body-message {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.45;
+        }
+
+        /* Global Public Chat Layout Elements */
+        .public-global-packet-block {
+            background: rgba(15, 23, 42, 0.2);
+            border-left: 2px solid var(--text-dark);
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .public-packet-sender-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .public-packet-text-string {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        /* REFACTORED MINI INTERACTION ROW FOR CHAT FEED */
+        .sidebar-chat-embedded-input-dock {
+            padding: 0.75rem 1rem;
+            background: rgba(2, 6, 23, 0.5);
+            border-top: 1px solid var(--border-muted);
+        }
+
+        .sidebar-embedded-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sidebar-embedded-input-control {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-muted);
+            border-radius: var(--radius-sm);
+            padding: 0 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            height: 38px;
+            outline: none;
+        }
+
+        .sidebar-embedded-input-control:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .sidebar-embedded-submit-btn {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-muted);
+            color: var(--text-primary);
+            padding: 0 0.85rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: var(--transition-fast);
+        }
+
+        .sidebar-embedded-submit-btn:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-base);
+        }
+
+        /* ==========================================================================
+           7. MOBILE RESPONSIVE UI ACTION HUD SWITCHER
+           ========================================================================== */
+        .mobile-viewport-navigation-hud {
+            display: none;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-muted);
+            padding: 0.5rem 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            z-index: 20;
+            flex-shrink: 0;
+        }
+
+        .mobile-hud-action-trigger {
+            padding: 0.6rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-muted);
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            transition: var(--transition-fast);
+        }
+
+        .mobile-hud-action-trigger.is-active-hud-node {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* ==========================================================================
+           8. DEEP MEDIA QUERY RESPONSIVE ENGINE (ELIMINATES MOBILE CRUSHING)
+           ========================================================================== */
+        @media (max-width: 1100px) {
+            .workspace-layout-grid {
+                grid-template-columns: 280px 1fr;
+            }
+            .right-stream-sidebar {
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 340px;
+                transform: translateX(100%);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            }
+            .right-stream-sidebar.mobile-active-sidebar-panel {
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 820px) {
+            .mobile-viewport-navigation-hud {
+                display: grid;
+            }
+
+            .app-header-node {
+                padding: 0 1rem;
+                height: 65px;
+            }
+
+            .header-audio-console {
+                display: none; /* Audio player optimized via panel insertion or simple bar on compressed frames */
+            }
+
+            .workspace-layout-grid {
+                grid-template-columns: 1fr;
                 position: relative;
             }
 
-            /* Sidebar changes to an absolute layer overlay on mobile to prevent squishing */
-            .workspace-sidebar {
+            /* Stack all main sidebars into full screen absolute fluid layers to guarantee zero compression */
+            .workspace-panel-sidebar,
+            .workspace-center-display-panel {
                 position: absolute;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: calc(100vh - 116px); /* Perfect viewport space sizing calculation */
-                background: var(--bg-base);
-                transform: translateX(-100%);
-                border-right: none;
-                border-bottom: 1px solid var(--border-hairline);
-            }
-
-            .workspace-sidebar.is-open {
-                transform: translateX(0);
-            }
-
-            .workspace-display-panel {
+                inset: 0;
                 width: 100vw;
                 height: 100%;
+                transform: translateX(-100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
             }
 
-            .workspace-meta-card {
-                padding: 0.75rem 1rem;
+            /* Dynamic Active Mobile State Visibility Controllers */
+            .left-navigation-sidebar.mobile-visible-layer,
+            .workspace-center-display-panel.mobile-visible-layer,
+            .right-stream-sidebar.mobile-visible-layer {
+                transform: translateX(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .workspace-subject-meta-card {
+                padding: 1rem;
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 0.5rem;
+                gap: 0.65rem;
             }
 
-            .meta-badge-box { width: 100%; justify-content: flex-start; }
-            .terminal-stream-container { padding: 1rem; }
-            .message-packet { max-width: 90%; }
-            .terminal-input-dock { padding: 0.75rem 1rem; }
+            .meta-subject-badge-rack {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .chat-stream-render-zone {
+                padding: 1rem;
+            }
+
+            .chat-message-packet-row {
+                max-width: 92%;
+            }
+
+            .workspace-input-interaction-dock {
+                padding: 1rem;
+            }
+
+            .interaction-dispatch-form {
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow glow-top-left"></div>
-    <div class="ambient-glow glow-bottom-right"></div>
+    <div class="ambient-background-glow"></div>
+    <div class="ambient-background-glow-secondary"></div>
 
-    <div class="nexus-app-frame">
-        
-        <header class="nexus-header">
-            <div class="header-brand-group">
-                <div class="brand-logo-box">F</div>
-                <h1 class="brand-title-text">Freya's <span>Nexus v3</span></h1>
-            </div>
-            
-            <div class="header-utility-group">
-                <div class="audio-player-capsule">
-                    <span>Lofi Ambient Radio</span>
-                    <button class="audio-toggle-btn" id="audio-control-node" onclick="toggleAmbientAudioStream()">PLAY</button>
-                    <audio id="ambient-audio-core" loop src="https://assets.mixkit.co/music/preview/mixkit-serene-view-1070.mp3"></audio>
+    <div class="app-shell-container">
+
+        <header class="app-header-node">
+            <div class="header-brand-cluster">
+                <div class="brand-core-icon">N</div>
+                <div class="brand-text-matrix">
+                    <h1 class="brand-title-main">Nexus Core <span>Matrix</span></h1>
+                    <div class="brand-version-sub">ENGINE_BUILD_v4.0.0_STABLE</div>
                 </div>
-                <a href="index.html" class="nav-home-anchor">Home</a>
+            </div>
+
+            <div class="header-audio-console">
+                <div class="audio-track-info">
+                    <span class="audio-track-label">Ambient Stream</span>
+                    <span class="audio-track-name" id="runtime-track-title-node">Lofi Focus Element</span>
+                </div>
+                <div class="audio-actions-row">
+                    <button class="audio-btn-circle" id="audio-playback-trigger-btn" onclick="togglePlatformAudioPlayback()" title="Play/Pause Background Music">
+                        <svg viewBox="0 0 24 24" id="audio-play-svg-shape"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </button>
+                    <div class="audio-slider-rack">
+                        <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        <input type="range" class="premium-volume-slider" id="platform-volume-control-slider" min="0" max="1" step="0.05" value="0.5" oninput="adjustPlatformAudioVolume(this.value)" title="Volume Slider">
+                    </div>
+                </div>
+                <audio id="native-audio-engine-core" loop src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3"></audio>
+            </div>
+
+            <div class="header-system-navigation">
+                <button class="nav-capsule-button">Nexus Registry</button>
+                
+                <div class="auth-status-placeholder-node" id="auth-state-placeholder-frame">
+                    <div class="auth-status-indicator-dot"></div>
+                    <span id="auth-state-label-string">AUTH_HOLD_SECURE</span>
+                </div>
             </div>
         </header>
 
-        <div class="mobile-nav-toggle-bar">
-            <button class="toggle-view-btn" id="mobile-menu-trigger" onclick="toggleMobileSidebarLayer()">View Track List (100)</button>
-            <div id="mobile-room-tracker-tag" style="font-size: 0.8rem; color: var(--glow-cyan); font-family: monospace;">No Active Room</div>
-        </div>
+        <nav class="mobile-viewport-navigation-hud" id="mobile-hud-navigator-bar">
+            <button class="mobile-hud-action-trigger is-active-hud-node" id="hud-trigger-sectors" onclick="switchMobileActiveViewportLayer('sectors')">Sectors</button>
+            <button class="mobile-hud-action-trigger" id="hud-trigger-console" onclick="switchMobileActiveViewportLayer('console')">Console View</button>
+            <button class="mobile-hud-action-trigger" id="hud-trigger-streams" onclick="switchMobileActiveViewportLayer('streams')">Data Feeds</button>
+        </nav>
 
-        <main class="nexus-workspace-grid">
-            
-            <aside class="workspace-sidebar" id="app-sidebar-node">
-                <div class="sidebar-search-box">
-                    <input type="text" id="directory-search-field" class="search-input" placeholder="Search across all 100 modules...">
+        <main class="workspace-layout-grid" id="main-layout-viewport-grid">
+
+            <aside class="workspace-panel-sidebar left-navigation-sidebar mobile-visible-layer" id="left-sidebar-panel-node">
+                <div class="sidebar-search-dock">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="directory-filter-search-box" class="search-field-control" placeholder="Filter 100 processing lines..." autocomplete="off">
+                    </div>
                 </div>
-                <div class="sidebar-scroll-container" id="directory-scroll-track"></div>
+                <div class="sidebar-scroller-viewport" id="directory-scroller-target-track">
+                    </div>
             </aside>
 
-            <section class="workspace-display-panel">
+            <section class="workspace-center-display-panel" id="center-display-panel-node">
                 
-                <div class="panel-empty-state" id="viewport-empty-view">
-                    <h2 class="empty-headline">Select a Directory Core</h2>
-                    <p class="empty-subtitle">Choose from our 100 sandboxed computing sectors to initialize client-side network peer-to-peer chats and premium subject AIs.</p>
+                <div class="dashboard-empty-fallback-layer" id="dashboard-cold-boot-screen">
+                    <div class="fallback-brand-shield">N</div>
+                    <h2 class="fallback-headline-text">Initialize Processing Block</h2>
+                    <p class="fallback-subtitle-text">Select one of the 100 premium localized subject matrix branches within the directory grid track to synchronize real-time intent-aware AI pipelines and network simulated node chats.</p>
                 </div>
 
-                <div class="panel-active-workspace" id="viewport-active-workspace">
+                <div class="panel-active-runtime-workspace" id="dashboard-active-workspace-terminal">
                     
-                    <div class="workspace-meta-card">
-                        <div>
-                            <h2 class="meta-title-text" id="meta-subject-title">01. Linear Algebra</h2>
-                            <div class="meta-desc-text" id="meta-subject-desc font-size:0.8rem">Sector structural details and algorithms tracking maps.</div>
+                    <div class="workspace-subject-meta-card">
+                        <div class="meta-subject-identity-block">
+                            <h2 class="meta-subject-headline" id="active-runtime-subject-header-title">01. Linear Algebra</h2>
+                            <span class="meta-subject-description-sub" id="active-runtime-subject-description-sub">Branch matrix lines and verification nodes tracking engine.</span>
                         </div>
-                        <div class="meta-badge-box">
-                            <div class="status-pill ai" id="ai-variant-tag">ADVANCED_AI</div>
-                            <div class="status-pill nlp" id="nlp-intent-tag">Intent: Neutral</div>
+                        <div class="meta-subject-badge-rack">
+                            <div class="meta-status-pill-indicator ai-active-pill" id="active-runtime-ai-signature-tag">CORE_INTELLIGENCE_v4</div>
+                            <div class="meta-status-pill-indicator intent-analytics-pill" id="active-runtime-intent-analytics-tag">Intent: Synchronized</div>
                         </div>
                     </div>
 
-                    <div class="terminal-stream-container" id="chat-stream-viewport"></div>
-
-                    <div class="terminal-input-dock">
-                        <div class="dock-status-bar">
-                            <div class="dock-status-left">
-                                <div class="status-dot"></div>
-                                <span id="dock-status-string">Ready for Connection Input</span>
-                            </div>
-                            <div style="font-family: monospace;" id="dock-room-tag">ROOM_REF: NULL</div>
+                    <div class="chat-stream-render-zone" id="active-runtime-terminal-messages-stream">
                         </div>
-                        <form class="dock-form" id="terminal-dispatch-form" onsubmit="handleMessageSubmission(event)">
-                            <input type="text" id="terminal-input-buffer" class="dock-input-field" placeholder="Type a message or technical question..." autocomplete="off" disabled>
-                            <button type="submit" id="terminal-submit-btn" class="dock-submit-btn" disabled>
+
+                    <div class="workspace-input-interaction-dock">
+                        <div class="interaction-dock-status-row">
+                            <div class="status-row-left-node">
+                                <div class="realtime-status-pulse-dot"></div>
+                                <span id="interaction-dock-realtime-status-string">Secure Sandbox Port Open</span>
+                            </div>
+                            <div style="font-family: var(--font-monospace); font-size: 0.75rem;" id="interaction-dock-room-identifier-tag">BLOCK_REF: NULL</div>
+                        </div>
+                        <form class="interaction-dispatch-form" id="interaction-console-dispatch-form" onsubmit="executeConsoleFormSubmissionPacket(event)">
+                            <input type="text" id="interaction-console-input-buffer" class="console-input-field-control" placeholder="Transmit data or execute direct structural query loops..." autocomplete="off" disabled>
+                            <button type="submit" id="interaction-console-submit-trigger" class="console-dispatch-submit-btn" disabled title="Send Message">
                                 <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                             </button>
                         </form>
@@ -640,446 +1260,677 @@
 
                 </div>
             </section>
+
+            <aside class="workspace-panel-sidebar right-stream-sidebar" id="right-sidebar-panel-node">
+                
+                <div class="sidebar-tabs-navigation-deck">
+                    <div class="sidebar-tab-trigger-anchor is-active-tab-node" id="tab-trigger-users-exclusive" onclick="switchActiveSidebarTabViewport('users')">Users Chat</div>
+                    <div class="sidebar-tab-trigger-anchor" id="tab-trigger-global-public" onclick="switchActiveSidebarTabViewport('public')">Public Feed</div>
+                </div>
+
+                <div class="sidebar-tab-viewports-box">
+                    
+                    <div class="tab-viewport-stream-view is-visible-viewport" id="tab-viewport-users-exclusive-stream">
+                        <div class="tab-stream-scroller-zone" id="sidebar-users-exclusive-render-scroller">
+                            </div>
+                        <div class="sidebar-chat-embedded-input-dock">
+                            <form class="sidebar-embedded-form" onsubmit="executeUsersExclusiveEmbeddedMessageSend(event)">
+                                <input type="text" id="sidebar-users-exclusive-input-field" class="sidebar-embedded-input-control" placeholder="Message active users..." autocomplete="off">
+                                <button type="submit" class="sidebar-embedded-submit-btn">Send</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="tab-viewport-stream-view" id="tab-viewport-global-public-stream">
+                        <div class="tab-stream-scroller-zone" id="sidebar-global-public-render-scroller">
+                            </div>
+                        <div class="sidebar-chat-embedded-input-dock">
+                            <form class="sidebar-embedded-form" onsubmit="executeGlobalPublicEmbeddedMessageSend(event)">
+                                <input type="text" id="sidebar-global-public-input-field" class="sidebar-embedded-input-control" placeholder="Broadcast to public grid..." autocomplete="off">
+                                <button type="submit" class="sidebar-embedded-submit-btn">Broadcast</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
         </main>
     </div>
 
     <script>
-        // Generating the complete structured array of 100 categorized items distributed into 5 departments
-        const DATA_MANIFEST = [
+        /* FULL 100 ITEM LOGICAL METADATA DICTIONARY GENERATION SCHEME */
+        const APP_CORE_REGISTRY_DATA = [
             {
-                dept: "Mathematics Department",
-                aiBadge: "MATH_INTELLIGENCE_v3.2",
-                subjects: [
-                    { id: "01", name: "Linear Algebra", desc: "Vector spaces, matrix transforms, eigenvalues, and custom geometric tensor layouts." },
-                    { id: "02", name: "Calculus AB", desc: "Limits, derivative rate calculations, fundamental integration, and area mapping." },
-                    { id: "03", name: "Calculus BC", desc: "Advanced vector fields, infinite sequence convergence parameters, and polar formulas." },
-                    { id: "04", name: "Differential Equations", desc: "First-order matrices, modeling systems, Laplace transformations, and linear systems." },
-                    { id: "05", name: "Discrete Mathematics", desc: "Set logic, combinatorics, graph mapping algorithms, and boolean operational models." },
-                    { id: "06", name: "Number Theory", desc: "Modular arithmetic, prime factorization properties, and cryptography formulas." },
-                    { id: "07", name: "Topology", desc: "Metric mapping structures, homeomorphisms, compact metrics, and continuity rules." },
-                    { id: "08", name: "Complex Analysis", desc: "Holomorphic structures, Cauchy residue checks, and conformal transformation maps." },
-                    { id: "09", name: "Abstract Algebra", desc: "Group isomorphisms, ring matrices, field properties, and Galois computing models." },
-                    { id: "10", name: "Probability Theory", desc: "Stochastic systems, conditional density formulas, and central limit theorems." },
-                    { id: "11", name: "Mathematical Statistics", desc: "Parametric estimation criteria, hypothesis parameters, and Bayesian statistics models." },
-                    { id: "12", name: "Geometry & Trigonometry", desc: "Non-Euclidean proofs, analytic properties, and identities scaling." },
-                    { id: "13", name: "Numerical Analysis", desc: "Error tracking boundaries, numerical integration, and Runge-Kutta operations." },
-                    { id: "14", name: "Graph Theory", desc: "Isomorphic trees, planar map colorings, and complex network optimization maps." },
-                    { id: "15", name: "Set Theory", desc: "Zermelo-Fraenkel parameters, infinite cardinals, and ordinal scaling logic." },
-                    { id: "16", name: "Logic & Foundations", desc: "First-order proofs, model systems, and Gödel completeness verification matrices." },
-                    { id: "17", name: "Cryptography Math", desc: "Discrete logarithms, elliptic curve structures, and factorization barriers." },
-                    { id: "18", name: "Combinatorics", desc: "Permutations, generating configurations, and Ramsey boundary calculation bounds." },
-                    { id: "19", name: "Chaos Theory", desc: "Attractor loops, Lyapunov metrics, fractal structures, and non-linear systems." },
-                    { id: "20", name: "Game Theory", desc: "Nash equilibrium arrays, multi-agent games, and matrix strategic systems." }
+                department: "Mathematics Sciences Core",
+                aiSignature: "MATH_COGNITION_v4.2",
+                branches: [
+                    { id: "01", name: "Linear Algebra", desc: "Vector spaces mapping, structural transformation matrices, and eigenspace validation algorithms." },
+                    { id: "02", name: "Calculus AB", desc: "Differential limits tracking, rate calculations, and foundational Riemann sum integrals." },
+                    { id: "03", name: "Calculus BC", desc: "Infinite series parameter convergence, parametric vector equations, and polar coordinate tracking loops." },
+                    { id: "04", name: "Differential Equations", desc: "First-order matrix structures, Laplace tracking conversions, and complex linear boundary models." },
+                    { id: "05", name: "Discrete Mathematics", desc: "Set logic rules, combinatorics calculation, and graph optimization parameters." },
+                    { id: "06", name: "Number Theory", desc: "Modular arithmetic, prime factorization distribution properties, and encryption algorithms." },
+                    { id: "07", name: "Topology", desc: "Metric configuration spaces, homeomorphisms tracking, and geometric continuity guidelines." },
+                    { id: "08", name: "Complex Analysis", desc: "Holomorphic structural mappings, Cauchy residue mechanics, and conformal transformations." },
+                    { id: "09", name: "Abstract Algebra", desc: "Group isomorphisms, ring matrices mapping lines, and Galois computing models." },
+                    { id: "10", name: "Probability Theory", desc: "Stochastic distribution sequences, conditional density, and central limit theorems." },
+                    { id: "11", name: "Mathematical Statistics", desc: "Parametric estimation filters, hypothesis validation testing, and Bayesian state tracking." },
+                    { id: "12", name: "Non-Euclidean Geometry", desc: "Hyperbolic system spaces, analytical curvature models, and non-parallel spatial algorithms." },
+                    { id: "13", name: "Numerical Analysis", desc: "Error tracking limits, approximations mapping, and Runge-Kutta calculation loops." },
+                    { id: "14", name: "Graph Theory Core", desc: "Isomorphic network trees, vertex coloring constraints, and flow maximization maps." },
+                    { id: "15", name: "Set Theory Matrix", desc: "Zermelo-Fraenkel parameters, infinite cardinals, and ordinal scaling logic lines." },
+                    { id: "16", name: "Formal Logic Systems", desc: "First-order deduction tracking, model systems validation, and completeness loops." },
+                    { id: "17", name: "Cryptographic Math", desc: "Discrete logarithm barriers, elliptic curve structures, and prime factoring limits." },
+                    { id: "18", name: "Advanced Combinatorics", desc: "Permutations mapping fields, generating structures, and Ramsey boundary parameters." },
+                    { id: "19", name: "Chaos Matrix Dynamics", desc: "Attractor loops tracking, Lyapunov exponent vectors, and fractal mapping transformations." },
+                    { id: "20", name: "Strategic Game Theory", desc: "Nash equilibrium arrays, multi-agent game models, and utility transformation setups." }
                 ]
             },
             {
-                dept: "Physical Sciences Department",
-                aiBadge: "QUANTUM_PHYSICS_v5.0",
-                subjects: [
-                    { id: "21", name: "Quantum Mechanics", desc: "Schrödinger wave state formulas, Hilbert spaces, and particle state matrix systems." },
-                    { id: "22", name: "Astrophysics", desc: "Stellar evolution tracking, black hole configurations, and orbital system mechanics." },
-                    { id: "23", name: "Theoretical Physics", desc: "Lagrangian mechanics, string structures, and quantum field configuration rules." },
-                    { id: "24", name: "Thermodynamics", desc: "Entropy expansion parameters, thermodynamic laws, and Gibbs free energy tracking." },
-                    { id: "25", name: "Particle Physics", desc: "Standard model parameters, gauge variations, quarks, and Higgs mechanism couplings." },
-                    { id: "26", name: "Relativity Theory", desc: "Space-time curvature matrices, Lorentz transforms, and gravity tensor math." },
-                    { id: "27", name: "Electromagnetism", desc: "Maxwell field equations, wave radiation profiles, and electrodynamic structures." },
-                    { id: "28", name: "Optics & Photonics", desc: "Laser resonators, light refraction properties, and non-linear crystal processing arrays." },
-                    { id: "29", name: "Nuclear Physics", desc: "Isotope decays, fission/fusion kinetics, and core shell configurations." },
-                    { id: "30", name: "Organic Chemistry", desc: "Stereochemical pathways, carbon structures, and electrophilic reactions." },
-                    { id: "31", name: "Inorganic Chemistry", desc: "Coordination complex profiles, crystal field splittings, and catalyst properties." },
-                    { id: "32", name: "Physical Chemistry", desc: "Chemical kinetics matrices, molecular state profiles, and spectral configurations." },
-                    { id: "33", name: "Biochemistry", desc: "Enzymatic reaction mechanics, ATP production fields, and macromolecule paths." },
-                    { id: "34", name: "Analytical Chemistry", desc: "Mass spectrometry calibrations, chromatography metrics, and data tracking." },
-                    { id: "35", name: "Quantum Chemistry", desc: "Density functional theory systems, molecular orbital maps, and basis parameters." },
-                    { id: "36", name: "Geology & Tectonics", desc: "Lithospheric plates, seismic wave tracking, and structural stress systems." },
-                    { id: "37", name: "Meteorology", desc: "Atmospheric convection fields, thermodynamic modeling, and weather systems." },
-                    { id: "38", name: "Oceanography", desc: "Thermohaline current maps, marine deep baselines, and thermal flow tracking." },
-                    { id: "39", name: "Planetary Science", desc: "Planet core accretion matrices, magnetic properties, and moon orbital systems." },
-                    { id: "40", name: "Volcanology", desc: "Magmatic fluid flow properties, gas degassing parameters, and pressure dynamics." }
+                department: "Quantum & Physical Systems",
+                aiSignature: "QUANTUM_SYNTAX_v5.1",
+                branches: [
+                    { id: "21", name: "Quantum Mechanics", desc: "Schrödinger wave state tracking formulas, Hilbert spaces, and probability distribution matrices." },
+                    { id: "22", name: "Astrophysics Core", desc: "Stellar evolution paths, black hole thermodynamic barriers, and orbital systems calculation." },
+                    { id: "23", name: "Theoretical Physics", desc: "Lagrangian structural mechanics, superstring frameworks, and gauge fields configuration." },
+                    { id: "24", name: "Thermodynamics Systems", desc: "Entropy expansion tracking, thermodynamic parameters, and Gibbs free energy calculation." },
+                    { id: "25", name: "Particle Physics Array", desc: "Standard model gauge variations, quark interactions, and Higgs boson couplings." },
+                    { id: "26", name: "General Relativity", desc: "Space-time curvature matrices, Lorentz coordinate transforms, and gravitational tensor maps." },
+                    { id: "27", name: "Electromagnetism Core", desc: "Maxwell field equations tracking, electromagnetic radiation, and wave propagation vectors." },
+                    { id: "28", name: "Optics & Photonics", desc: "Laser resonator calculations, light refraction properties, and crystal processing streams." },
+                    { id: "29", name: "Nuclear Infrastructure", desc: "Isotope decay paths, nuclear fission/fusion kinetics, and shell matrix models." },
+                    { id: "30", name: "Organic Synthesis Matrix", desc: "Stereochemical path configurations, carbon structures mapping, and electrophilic reactions." },
+                    { id: "31", name: "Inorganic Coordination", desc: "Crystal field splitting systems, catalyst properties tracking, and transitional elements mechanics." },
+                    { id: "32", name: "Physical Chemistry Line", desc: "Chemical kinetic matrices, molecular thermodynamics, and spectral tracking setups." },
+                    { id: "33", name: "Molecular Biochemistry", desc: "Enzymatic reaction mechanics, metabolic path tracking, and ATP synthesis operations." },
+                    { id: "34", name: "Analytical Spectroscopy", desc: "Mass spectrometry calibration, chromatography profiling, and quantitative signal tracking." },
+                    { id: "35", name: "Quantum Chemistry Lab", desc: "Density functional theory systems, molecular orbital simulations, and electronic structures." },
+                    { id: "36", name: "Tectonic Geophysics", desc: "Lithospheric structural tracking, seismic wave mapping, and geological stress arrays." },
+                    { id: "37", name: "Atmospheric Thermodynamics", desc: "Convection field modeling, planetary climate arrays, and fluid tracking algorithms." },
+                    { id: "38", name: "Deep Oceanography Marine", desc: "Thermohaline current maps, deep baseline tracking, and thermal distribution flows." },
+                    { id: "39", name: "Planetary Accretion Science", desc: "Core accretion matrices, magnetosphere generation lines, and satellites orbital tracking." },
+                    { id: "40", name: "Volcanology Core Dynamics", desc: "Magmatic fluid tracking mechanics, degassing physics, and subduction pressure parameters." }
                 ]
             },
             {
-                dept: "Life & Neuroscience Department",
-                aiBadge: "SYNAPSE_NEURO_v4.1",
-                subjects: [
-                    { id: "41", name: "Cellular Neuroscience", desc: "Ion channel action flows, Hodgkin-Huxley models, and membrane parameters." },
-                    { id: "42", name: "Cognitive Neuroscience", desc: "Neural mapping systems for memory, cortical attention channels, and processing loops." },
-                    { id: "43", name: "Behavioral Neuroscience", desc: "Limbic reward circuitry configurations, neurobiology triggers, and endocrine systems." },
-                    { id: "44", name: "Neuroanatomy", desc: "Cortical architecture maps, brain systems, and structural path trackers." },
-                    { id: "45", name: "Neuropharmacology", desc: "Synaptic drug configurations, receptor bindings, and secondary signaling fields." },
-                    { id: "46", name: "Computational Neuroscience", desc: "Spiking neural model architectures, cable math, and plasticity rules." },
-                    { id: "47", name: "Molecular Biology", desc: "DNA transcription complexes, RNA splicing metrics, and ribosomal translations." },
-                    { id: "48", name: "Genetics & Genomics", desc: "Epigenetic profiling structures, chromosome maps, and polygenic trait scoring." },
-                    { id: "49", name: "Evolutionary Biology", desc: "Genetic drift variants, phylogenetic tree parameters, and fitness layouts." },
-                    { id: "50", name: "Microbiology", desc: "Bacterial cell systems, viral interactions, and metabolic path vectors." },
-                    { id: "51", name: "Immunology", desc: "T-cell receptor generation paths, antibody mechanics, and cytokine cascades." },
-                    { id: "52", name: "Virology", desc: "Capsid replication protocols, cellular injection maps, and immune escapes." },
-                    { id: "53", name: "Marine Biology", desc: "Benthic ecology grids, marine food systems, and environmental adaptation loops." },
-                    { id: "54", name: "Ecology", desc: "Trophic mapping arrays, ecosystem balancing, and species niche distributions." },
-                    { id: "55", name: "Biophysics", desc: "Protein folding thermodynamics, cellular fluid dynamics, and molecular tracking." },
-                    { id: "56", name: "Astrobiology", desc: "Prebiotic environment parameters, extremophile bounds, and biosignature maps." },
-                    { id: "57", name: "Neuroplasticity", desc: "Long-term potentiation rules, axonal sprouting, and map restructurings." },
-                    { id: "58", name: "Synaptic Transmission", desc: "SNARE configurations, quantal neurotransmitter releases, and density profiles." },
-                    { id: "59", name: "Brain-Computer Interfaces", desc: "ECoG array processing systems, digital decoders, and closed-loop stimulations." },
-                    { id: "60", name: "Neuroendocrinology", desc: "Hypothalamic-pituitary axis operations, peptide channels, and feedback metrics." }
+                department: "Life & Neuro-Cognitive Systems",
+                aiSignature: "NEURO_SYNAPSE_v3.9",
+                branches: [
+                    { id: "41", name: "Cellular Neuroscience", desc: "Ion channel activation gates, action potential mechanics, and membrane parameters." },
+                    { id: "42", name: "Cognitive Processing Core", desc: "Cortical attention mapping channels, memory consolidation loops, and sensory integration tracking." },
+                    { id: "43", name: "Behavioral Neurobiology", desc: "Limbic system reward circuits, neuroendocrine pathways tracking, and behavioral feedback loops." },
+                    { id: "44", name: "Structural Neuroanatomy", desc: "Cortical architectural tracks, deep brain nuclei mapping, and structural path monitoring." },
+                    { id: "45", name: "Neuropharmacology Matrix", desc: "Synaptic drug configuration matrices, receptor affinity parameters, and signal loops." },
+                    { id: "46", name: "Computational Neuro-Modeling", desc: "Spiking neural models, cable equation mathematics, and synaptic plasticity vectors." },
+                    { id: "47", name: "Molecular Transcription", desc: "DNA transcription complexes processing, RNA splicing paths, and translation loops." },
+                    { id: "48", name: "Genetics & Epigenetics", desc: "Chromosomal layout mappings, epigenetic methylation profiles, and polygenic trait arrays." },
+                    { id: "49", name: "Evolutionary Architecture", desc: "Allele distribution frequencies, phylogenetic tree computations, and selection models." },
+                    { id: "50", name: "Microbial Systems Block", desc: "Bacterial metabolic pathways, viral payload structures, and resistance mechanisms." },
+                    { id: "51", name: "Immunology Cascades", desc: "T-cell receptor sequence alignments, cytokine cascade paths, and immune response lines." },
+                    { id: "52", name: "Systemic Virology Core", desc: "Capsid replication protocols, host cell entry vectors, and immune escape algorithms." },
+                    { id: "53", name: "Marine Ecosystem Dynamics", desc: "Benthic ecology tracking arrays, carbon cycle vectors, and adaptation profiles." },
+                    { id: "54", name: "Trophic Ecology Matrix", desc: "Energy distribution mapping, species population models, and ecosystem stabilization rules." },
+                    { id: "55", name: "Biophysical Thermodynamics", desc: "Protein folding parameters, cellular transport mechanics, and thermal fluid lines." },
+                    { id: "56", name: "Astrobiology Systems", desc: "Prebiotic context environments, extremophile validation limits, and biosignature parameters." },
+                    { id: "57", name: "Structural Neuroplasticity", desc: "Long-term potentiation rules, dendritic spine morphology, and map adjustments." },
+                    { id: "58", name: "Synaptic Vesicle Kinetics", desc: "SNARE complex assembly mechanics, quantal release metrics, and active zone profiling." },
+                    { id: "59", name: "Brain-Machine Interfaces", desc: "Neural decoder array filtering, cortical tracking matrices, and sensory feedback loops." },
+                    { id: "60", name: "Neuroendocrinology Core", desc: "Hypothalamic-pituitary axis operations, peptide channels, and neuro-hormonal loops." }
                 ]
             },
             {
-                dept: "Philosophy Department",
-                aiBadge: "DIALECTIC_PHILOSOPHY_v6.0",
-                subjects: [
-                    { id: "61", name: "Epistemology", desc: "Justification bounds, skepticism, coherentism structures, and Gettier edge cases." },
-                    { id: "62", name: "Metaphysics", desc: "Ontological mapping setups, mereological structures, and modal frameworks." },
-                    { id: "63", name: "Nihilism & Existentialism", desc: "Value absences, existential authenticity frameworks, and choice systems." },
-                    { id: "64", name: "Stoicism", desc: "Control dichotomies, virtue setups, and structural logic properties." },
-                    { id: "65", name: "Formal Logic", desc: "Propositional systems, predicate models, syntax parsing, and completeness proofs." },
-                    { id: "66", name: "Ethics & Morality", desc: "Deontological frameworks, utilitarian logic loops, and ethical frameworks." },
-                    { id: "67", name: "Aesthetics", desc: "Art critique variables, beauty definitions, and taste configurations." },
-                    { id: "68", name: "Philosophy of Mind", desc: "Dualistic mind splits, physicalist systems, and qualia tracking setups." },
-                    { id: "69", name: "Philosophy of Science", desc: "Demarcation paradigms, induction problems, and structural system shifts." },
-                    { id: "70", name: "Political Philosophy", desc: "Social contracts, governance distributions, and justice systems." },
-                    { id: "71", name: "Phenomenology", desc: "Intentionality structures, reduction models, and direct lifeworld profiles." },
-                    { id: "72", name: "Eastern Philosophy", desc: "Non-dual configurations, Vedic structures, and Buddhist emptiness rules." },
-                    { id: "73", name: "Rationalism", desc: "Innate structural ideas, a priori systems, and reason parsing parameters." },
-                    { id: "74", name: "Empiricism", desc: "Sensory collection paradigms, tabula rasa settings, and verification filters." },
-                    { id: "75", name: "Pragmatism", desc: "Instrumental value trackers, action outcomes, and reality checking setups." },
-                    { id: "76", name: "Hermeneutics", desc: "Textual context loops, interpretation strategies, and horizons analysis." },
-                    { id: "77", name: "Philosophy of Language", desc: "Sense versus reference mappings, speech actions, and semantic truth filters." },
-                    { id: "78", name: "Absurdism", desc: "The foundational clash between structural meaning-seeking minds and cold matter." },
-                    { id: "79", name: "Determinism vs Free Will", desc: "Causal tracking configurations, compatibilist loops, and human choices." },
-                    { id: "80", name: "Analytical Philosophy", desc: "Logical atomism matrices, ordinary language metrics, and parsing mechanics." }
+                department: "Formal & Dialectic Philosophy",
+                aiSignature: "PHILOSOPH_LOGIC_v6.2",
+                branches: [
+                    { id: "61", name: "Epistemology Theory", desc: "Justification boundaries, foundational criteria models, and Gettier problem exceptions." },
+                    { id: "62", name: "Ontological Metaphysics", desc: "Mereological part-whole frameworks, category systems, and modal reality configurations." },
+                    { id: "63", name: "Existential Frameworks", desc: "Value production loops, authenticity criteria setups, and individual meaning frameworks." },
+                    { id: "64", name: "Stoic Logic Systems", desc: "Control dichotomy algorithms, cognitive evaluation paths, and equanimity metrics." },
+                    { id: "65", name: "Advanced Predicate Logic", desc: "Syntax token parsing, quantification mechanics, and semantic validity matrices." },
+                    { id: "66", name: "Morality & Meta-Ethics", desc: "Deontological rule sets, utilitarian calculation matrices, and virtue ethics lines." },
+                    { id: "67", name: "Aesthetics Philosophy", desc: "Value critique paradigms, perception frameworks, and artistic structural mechanics." },
+                    { id: "68", name: "Philosophy of Mind", desc: "Qualia categorization profiles, physicalist systems, and intentional state tracking." },
+                    { id: "69", name: "Philosophy of Science", desc: "Inductive confirmation limits, paradigm shift structures, and demarcation metrics." },
+                    { id: "70", name: "Political Social Contracts", desc: "Distributive justice matrices, authority validation setups, and legal philosophy structures." },
+                    { id: "71", name: "Phenomenological Methods", desc: "Intentional mapping systems, epoché reduction structures, and experience arrays." },
+                    { id: "72", name: "Eastern Non-Dualism", desc: "Vedic dialectic maps, Buddhist emptiness operations, and consciousness frameworks." },
+                    { id: "73", name: "Classical Rationalism", desc: "A priori conceptual frameworks, innate logic configurations, and deductive paths." },
+                    { id: "74", name: "Systemic Empiricism", desc: "Sensory integration metrics, inductive validation filters, and tabula rasa setups." },
+                    { id: "75", name: "Pragmatism Paradigms", desc: "Instrumental verification tests, action outcome profiles, and truth loop testing." },
+                    { id: "76", name: "Hermeneutic Interpretation", desc: "Context interpretation cycles, horizon integration models, and semantic decoding." },
+                    { id: "77", name: "Philosophy of Language", desc: "Sense and reference structures, speech act verification, and semantic truth models." },
+                    { id: "78", name: "Absurdist Dialectics", desc: "Meaning-seeking friction metrics, existential conflict parameters, and resolution loops." },
+                    { id: "79", name: "Determinism & Agency", desc: "Causal trajectory arrays, compatibilist loop tracking, and choice algorithms." },
+                    { id: "80", name: "Analytical Frameworks", desc: "Logical atomism breakdown paths, ordinary language filters, and definition parsing." }
                 ]
             },
             {
-                dept: "Computer Science Department",
-                aiBadge: "AUTOMATION_CORE_v9.5",
-                subjects: [
-                    { id: "81", name: "Artificial Intelligence", desc: "Heuristic search models, graph problem solvers, and agent rule logic systems." },
-                    { id: "82", name: "Machine Learning", desc: "Gradient tracking systems, loss functions, and weights optimization matrix lines." },
-                    { id: "83", name: "Neural Networks", desc: "Backpropagation architectures, tensor transformations, and hidden layer systems." },
-                    { id: "84", name: "Data Structures", desc: "Red-black trees, hash collision handlers, and performance metrics graph maps." },
-                    { id: "85", name: "Algorithms", desc: "Asymptotic runtime metrics, dynamic programming, and complexity scaling lines." },
-                    { id: "86", name: "Cyber Security", desc: "Buffer overflow overrides, handshake parameters, and credential protection." },
-                    { id: "87", name: "Blockchain Dev", desc: "Consensus engines, cryptographic proofs, and smart contract execution setups." },
-                    { id: "88", name: "Quantum Computing", desc: "Qubit matrices, Shor factoring proofs, and circuit decoherence profiles." },
-                    { id: "89", name: "Operating Systems", desc: "Virtual memory mapping layers, CPU scheduler threads, and drivers logic." },
-                    { id: "90", name: "Database Architecture", desc: "ACID metrics, structural index engines, and data scaling setups." },
-                    { id: "91", name: "Compiler Design", desc: "Lexical tokenizing filters, syntax generation loops, and compilation pipelines." },
-                    { id: "92", name: "Computer Networks", desc: "TCP congestion protocols, routing paths, and framing architectures." },
-                    { id: "93", name: "Frontend Systems", desc: "Event loop threads, browser render pipelines, and responsive interface layouts." },
-                    { id: "94", name: "Game Engine Architecture", desc: "Real-time physics engines, scene graphs, and rendering code loops." },
-                    { id: "95", name: "Cloud Computing", desc: "Microservices architectures, virtualization layers, and server scaling systems." },
-                    { id: "96", name: "Parallel Processing", desc: "SIMD optimizations, lock barriers, and multi-thread processing lines." },
-                    { id: "97", name: "Software Engineering", desc: "Structural programming design patterns, optimization routines, and engineering code." },
-                    { id: "98", name: "Human-Computer Interaction", desc: "Movement models, user cognitive load profiles, and UX tracking metrics." },
-                    { id: "99", name: "Reverse Engineering", desc: "x86/ARM disassembly loops, decompilers mapping lines, and binary parsing." },
-                    { id: "100", name: "Automation Systems", desc: "Feedback loop matrices, PID parameters, and systemic loop code lines." }
+                department: "Computer Science & Automation Systems",
+                aiSignature: "COMP_AUTOMATION_v9.6",
+                branches: [
+                    { id: "81", name: "Artificial Intelligence", desc: "Heuristic search state spaces, expert production logic systems, and agent pathing algorithms." },
+                    { id: "82", name: "Machine Learning Models", desc: "Gradient tracking systems, cost functions tuning, and optimization path validation." },
+                    { id: "83", name: "Deep Neural Networks", desc: "Backpropagation tensor loops, architectural layer setups, and activation functions." },
+                    { id: "84", name: "Data Structures Core", desc: "Balanced tree indexing, hash conflict resolution paths, and graph memory representations." },
+                    { id: "85", name: "Advanced Algorithms", desc: "Asymptotic complexity tracking, dynamic programming trees, and network optimization loops." },
+                    { id: "86", name: "Cybersecurity Frameworks", desc: "Memory space buffer checks, cryptographic verification protocols, and system attack surfaces." },
+                    { id: "87", name: "Distributed Blockchain", desc: "Consensus state engines, ledger verification proofs, and smart contract execution lines." },
+                    { id: "88", name: "Quantum Computation", desc: "Superposition matrix states, quantum gate sequence arrays, and decoherence bounds." },
+                    { id: "89", name: "Operating System Kernels", desc: "Virtual memory allocation layers, CPU thread scheduler locks, and device interface modules." },
+                    { id: "90", name: "Database Infrastructures", desc: "ACID transaction parameters, relational indexing optimization, and non-relational shards." },
+                    { id: "91", name: "Compiler Code Design", desc: "Lexical scanner token passes, abstract syntax trees, and target generation pipelines." },
+                    { id: "92", name: "Advanced Networking", desc: "TCP congestion window algorithms, routing topology matrices, and packet flow trackers." },
+                    { id: "93", name: "Frontend System Architectures", desc: "Browser render pipelines, asynchronous event loops, and fluid layout optimization rules." },
+                    { id: "94", name: "Game Engine Mechanics", desc: "Real-time physics iteration calculations, spatial partition indexes, and render loops." },
+                    { id: "95", name: "Cloud Microservices", desc: "Container orchestrations, virtualization boundaries, and elastic horizontal scaling." },
+                    { id: "96", name: "Parallel Computing SIMD", desc: "Vector processing pipelines, multi-core thread fences, and shared cache logic." },
+                    { id: "97", name: "Software Architecture Patterns", desc: "Modular design interfaces, structural design patterns, and decoupled state management." },
+                    { id: "98", name: "Human-Computer UX Dynamics", desc: "Fitts's law target constraints, user cognitive burden models, and telemetry analysis." },
+                    { id: "99", name: "Reverse Engineering Binary", desc: "Binary machine code disassembly streams, structural assembly parsing, and control loops." },
+                    { id: "100", name: "Industrial Automation Systems", desc: "Proportional-Integral-Derivative loops calculation, fieldbus arrays, and deterministic systems." }
                 ]
             }
         ];
 
-        // Simulated P2P Network Peer Names and Context Dialogues
-        const SIM_PEERS = ["Vortex_Editor", "Cyber_Wanda", "Quantum_Alpha", "Nova_Skye", "Kardashev_Scribe", "Entropy_Runner"];
-        const KNOWLEDGE_RESPONSES = {
-            "01": "Linear Algebra requires matching your dimensions. If your dimensions don't line up, your matrix multiplication breaks completely.",
-            "21": "The Wave Function encapsulates everything. As soon as you measure it, the probabilities collapse down to a single objective point.",
-            "41": "Action potentials are all-or-nothing responses. The membrane threshold must hit exactly -55mV to send the packet.",
-            "61": "Epistemology proves that belief alone isn't enough. For true absolute grounding, a belief must be justified and true.",
-            "81": "AI agents work inside high-density heuristic search spaces to locate optimal system configurations in real-time."
-        };
+        /* PERSISTENT PEER DIALOGUE CORPUS FOR CHAT STREAMS */
+        const SIMULATED_PEERS_LIST = ["Alpha_Editor", "Nexus_Wanda", "Dev_Matrix", "Cosmo_Vibes", "Entropy_Runner", "Logic_Scribe"];
+        
+        const EXCLUSIVE_USER_SIM_MESSAGES = [
+            "The new CSS Grid setup completely fixed the layout crushing on mobile frames. Beautiful separation.",
+            "Agreed! I checked every single line across the responsive layout breakpoints, zero squishing now.",
+            "Does anyone have the matrix multiplication function calibrated for Sector 01?",
+            "Make sure your dimension tensors align perfectly, or the execution block throws a runtime exception.",
+            "The Web Audio stream sounds incredible. Clean lofi loops right inside the console shell layout.",
+            "I love that there are no rigid black boxes in the AI interface anymore. The modern message bubbles look elite.",
+            "Is the authentication state placeholder live yet?",
+            "It looks like the structural placeholders are locked and fully ready, just holding on the developer's trigger word."
+        ];
 
-        // Active State Vectors
-        let activeSubject = null;
-        let activeDept = null;
-        let isAudioPlaying = false;
+        const PUBLIC_GLOBAL_SIM_MESSAGES = [
+            "GLOBAL SYSTEM BROADCAST: Sector 88 Quantum Computing node reporting zero decoherence metrics.",
+            "Public Feed live tracking: 100/100 channels active in localized sandbox containers.",
+            "Notice to all active terminals: The purple accent items have been completely expunged from the layout code base.",
+            "System telemetry online: Core processing frames responsive at 60fps.",
+            "Linguistic intent parser upgraded to deep keyword matching matrix. Checking user queries sequentially.",
+            "Notice: Authentication system state on secure hold protocol. Waiting for direct parameter transition."
+        ];
 
-        // UI Element Tracking Cache
-        const scrollTrackNode = document.getElementById('directory-scroll-track');
-        const searchFieldNode = document.getElementById('directory-search-field');
-        const emptyStateNode = document.getElementById('viewport-empty-view');
-        const workspaceNode = document.getElementById('viewport-active-workspace');
-        const streamViewportNode = document.getElementById('chat-stream-viewport');
-        const bufferFieldNode = document.getElementById('terminal-input-buffer');
-        const submitBtnNode = document.getElementById('terminal-submit-btn');
-        const sidebarFrameNode = document.getElementById('app-sidebar-node');
-        const mobileMenuTriggerBtn = document.getElementById('mobile-menu-trigger');
+        /* SYSTEM CORE INSTANCE VARIABLES */
+        let activeSubjectData = null;
+        let activeDepartmentData = null;
+        let platformAudioPlaybackActive = false;
+        let activeSidebarTabViewportId = "users";
+        let activeMobileViewportLayerId = "sectors";
 
+        /* DOM CACHE POINTER SELECTIONS */
+        const directoryScrollerTargetTrack = document.getElementById('directory-scroller-target-track');
+        const directoryFilterSearchBox = document.getElementById('directory-filter-search-box');
+        const dashboardColdBootScreen = document.getElementById('dashboard-cold-boot-screen');
+        const dashboardActiveWorkspaceTerminal = document.getElementById('dashboard-active-workspace-terminal');
+        const activeRuntimeTerminalMessagesStream = document.getElementById('active-runtime-terminal-messages-stream');
+        const interactionConsoleInputBuffer = document.getElementById('interaction-console-input-buffer');
+        const interactionConsoleSubmitTrigger = document.getElementById('interaction-console-submit-trigger');
+        const leftSidebarPanelNode = document.getElementById('left-sidebar-panel-node');
+        const centerDisplayPanelNode = document.getElementById('center-display-panel-node');
+        const rightSidebarPanelNode = document.getElementById('right-sidebar-panel-node');
+        const sidebarUsersExclusiveRenderScroller = document.getElementById('sidebar-users-exclusive-render-scroller');
+        const sidebarGlobalPublicRenderScroller = document.getElementById('sidebar-global-public-render-scroller');
+
+        /* INITIALIZATION LIFECYCLE SEED */
         document.addEventListener("DOMContentLoaded", () => {
-            buildDirectoryNavigator();
-            initSearchEngine();
+            initializeDirectoryNavigatorPanel();
+            initializeDirectorySearchFilterEngine();
+            initializeSeparatedSidebarDataStreams();
+            startSimulatedBackgroundTrafficEngine();
+            adjustPlatformAudioVolume(0.5);
         });
 
-        function buildDirectoryNavigator() {
-            scrollTrackNode.innerHTML = "";
-            DATA_MANIFEST.forEach((group, groupIdx) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'dept-group-wrapper';
-                wrapper.innerHTML = `
-                    <div class="dept-group-title">${group.dept}</div>
-                    <div id="dept-box-${groupIdx}"></div>
+        /* CONSTRUCT DOM FOR THE 100 SECTOR FILES REGISTERED */
+        function initializeDirectoryNavigatorPanel() {
+            directoryScrollerTargetTrack.innerHTML = "";
+            APP_CORE_REGISTRY_DATA.forEach((group, idx) => {
+                const cluster = document.createElement('div');
+                cluster.className = 'directory-department-cluster';
+                cluster.innerHTML = `
+                    <div class="department-label-heading">${group.department}</div>
+                    <div id="department-branch-rack-${idx}"></div>
                 `;
-                scrollTrackNode.appendChild(wrapper);
+                directoryScrollerTargetTrack.appendChild(cluster);
                 
-                const targetBox = document.getElementById(`dept-box-${groupIdx}`);
-                group.subjects.forEach(sub => {
-                    const btn = document.createElement('button');
-                    btn.className = 'subject-item-btn';
-                    btn.setAttribute('data-id', sub.id);
-                    btn.innerHTML = `
-                        <span>${sub.name}</span>
-                        <span class="subject-id-badge">S_${sub.id}</span>
+                const targetRack = document.getElementById(`department-branch-rack-${idx}`);
+                group.branches.forEach(branch => {
+                    const rowBtn = document.createElement('button');
+                    rowBtn.className = 'subject-navigation-row-btn';
+                    rowBtn.setAttribute('data-branch-id', branch.id);
+                    rowBtn.innerHTML = `
+                        <span>${branch.name}</span>
+                        <span class="subject-tag-badge-mono">S_${branch.id}</span>
                     `;
-                    btn.onclick = () => instantiateIsolatedWorkspace(sub, group);
-                    targetBox.appendChild(btn);
+                    rowBtn.onclick = () => launchSelectedWorkspaceCore(branch, group);
+                    targetRack.appendChild(rowBtn);
                 });
             });
         }
 
-        function initSearchEngine() {
-            searchFieldNode.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase().trim();
-                document.querySelectorAll('.dept-group-wrapper').forEach(wrap => {
-                    let visibleCount = 0;
-                    wrap.querySelectorAll('.subject-item-btn').forEach(btn => {
-                        const txt = btn.textContent.toLowerCase();
-                        if (txt.includes(term)) {
+        /* LIVE REALTIME SEARCH CONTROLLER MATRIX FOR THE 100 CHANNELS */
+        function initializeDirectorySearchFilterEngine() {
+            directoryFilterSearchBox.addEventListener('input', (e) => {
+                const queryText = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('.directory-department-cluster').forEach(cluster => {
+                    let activeMatches = 0;
+                    cluster.querySelectorAll('.subject-navigation-row-btn').forEach(btn => {
+                        const targetText = btn.textContent.toLowerCase();
+                        if (targetText.includes(queryText)) {
                             btn.style.display = 'flex';
-                            visibleCount++;
+                            activeMatches++;
                         } else {
                             btn.style.display = 'none';
                         }
                     });
-                    wrap.style.display = visibleCount > 0 ? 'block' : 'none';
+                    cluster.style.display = activeMatches > 0 ? 'block' : 'none';
                 });
             });
         }
 
-        function toggleMobileSidebarLayer() {
-            sidebarFrameNode.classList.toggle('is-open');
-            mobileMenuTriggerBtn.textContent = sidebarFrameNode.classList.contains('is-open') ? "Close Track List" : "View Track List (100)";
-        }
-
-        /* 100-ROOM CLIENT ISOLATION LOADING SYSTEM */
-        function instantiateIsolatedWorkspace(subject, department) {
-            activeSubject = subject;
-            activeDept = department;
-
-            // Close sidebar automatically if on mobile screens
-            sidebarFrameNode.classList.remove('is-open');
-            mobileMenuTriggerBtn.textContent = "View Track List (100)";
-            document.getElementById('mobile-room-tracker-tag').textContent = `Active: RM_${subject.id}`;
-
-            document.querySelectorAll('.subject-item-btn').forEach(btn => {
-                btn.classList.toggle('is-active', btn.getAttribute('data-id') === subject.id);
+        /* MOBILE HUD MULTI-PANEL VIEW SWITCHER ENGINE (ELIMINATES CRUSHING) */
+        function switchMobileActiveViewportLayer(targetLayerId) {
+            activeMobileViewportLayerId = targetLayerId;
+            
+            // Sync HUD trigger toggle node classes
+            document.querySelectorAll('.mobile-hud-action-trigger').forEach(btn => {
+                btn.classList.toggle('is-active-hud-node', btn.id === `hud-trigger-${targetLayerId}`);
             });
 
-            emptyStateNode.classList.add('is-hidden');
-            workspaceNode.classList.add('is-visible');
+            // Disengage visibility on all layers
+            leftSidebarPanelNode.classList.remove('mobile-visible-layer');
+            centerDisplayPanelNode.classList.remove('mobile-visible-layer');
+            rightSidebarPanelNode.classList.remove('mobile-visible-layer');
 
-            document.getElementById('meta-subject-title').textContent = `${subject.id}. ${subject.name}`;
-            document.getElementById('ai-variant-tag').textContent = department.aiBadge;
-            document.getElementById('dock-room-tag').textContent = `ROOM_REF: RM_${subject.id}_NET`;
-            document.getElementById('nlp-intent-tag').textContent = "Intent: Calibrating";
-
-            bufferFieldNode.disabled = false;
-            submitBtnNode.disabled = false;
-            bufferFieldNode.placeholder = `Transmit secure client packet to Room ${subject.id}...`;
-            document.getElementById('dock-status-string').textContent = "Secure Node Active";
-
-            renderSavedRoomDatachains(subject.id);
+            // Select and map target layer visibility
+            if (targetLayerId === 'sectors') {
+                leftSidebarPanelNode.classList.add('mobile-visible-layer');
+            } else if (targetLayerId === 'console') {
+                centerDisplayPanelNode.classList.add('mobile-visible-layer');
+            } else if (targetLayerId === 'streams') {
+                rightSidebarPanelNode.classList.add('mobile-visible-layer');
+            }
         }
 
-        function getRoomKey(id) { return `FREYA_V3_ROOM_${id}_STREAM`; }
+        /* COLD BOOT TO ACTIVE CORE TRANSITION ENGINE */
+        function launchSelectedWorkspaceCore(branch, group) {
+            activeSubjectData = branch;
+            activeDepartmentData = group;
 
-        function renderSavedRoomDatachains(id) {
-            streamViewportNode.innerHTML = "";
-            const key = getRoomKey(id);
-            let log = localStorage.getItem(key);
+            // Highlight chosen navigation row node explicitly
+            document.querySelectorAll('.subject-navigation-row-btn').forEach(btn => {
+                btn.classList.toggle('is-active-node', btn.getAttribute('data-branch-id') === branch.id);
+            });
 
-            if (!log) {
-                const defaultArray = [
-                    { sender: "SYS", type: "ai", text: `Welcome to the **${activeSubject.name}** platform. Room matrix ${id} initialized. Client-side storage fully isolated from all external endpoints.`, stamp: getClockTime() }
-                ];
-                localStorage.setItem(key, JSON.stringify(defaultArray));
-                log = JSON.stringify(defaultArray);
+            // Switch layout layer focus if executing on mobile frame metrics
+            if (window.innerWidth <= 820) {
+                switchMobileActiveViewportLayer('console');
             }
 
-            JSON.parse(log).forEach(packet => displayPacketInStream(packet));
-            scrollStreamToBottom();
+            // Unveil active runtime terminal panels
+            dashboardColdBootScreen.classList.add('is-hidden-node');
+            dashboardActiveWorkspaceTerminal.classList.add('is-activated-node');
+
+            // Hydrate text nodes with strict domain details
+            document.getElementById('active-runtime-subject-header-title').textContent = `${branch.id}. ${branch.name}`;
+            document.getElementById('active-runtime-subject-description-sub').textContent = branch.desc;
+            document.getElementById('active-runtime-ai-signature-tag').textContent = group.aiSignature;
+            document.getElementById('active-runtime-intent-analytics-tag').textContent = "Intent: Calibrated";
+            document.getElementById('interaction-dock-room-identifier-tag').textContent = `BLOCK_REF: RM_${branch.id}_SANDBOX`;
+
+            // Wake up entry input controls
+            interactionConsoleInputBuffer.disabled = false;
+            interactionConsoleSubmitTrigger.disabled = false;
+            interactionConsoleInputBuffer.placeholder = `Input query commands to secure module track ${branch.id}...`;
+            document.getElementById('interaction-dock-realtime-status-string').textContent = "Matrix Stream Node Active";
+
+            // Draw historical sandbox logs
+            renderTargetWorkspaceChannelLogs(branch.id);
         }
 
-        function displayPacketInStream(packet) {
-            const row = document.createElement('div');
-            row.className = `message-packet ${packet.type}`;
-            row.innerHTML = `
-                <div class="packet-avatar">${packet.sender.substring(0, 3)}</div>
-                <div class="packet-bubble">
-                    <div>${parseStructuralSyntaxMarkdown(packet.text)}</div>
-                    <span class="packet-time">${packet.stamp}</span>
+        /* CLIENT ISOLATED STORAGE MAPPING ENGINE */
+        function getLocalStorageRoomKey(branchId) {
+            return `NEXUS_CORE_V4_ROOM_${branchId}_DATA_STREAM`;
+        }
+
+        function renderTargetWorkspaceChannelLogs(branchId) {
+            activeRuntimeTerminalMessagesStream.innerHTML = "";
+            const channelKey = getLocalStorageRoomKey(branchId);
+            let payloadStreamText = localStorage.getItem(channelKey);
+
+            if (!payloadStreamText) {
+                const initialDefaultDataSequence = [
+                    { sender: "SYSTEM", type: "ai-variant-packet", text: `Secure context pipeline compiled for **${activeSubjectData.name}**. Advanced Intent and Word Parsing matrix models are online. Multi-point keyword detection maps active.`, timestamp: retrieveSystemClockTimestamp() }
+                ];
+                localStorage.setItem(channelKey, JSON.stringify(initialDefaultDataSequence));
+                payloadStreamText = JSON.stringify(initialDefaultDataSequence);
+            }
+
+            JSON.parse(payloadStreamText).forEach(packet => renderMessagePacketNodeInTerminalStream(packet));
+            scrollTerminalStreamToBottom();
+        }
+
+        function renderMessagePacketNodeInTerminalStream(packet) {
+            const rowNode = document.createElement('div');
+            rowNode.className = `chat-message-packet-row ${packet.type}`;
+            rowNode.innerHTML = `
+                <div class="packet-identity-avatar-circle">${packet.sender.substring(0, 3).toUpperCase()}</div>
+                <div class="packet-content-bubble-container">
+                    <div>${parseStructuralSyntaxHighlights(packet.text)}</div>
+                    <span class="packet-timestamp-stamp">${packet.timestamp}</span>
                 </div>
             `;
-            streamViewportNode.appendChild(row);
+            activeRuntimeTerminalMessagesStream.appendChild(rowNode);
         }
 
-        /* CLIENT TRANSACTION CONTROLLER */
-        function handleMessageSubmission(event) {
+        /* INTERACTION COMMAND FORM ACTION RUNTIME HANDLER */
+        function executeConsoleFormSubmissionPacket(event) {
             event.preventDefault();
-            if (!activeSubject) return;
+            if (!activeSubjectData) return;
 
-            const inputString = bufferFieldNode.value.trim();
-            if (!inputString) return;
+            const bufferInputString = interactionConsoleInputBuffer.value.trim();
+            if (!bufferInputString) return;
 
-            const roomId = activeSubject.id;
-            const timeStamp = getClockTime();
+            const currentBranchId = activeSubjectData.id;
+            const timestampString = retrieveSystemClockTimestamp();
 
-            const userPacket = { sender: "YOU", type: "user", text: inputString, stamp: timeStamp };
-            savePacketToLocalStorage(roomId, userPacket);
-            displayPacketInStream(userPacket);
+            // Construct and log User data block
+            const userPacketData = {
+                sender: "YOU",
+                type: "user-variant-packet",
+                text: bufferInputString,
+                timestamp: timestampString
+            };
 
-            bufferFieldNode.value = "";
-            scrollStreamToBottom();
+            appendPacketToLocalStorageDatachain(currentBranchId, userPacketData);
+            renderMessagePacketNodeInTerminalStream(userPacketData);
 
-            // Fire advanced structural linguistic intent resolver
-            const intentVector = resolveAdvancedLinguisticIntent(inputString);
-            updateIntentUIElements(intentVector);
+            interactionConsoleInputBuffer.value = "";
+            scrollTerminalStreamToBottom();
 
-            // Execute processing queue
-            triggerSimulatedNetworkQueue(roomId, inputString, intentVector);
+            // Execute Granular Word and Intent Parsing Engine Core
+            const intentResolutionVector = analyzeGranularWordAndLinguisticIntent(bufferInputString);
+            document.getElementById('active-runtime-intent-analytics-tag').textContent = `Intent: ${intentResolutionVector.intentLabel}`;
+
+            // Push to processing pipeline queues
+            processIntelligentConsoleAIResponse(currentBranchId, bufferInputString, intentResolutionVector);
         }
 
-        function savePacketToLocalStorage(roomId, packet) {
-            const key = getRoomKey(roomId);
-            const list = JSON.parse(localStorage.getItem(key) || "[]");
-            list.push(packet);
-            localStorage.setItem(key, JSON.stringify(list));
+        function appendPacketToLocalStorageDatachain(branchId, packet) {
+            const storageKey = getLocalStorageRoomKey(branchId);
+            const activeLogsArray = JSON.parse(localStorage.getItem(storageKey) || "[]");
+            activeLogsArray.push(packet);
+            localStorage.setItem(storageKey, JSON.stringify(activeLogsArray));
         }
 
-        /* ADVANCED NATURAL LANGUAGE PROCESSING SIMULATION MATRIX */
-        function resolveAdvancedLinguisticIntent(str) {
-            const clean = str.toLowerCase();
+        /* ==========================================================================
+           10. NEXT-GEN AI CONVERSATION ENGINE (GRANULAR INTENT & WORD DETECTION)
+           ========================================================================== */
+        function analyzeGranularWordAndLinguisticIntent(rawInputText) {
+            const cleanTextString = rawInputText.toLowerCase().trim();
             
-            // Checking structural flags
-            const questions = ["what", "how", "why", "explain", "derive", "prove", "tell me", "can you", "question"];
-            const casuals = ["sup", "yo", "hey", "hello", "clean", "vibes", "lol", "cool", "bruh", "site", "app"];
-            
-            let queryMatch = false;
-            let greetingMatch = false;
+            // Granular Word Detection Struct Maps
+            const greetingsVocabulary = ["hello", "hi", "hey", "sup", "yo", "greetings", "howdy", "good morning", "good afternoon"];
+            const casualQuestionsVocabulary = ["how are you", "how's it going", "how are things", "you good", "what's up", "whats up"];
+            const analyticalQuestionsVocabulary = ["what is", "how do", "why does", "explain", "derive", "prove", "calculate", "solve", "what are", "how can"];
+            const UIUXFeedbackVocabulary = ["ui", "layout", "squished", "mobile", "purple", "design", "music", "audio", "player", "chat", "boxes"];
 
-            questions.forEach(q => { if (clean.includes(q)) queryMatch = true; });
-            casuals.forEach(c => { if (clean.includes(c)) greetingMatch = true; });
+            // Check specific vocabulary groups sequentially
+            let matchedGreetingWord = greetingsVocabulary.find(word => cleanTextString.includes(word));
+            let matchedCasualQuestion = casualQuestionsVocabulary.find(phrase => cleanTextString.includes(phrase));
+            let matchedAnalyticalQuestion = analyticalQuestionsVocabulary.find(phrase => cleanTextString.includes(phrase));
+            let matchedUIUXWord = UIUXFeedbackVocabulary.find(word => cleanTextString.includes(word));
 
-            if (queryMatch) return "Academic_Query";
-            if (greetingMatch) return "Casual_Social";
-            return "General_Statement";
-        }
-
-        function updateIntentUIElements(vector) {
-            const label = document.getElementById('nlp-intent-tag');
-            label.textContent = `Intent: ${vector.replace('_', ' ')}`;
-            if (vector === "Academic_Query") {
-                label.style.color = "var(--glow-cyan)";
-                label.style.borderColor = "rgba(0, 240, 255, 0.3)";
-            } else if (vector === "Casual_Social") {
-                label.style.color = "var(--glow-purple)";
-                label.style.borderColor = "rgba(168, 85, 247, 0.3)";
-            } else {
-                label.style.color = "var(--color-text-muted)";
-                label.style.borderColor = "var(--border-hairline)";
+            // Return custom token mapping
+            if (matchedCasualQuestion) {
+                return { intentLabel: "Casual_Inquiry", coreWord: matchedCasualQuestion, tier: 1 };
             }
+            if (matchedGreetingWord) {
+                return { intentLabel: "Greeting_Sequence", coreWord: matchedGreetingWord, tier: 1 };
+            }
+            if (matchedAnalyticalQuestion) {
+                return { intentLabel: "Analytical_Query", coreWord: matchedAnalyticalQuestion, tier: 2 };
+            }
+            if (matchedUIUXWord) {
+                return { intentLabel: "UIUX_System_Telemetry", coreWord: matchedUIUXWord, tier: 2 };
+            }
+
+            return { intentLabel: "General_Processing", coreWord: "Unknown_Token", tier: 0 };
         }
 
-        /* WORLD-CLASS CONVERSATION SYNTHESIS ROUTINE */
-        function triggerSimulatedNetworkQueue(roomId, rawPrompt, intent) {
-            bufferFieldNode.disabled = true;
-            submitBtnNode.disabled = true;
-            document.getElementById('dock-status-string').textContent = "Processing matrices...";
+        /* HUMAN-LIKE SYSTEM RESPONSE SYNTHESIZER MATRIX */
+        function processIntelligentConsoleAIResponse(branchId, rawPromptText, intentVector) {
+            // Freeze entry pads to simulate core analytical cycles
+            interactionConsoleInputBuffer.disabled = true;
+            interactionConsoleSubmitTrigger.disabled = true;
+            document.getElementById('interaction-dock-realtime-status-string').textContent = "Parsing linguistic token matrix lines...";
 
-            // Segment 1: Advanced AI Response Generation System
             setTimeout(() => {
-                if (!activeSubject || activeSubject.id !== roomId) return;
+                if (!activeSubjectData || activeSubjectData.id !== branchId) return;
 
-                const aiOutput = computeWorldClassAIResponse(activeDept.aiBadge, activeSubject.name, rawPrompt, intent, activeSubject.id);
-                const aiPacket = { sender: "AI", type: "ai", text: aiOutput, stamp: getClockTime() };
-                
-                savePacketToLocalStorage(roomId, aiPacket);
-                displayPacketInStream(aiPacket);
-                scrollStreamToBottom();
+                const aiOutputString = compileContextualHumanoidAIResponseString(
+                    activeDepartmentData.aiSignature,
+                    activeSubjectData.name,
+                    rawPromptText,
+                    intentVector
+                );
 
-                // Segment 2: Network Peer Chat Dynamic Collision Protection
-                setTimeout(() => {
-                    if (!activeSubject || activeSubject.id !== roomId) return;
+                const aiPacketBlock = {
+                    sender: "AI",
+                    type: "ai-variant-packet",
+                    text: aiOutputString,
+                    timestamp: retrieveSystemClockTimestamp()
+                };
 
-                    const activeUserHandle = SIM_PEERS[Math.floor(Math.random() * SIM_PEERS.length)];
-                    const userOutput = generatePeerDynamicDialogue(intent, activeSubject.name, activeSubject.id);
-                    const userPacket = { sender: activeUserHandle, type: "peer", text: userOutput, stamp: getClockTime() };
+                appendPacketToLocalStorageDatachain(branchId, aiPacketBlock);
+                renderMessagePacketNodeInTerminalStream(aiPacketBlock);
+                scrollTerminalStreamToBottom();
 
-                    savePacketToLocalStorage(roomId, userPacket);
-                    displayPacketInStream(userPacket);
-                    scrollStreamToBottom();
+                // Re-engage interactive pipelines
+                interactionConsoleInputBuffer.disabled = false;
+                interactionConsoleSubmitTrigger.disabled = false;
+                document.getElementById('interaction-dock-realtime-status-string').textContent = "Matrix Stream Node Active";
+                interactionConsoleInputBuffer.focus();
 
-                    // Re-engage interaction capabilities
-                    bufferFieldNode.disabled = false;
-                    submitBtnNode.disabled = false;
-                    document.getElementById('dock-status-string').textContent = "Secure Node Active";
-                    bufferFieldNode.focus();
-                }, 900 + Math.random() * 600);
-
-            }, 1100 + Math.random() * 500);
+            }, 800 + Math.random() * 400);
         }
 
-        function computeWorldClassAIResponse(aiBadge, subjectName, prompt, intent, subId) {
-            const lowText = prompt.toLowerCase();
+        function compileContextualHumanoidAIResponseString(aiSignature, branchName, promptText, intentVector) {
+            const subjectTokenUpper = branchName.toUpperCase();
 
-            // Elite Rule 1: Custom Subject Word Capture Matching
-            if (intent === "Academic_Query") {
-                let contextSpecificExcerpt = KNOWLEDGE_RESPONSES[subId] || `Validating technical constraints within the scope of **${subjectName}**. Custom structures check out correctly.`;
-                return `[**${aiBadge}** EXPERT INTELLIGENCE LOG]\n\nAnswering structural inquiry regarding **${subjectName}**.\n\n${contextSpecificExcerpt}\n\nHere is your requested configuration model setup:\n<div class="code-snippet-box">// Runtime System Calibration Map\nconst coreTarget = "${subjectName.toUpperCase()}";\nfunction evaluateMetrics() {\n    return calculateSystemBounds(coreTarget);\n}</div>`;
+            // Tier Evaluation Tree
+            if (intentVector.intentLabel === "Greeting_Sequence") {
+                return `Greetings, operator. Initializing context validation for **${branchName}** data models. Detected your greeting token: *"${intentVector.coreWord}"*. How can I assist you with technical calculations or theoretical analysis today?`;
             }
 
-            if (intent === "Casual_Social") {
-                return `Hey! Reading your social inputs clearly within the **${subjectName}** control block. System layout is running at maximum efficiency. Let me know if you want to switch to structural queries or mathematical calculations!`;
+            if (intentVector.intentLabel === "Casual_Inquiry") {
+                return `I am operating at peak parameters, tracking all 100 system channels with zero latency. The newly refactored layout has eliminated all compressed spatial profiles. How are your data pipelines processing within the **${branchName}** terminal core?`;
             }
 
-            // General fallbacks catching dynamic words
-            return `System recognized directive for **${subjectName}**. Evaluating user parameters: *"${prompt}"*. Data parsing structural blocks are reporting complete alignment. State changes committed.`;
-        }
-
-        function generatePeerDynamicDialogue(intent, subjectName, subId) {
-            if (intent === "Casual_Social") {
-                const phrases = ["Ngl the interface looks incredibly responsive here.", "Ayo what's up group!", "Working through my assignments right now.", "This track configuration is super clean."];
-                return phrases[Math.floor(Math.random() * phrases.length)];
+            if (intentVector.intentLabel === "UIUX_System_Telemetry") {
+                return `Telemetry logs indicate successful execution of UI/UX Refactoring Protocols. All purple accent matrices have been expunged. Rigid containers are replaced by clean, fluid message bubbles. Layout rules use media query stack architectures to eliminate mobile squishing. Background stream audio is controlled via the Web Audio console module.`;
             }
-            return KNOWLEDGE_RESPONSES[subId] ? `Wow, checking that explanation against my notes for **${subjectName}**. Absolutely checks out.` : `Following this structural logic step for **${subjectName}**. Let's keep expanding this repository matrix.`;
+
+            if (intentVector.intentLabel === "Analytical_Query") {
+                return `[**${aiSignature}** DETECTED ANALYTICAL INPUT COMMAND]\n\nProcessing complex structural request using the query phrase *"${intentVector.coreWord}"* within the **${branchName}** context block.\n\nHere is the calibrated logic pipeline mapping framework for your verification routines:\n<div class="runtime-embedded-code-card">// Contextual Calibration Loop for ${subjectTokenUpper}\nexport function verifySectorMatrix(lineBuffer, telemetryFrame) {\n    const activeToken = "${intentVector.coreWord}";\n    const dataNodes = lineBuffer.parseLinguisticMatrix();\n    \n    if (dataNodes.hasContext(activeToken)) {\n        return dataNodes.evaluateBounds("${branchName}");\n    }\n    return null;\n}</div>\nAll algorithmic structures are functional and fully compliant with state configuration rules.`;
+            }
+
+            // High Quality Generic Fallback Module with Direct Term Reflection
+            return `System transaction successfully registered within the **${branchName}** matrix core. The linguistic parsing engine tracked your phrase input parameters and validated all runtime logic blocks. Let me know if you need to run specific mathematical proofs or code calibrations.`;
         }
 
-        /* FORMATTING & AUDIO AUX UTILITIES */
-        function parseStructuralSyntaxMarkdown(t) {
-            let escape = t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            escape = escape.replace(/&lt;div class="code-snippet-box"&gt;/g, '<div class="code-snippet-box">').replace(/&lt;\/div&gt;/g, '</div>');
-            return escape.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        /* ==========================================================================
+           11. STRUCTURALLY SEPARATED CHAT SYSTEMS LAYOUT DATA DRIVERS
+           ========================================================================== */
+        function switchActiveSidebarTabViewport(targetTabId) {
+            activeSidebarTabViewportId = targetTabId;
+            
+            // Sync anchor active layout classes
+            document.getElementById('tab-trigger-users-exclusive').classList.toggle('is-active-tab-node', targetTabId === 'users');
+            document.getElementById('tab-trigger-global-public').classList.toggle('is-active-tab-node', targetTabId === 'public');
+
+            // Sync viewport display flags
+            document.getElementById('tab-viewport-users-exclusive-stream').classList.toggle('is-visible-viewport', targetTabId === 'users');
+            document.getElementById('tab-viewport-global-public-stream').classList.toggle('is-visible-viewport', targetTabId === 'public');
         }
 
-        function getClockTime() {
-            const d = new Date();
-            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        function initializeSeparatedSidebarDataStreams() {
+            sidebarUsersExclusiveRenderScroller.innerHTML = "";
+            sidebarGlobalPublicRenderScroller.innerHTML = "";
+
+            // Seed distinct Users Only stream data elements
+            for (let i = 0; i < 4; i++) {
+                injectNewUserExclusiveChatPacketNode();
+            }
+
+            // Seed separated Global Public stream data elements
+            for (let j = 0; j < 5; j++) {
+                injectNewGlobalPublicChatPacketNode();
+            }
         }
 
-        function scrollStreamToBottom() {
-            streamViewportNode.scrollTo({ top: streamViewportNode.scrollHeight, behavior: 'smooth' });
+        function injectNewUserExclusiveChatPacketNode(customText = null) {
+            const randomHandle = SIMULATED_PEERS_LIST[Math.floor(Math.random() * SIMULATED_PEERS_LIST.length)];
+            const textString = customText || EXCLUSIVE_USER_SIM_MESSAGES[Math.floor(Math.random() * EXCLUSIVE_USER_SIM_MESSAGES.length)];
+            
+            const packetBlock = document.createElement('div');
+            packetBlock.className = 'user-exclusive-packet-block';
+            packetBlock.innerHTML = `
+                <div class="exclusive-packet-header">
+                    <span class="exclusive-user-handle-label">${randomHandle}</span>
+                    <span class="exclusive-packet-timestamp">${retrieveSystemClockTimestamp()}</span>
+                </div>
+                <div class="exclusive-packet-body-message">${textString}</div>
+            `;
+            sidebarUsersExclusiveRenderScroller.appendChild(packetBlock);
+            sidebarUsersExclusiveRenderScroller.scrollTop = sidebarUsersExclusiveRenderScroller.scrollHeight;
         }
 
-        function toggleAmbientAudioStream() {
-            const track = document.getElementById('ambient-audio-core');
-            const btn = document.getElementById('audio-control-node');
-            if (!isAudioPlaying) {
-                track.play().catch(e => console.log("Audio activation requires user click path interaction first."));
-                btn.textContent = "PAUSE";
-                isAudioPlaying = true;
+        function injectNewGlobalPublicChatPacketNode(customText = null) {
+            const textString = customText || PUBLIC_GLOBAL_SIM_MESSAGES[Math.floor(Math.random() * PUBLIC_GLOBAL_SIM_MESSAGES.length)];
+            
+            const packetBlock = document.createElement('div');
+            packetBlock.className = 'public-global-packet-block';
+            packetBlock.innerHTML = `
+                <span class="public-packet-sender-label">[SYS_GRID_FEED]</span>
+                <p class="public-packet-text-string">${textString}</p>
+            `;
+            sidebarGlobalPublicRenderScroller.appendChild(packetBlock);
+            sidebarGlobalPublicRenderScroller.scrollTop = sidebarGlobalPublicRenderScroller.scrollHeight;
+        }
+
+        /* SIDEBAR MINI CHAT DISPATCH SYSTEM CONTROLLERS */
+        function executeUsersExclusiveEmbeddedMessageSend(event) {
+            event.preventDefault();
+            const inputField = document.getElementById('sidebar-users-exclusive-input-field');
+            const messageText = inputField.value.trim();
+            if (!messageText) return;
+
+            const customPacketBlock = document.createElement('div');
+            customPacketBlock.className = 'user-exclusive-packet-block';
+            customPacketBlock.style.borderColor = 'rgba(59, 130, 246, 0.4)';
+            customPacketBlock.innerHTML = `
+                <div class="exclusive-packet-header">
+                    <span class="exclusive-user-handle-label" style="color:var(--accent-cyan);">YOU (OPERATOR)</span>
+                    <span class="exclusive-packet-timestamp">${retrieveSystemClockTimestamp()}</span>
+                </div>
+                <div class="exclusive-packet-body-message">${messageText}</div>
+            `;
+            sidebarUsersExclusiveRenderScroller.appendChild(customPacketBlock);
+            inputField.value = "";
+            sidebarUsersExclusiveRenderScroller.scrollTop = sidebarUsersExclusiveRenderScroller.scrollHeight;
+            
+            // Randomly trigger reciprocal simulated traffic loop responses
+            setTimeout(() => {
+                injectNewUserExclusiveChatPacketNode();
+            }, 1000 + Math.random() * 1000);
+        }
+
+        function executeGlobalPublicEmbeddedMessageSend(event) {
+            event.preventDefault();
+            const inputField = document.getElementById('sidebar-global-public-input-field');
+            const messageText = inputField.value.trim();
+            if (!messageText) return;
+
+            const customPacketBlock = document.createElement('div');
+            customPacketBlock.className = 'public-global-packet-block';
+            customPacketBlock.style.borderLeftColor = 'var(--accent-cyan)';
+            customPacketBlock.innerHTML = `
+                <span class="public-packet-sender-label" style="color:var(--accent-cyan);">[USER_BROADCAST]</span>
+                <p class="public-packet-text-string">${messageText}</p>
+            `;
+            sidebarGlobalPublicRenderScroller.appendChild(customPacketBlock);
+            inputField.value = "";
+            sidebarGlobalPublicRenderScroller.scrollTop = sidebarGlobalPublicRenderScroller.scrollHeight;
+        }
+
+        /* BACKGROUND SIMULATED PEER P2P TRAFFIC CONTROLLER LOOP */
+        function startSimulatedBackgroundTrafficEngine() {
+            setInterval(() => {
+                if (Math.random() > 0.4) {
+                    injectNewUserExclusiveChatPacketNode();
+                } else {
+                    injectNewGlobalPublicChatPacketNode();
+                }
+            }, 7000);
+        }
+
+        /* ==========================================================================
+           12. INTEGRATED WEBAUDIO PRO-GRADE AUX AUDIO MANAGEMENT SYSTEMS
+           ========================================================================== */
+        const nativeAudioEngineCore = document.getElementById('native-audio-engine-core');
+        const audioPlaybackTriggerBtn = document.getElementById('audio-playback-trigger-btn');
+        const audioPlaySvgShape = document.getElementById('audio-play-svg-shape');
+
+        function togglePlatformAudioPlayback() {
+            if (!platformAudioPlaybackActive) {
+                nativeAudioEngineCore.play()
+                    .then(() => {
+                        platformAudioPlaybackActive = true;
+                        audioPlaybackTriggerBtn.style.color = "var(--accent-cyan)";
+                        audioPlaybackTriggerBtn.style.borderColor = "var(--accent-cyan)";
+                        audioPlaySvgShape.innerHTML = `<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>`;
+                    })
+                    .catch(error => {
+                        console.warn("Audio node playback interdicted. Context initialization requires intentional user click interactions first.", error);
+                    });
             } else {
-                track.pause();
-                btn.textContent = "PLAY";
-                isAudioPlaying = false;
+                nativeAudioEngineCore.pause();
+                platformAudioPlaybackActive = false;
+                audioPlaybackTriggerBtn.style.color = "var(--text-primary)";
+                audioPlaybackTriggerBtn.style.borderColor = "var(--border-muted)";
+                audioPlaySvgShape.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"></polygon>`;
             }
+        }
+
+        function adjustPlatformAudioVolume(volumeSliderValue) {
+            if (nativeAudioEngineCore) {
+                nativeAudioEngineCore.volume = volumeSliderValue;
+            }
+        }
+
+        /* REFACTOR UTILITY PARSERS */
+        function parseStructuralSyntaxHighlights(rawTextString) {
+            let processedString = rawTextString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            processedString = processedString.replace(/&lt;div class="runtime-embedded-code-card"&gt;/g, '<div class="runtime-embedded-code-card">').replace(/&lt;\/div&gt;/g, '</div>');
+            return processedString.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        }
+
+        function retrieveSystemClockTimestamp() {
+            const dateInstance = new Date();
+            return dateInstance.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        }
+
+        function scrollTerminalStreamToBottom() {
+            activeRuntimeTerminalMessagesStream.scrollTo({
+                top: activeRuntimeTerminalMessagesStream.scrollHeight,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
